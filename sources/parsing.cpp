@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 09:14:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/25 12:32:45 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/11/25 12:33:30 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ void	checkPassword(std::string pass)
 	if (pass.size() < 5)
 		throw std::exception();
 
-	std::string::iterator	it;
-	for (it = pass.begin(); it != pass.end(); ++it)
+	for (std::string::iterator it = pass.begin(); it != pass.end(); ++it)
 		if (!std::isprint(*it) || *it == ' ' || *it == '	')
 			std::cout << *it << std::endl;
 }
