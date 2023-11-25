@@ -11,6 +11,7 @@
 # **************************************************************************** #
 
 SOURCES		=	sources/main.cpp \
-				sources/class/Client.cpp \
-				sources/class/Server.cpp \
-				sources/class/Channel.cpp
+				sources/parsing.cpp \
+				sources/Client.cpp \
+				sources/Server.cpp \
+				sources/Channel.cpp \

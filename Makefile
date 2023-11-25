@@ -6,7 +6,7 @@
 #    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/11/25 08:27:56 by hgeffroy         ###   ########.fr        #
+#    Updated: 2023/11/25 12:08:12 by hgeffroy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,12 @@ include config/includes.mk
 
 #--variables-------------------------------------------------------------------#
 
-NAME            =       PmergeMe
+NAME            =       ircserv
 DEBUG           =       no
 
 #--includes & libraries--------------------------------------------------------#
 
-INC_DIR         =       ./
+INC_DIR         =       includes/
 
 #--sources & objects-----------------------------------------------------------#
 
