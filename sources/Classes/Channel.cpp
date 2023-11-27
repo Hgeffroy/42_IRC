@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client.cpp                                         :+:      :+:    :+:   */
+/*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/25 08:51:07 by hgeffroy         ###   ########.fr       */
+/*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
+/*   Updated: 2023/11/27 13:54:44 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
+#include "irc.h"
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client()
+Channel::Channel()
 {
 
 }
 
-Client::~Client()
+Channel::~Channel()
 {
 
 }
