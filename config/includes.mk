@@ -3,15 +3,17 @@
 #                                                         :::      ::::::::    #
 #    includes.mk                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:31 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/11/25 08:31:45 by hgeffroy         ###   ########.fr        #
+#    Updated: 2023/11/27 13:54:44 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Normalement inutile !! (A check)
 
-HEADERS		=	includes/Client.hpp \
-				includes/Server.hpp \
-				includes/Channel.hpp
+HEADERS		=	includes/Channel.hpp										\
+				includes/Client.hpp											\
+				includes/Server.hpp											\
+				includes/irc.h											\
+				includes/irc.hpp

@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   irc.hpp                                            :+:      :+:    :+:   */
+/*   irc.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/27 13:49:36 by twang            ###   ########.fr       */
+/*   Created: 2023/11/27 13:43:32 by twang             #+#    #+#             */
+/*   Updated: 2023/11/27 13:46:28 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IRC_HPP
-# define IRC_HPP
+#ifndef FT_IRC_H
+# define FT_IRC_H
 
-# include <iostream>
-# include <sys/socket.h>
-# include <cstdlib>
-# include <string>
-# include <exception>
-# include <cerrno>
-
-# include <cctype> // Pas inclus dans cstdlib ?
+# include "Channel.hpp"
+# include "Client.hpp"
+# include "Server.hpp"
 
 #endif
-
