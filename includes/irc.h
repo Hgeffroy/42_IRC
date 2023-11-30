@@ -17,15 +17,18 @@
 
 # include <iostream>
 # include <sys/socket.h>
+# include <sys/types.h>
 # include <sys/select.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <cstdlib>
+# include <cstring>
 # include <string>
 # include <exception>
 # include <cerrno>
 # include <vector>
 # include <algorithm>
+# include <unistd.h>
 
 # include "defines.h"
 # include "enum.h"

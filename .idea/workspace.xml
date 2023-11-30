@@ -11,17 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4b8e1176-40cc-4597-a826-da75ea8376ee" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/includes.mk" beforeDir="false" afterPath="$PROJECT_DIR$/config/includes.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Channel.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Channel.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/Client.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Client.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Server.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Server.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/irc.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/irc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/Classes/Channel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/Classes/Channel.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sources/Classes/Client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/Classes/Client.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sources/Classes/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/Classes/Server.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +62,8 @@
       <option name="presentableId" value="Default" />
       <updated>1701328405457</updated>
       <workItem from="1701328408351" duration="2798000" />
-      <workItem from="1701331343705" duration="4230000" />
+      <workItem from="1701331343705" duration="4554000" />
+      <workItem from="1701337669414" duration="2161000" />
     </task>
     <servers />
   </component>
