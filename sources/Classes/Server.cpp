@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 10:33:12 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/11/30 11:18:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ std::string	Server::setPassword(std::string& pass)
 	return (pass);
 }
 
-void	Server::accept(Client& client)
+void	Server::accept(Client& client) // Creer un nouveau client !!
 {
 	int					cs;
 	struct sockaddr_in	csin;
@@ -80,7 +80,7 @@ void	Server::accept(Client& client)
 
 	cs = ::accept(client.getFd(), reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
 	std::cout << "New client!" << std::endl;
-	client.setType(FD_CLIENT);
+	_clients.push_back(Client(FD_CLIENT, cs));
 }
 
 int	Server::higherFd() const
@@ -124,7 +124,7 @@ void	Server::checkFd()
 			if (it->getType() == FD_SERV)
 				accept(*it);
 			else if (it->getType() == FD_CLIENT)
-				it->read();
+				it->read(_clients);
 			i--;
 		}
 		if (FD_ISSET(it->getFd(), &_fdWrite))
