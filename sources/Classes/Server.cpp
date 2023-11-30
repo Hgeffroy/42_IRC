@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/27 13:54:44 by twang            ###   ########.fr       */
+/*   Updated: 2023/11/30 11:18:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.h"
+#include "irc.hpp"
 
 /**  Constructors and destructors  ************************************************************************************/
 
@@ -24,15 +24,30 @@ Server::~Server()
 
 }
 
-Server::Server(std::string port, std::string password)
+Server::Server(std::string portstr, std::string password)
 {
-	_port = checkPort(port);
-	_password = checkPassword(password);
+	struct sockaddr_in	sin;
+	int					port;
+	int 				s;
+
+	port = setPort(portstr);
+	_password = setPassword(password);
+	s = socket(PF_INET, SOCK_STREAM, 0); // Check le 0 (Check si SOCK_STREAM n'a qu'un seul protocole), a recup !!
+	if (s < 0)
+		throw std::exception();
+	sin.sin_family = AF_INET;
+	sin.sin_addr.s_addr = INADDR_ANY;
+	sin.sin_port = htons(port);
+	if (bind(s, reinterpret_cast< sockaddr* >(&sin), sizeof(sin)) < 0)
+		throw std::exception();
+	if (listen(s, 128) < 0)
+		throw std::exception();
+	_clients.push_back(Client(FD_SERV, s));
 }
 
 /**  Private member functions  ****************************************************************************************/
 
-int	Server::checkPort(std::string portstr)
+int	Server::setPort(std::string& portstr)
 {
 	char* end;
 	int	port = static_cast<int>(std::strtol(portstr.c_str(), &end, 10));
@@ -43,7 +58,7 @@ int	Server::checkPort(std::string portstr)
 	return (port);
 }
 
-std::string	Server::checkPassword(std::string pass)
+std::string	Server::setPassword(std::string& pass)
 {
 	if (pass.size() < 5)
 		throw std::invalid_argument("<password> is too short");
@@ -56,3 +71,69 @@ std::string	Server::checkPassword(std::string pass)
 
 	return (pass);
 }
+
+void	Server::accept(Client& client) // Creer un nouveau client !!
+{
+	int					cs;
+	struct sockaddr_in	csin;
+	socklen_t			csin_len = sizeof(csin);
+
+	cs = ::accept(client.getFd(), reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
+	std::cout << "New client!" << std::endl;
+	_clients.push_back(Client(FD_CLIENT, cs));
+}
+
+int	Server::higherFd() const
+{
+	int									max = 0;
+	std::vector<Client>::const_iterator	it;
+
+	for (it = _clients.begin(); it != _clients.end(); ++it)
+		max = std::max(max, it->getFd());
+
+	return (max);
+}
+
+/**  Public member functions  *****************************************************************************************/
+
+
+void	Server::initFd()
+{
+	std::vector<Client>::iterator	it;
+
+	FD_ZERO(&_fdRead);
+	FD_ZERO(&_fdWrite);
+	for (it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		FD_SET(it->getFd(), &_fdRead);
+		if (!it->getBufRead().empty())
+			FD_SET(it->getFd(), &_fdWrite);
+	}
+}
+
+void	Server::checkFd()
+{
+	std::vector<Client>::iterator	it;
+	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, &_fdWrite, NULL, NULL); // Faire une fonction pour le premier argument.
+
+	for (it = _clients.begin(); it != _clients.end() && i > 0; ++it)
+	{
+		std::cout << "Check client on socket: " << it->getFd() << std::endl;
+		if (FD_ISSET(it->getFd(), &_fdRead))
+		{
+			if (it->getType() == FD_SERV)
+				accept(*it);
+			else if (it->getType() == FD_CLIENT)
+				it->read(_clients);
+			i--;
+		}
+		if (FD_ISSET(it->getFd(), &_fdWrite))
+		{
+			i--;
+			it->write();
+		}
+	}
+}
+
+
+

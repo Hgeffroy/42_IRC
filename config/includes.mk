@@ -15,5 +15,7 @@
 HEADERS		=	includes/Channel.hpp										\
 				includes/Client.hpp											\
 				includes/Server.hpp											\
-				includes/irc.h											\
+				includes/Fd.hpp												\
+				includes/defines.h											\
+				includes/irc.h												\
 				includes/irc.hpp

@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Channel.cpp                                        :+:      :+:    :+:   */
+/*   enum.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/27 13:54:44 by twang            ###   ########.fr       */
+/*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
+/*   Updated: 2023/11/29 13:35:08 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
+#ifndef ENUM_H
+# define ENUM_H
 
-/**  Constructors and destructors  ************************************************************************************/
-
-Channel::Channel()
+enum	e_type
 {
+	FD_SERV,		// Client pas encore accepte
+	FD_CLIENT		// Client accepte
+};
 
-}
-
-Channel::~Channel()
-{
-
-}
+#endif
