@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:57:17 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/27 13:55:21 by twang            ###   ########.fr       */
+/*   Updated: 2023/11/30 08:48:48 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.h"
+#include "irc.hpp"
 
 int	main(int ac, char** av)
 {
@@ -24,13 +24,17 @@ int	main(int ac, char** av)
 	try
 	{
 		Server	serv(av[1], av[2]);
+		while (1)
+		{
+			serv.initFd();
+			serv.checkFd();
+		}
 	}
 	catch (std::exception& e)
 	{
 		std::cerr << "Couldn't create the server because ";
 		std::cerr << e.what() << std::endl;
+		// Liberer le port !!
 		return (-1);
 	}
-
-
 }

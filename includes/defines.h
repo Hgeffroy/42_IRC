@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Channel.cpp                                        :+:      :+:    :+:   */
+/*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/27 13:54:44 by twang            ###   ########.fr       */
+/*   Created: 2023/11/29 09:26:09 by hgeffroy          #+#    #+#             */
+/*   Updated: 2023/11/29 09:31:06 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
+#ifndef DEFINES_H
+# define DEFINES_H
 
-/**  Constructors and destructors  ************************************************************************************/
+# define MAX_CLIENTS		50
+# define BUFFER_SIZE		4096
 
-Channel::Channel()
-{
-
-}
-
-Channel::~Channel()
-{
-
-}
+#endif

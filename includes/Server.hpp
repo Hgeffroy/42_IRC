@@ -6,31 +6,38 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/26 17:01:45 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/11/30 08:42:50 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-#include "irc.hpp"
+#include "irc.h"
 
 class	Server
 {
 private:
 
-	int			_port;
-	std::string	_password;
-	
+	std::string			_password;
+	std::vector<Client> _clients;
+	fd_set				_fdWrite;
+	fd_set				_fdRead;
+
 	Server();
-	int			checkPort(std::string portstr);
-	std::string	checkPassword(std::string pass);
-	
+	static int			setPort(std::string& portstr);
+	static std::string	setPassword(std::string& pass);
+	void				accept(Client& client);
+	int 				higherFd() const;
+
 public:
 
 	~Server();
 	Server(std::string port, std::string password);
-	
+
+	void	initFd();
+	void	checkFd();
+
 };
 
 #endif
