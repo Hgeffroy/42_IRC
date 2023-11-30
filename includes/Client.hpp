@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 11:12:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:09:10 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,28 @@ private:
 
 	int			_type;
 	int 		_fd;
-	char 		_bufRead[BUFFER_SIZE];
-	char 		_bufWrite[BUFFER_SIZE];
+	bool		_connected;
+	bool		_passwordOk;
+	std::string _nickname;
+	std::string	_username;
+	char 		_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
+	char 		_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
 
-	Client();
+	int	setInfos(std::string pass);
 
 public:
 
-	explicit	Client(int type, int socket);
-				~Client();
+	Client(int type, int socket);
+	~Client();
 
-	int 		getType() const;
-	std::string	getBufRead() const;
-	std::string	getBufWrite() const;
-	int 		getFd() const;
-	void		setType(int newType);
+	int 			getType() const;
+	const char*		getBufRead() const;
+	const char*		getBufWrite() const;
+	int 			getFd() const;
+	void			setType(int newType);
 
 	void	write();
-	void	read(std::vector<Client>);
-//	void	(*fct_read)();
-//	void	(*fct_write)();
+	void	read(std::vector<Client>& clients, std::string pass);
 
 };
 

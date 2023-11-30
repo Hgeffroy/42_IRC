@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 11:18:25 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:08:50 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	Server::accept(Client& client) // Creer un nouveau client !!
 	socklen_t			csin_len = sizeof(csin);
 
 	cs = ::accept(client.getFd(), reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
-	std::cout << "New client!" << std::endl;
+	std::cout << "New client on socket: " << cs << std::endl;
 	_clients.push_back(Client(FD_CLIENT, cs));
 }
 
@@ -106,7 +106,7 @@ void	Server::initFd()
 	for (it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		FD_SET(it->getFd(), &_fdRead);
-		if (!it->getBufRead().empty())
+		if (std::strlen(it->getBufWrite()))
 			FD_SET(it->getFd(), &_fdWrite);
 	}
 }
@@ -124,7 +124,7 @@ void	Server::checkFd()
 			if (it->getType() == FD_SERV)
 				accept(*it);
 			else if (it->getType() == FD_CLIENT)
-				it->read(_clients);
+				it->read(_clients, _password); // Continue si le read a fait sortir le client !!
 			i--;
 		}
 		if (FD_ISSET(it->getFd(), &_fdWrite))

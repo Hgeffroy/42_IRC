@@ -12,6 +12,8 @@
     <list default="true" id="4b8e1176-40cc-4597-a826-da75ea8376ee" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/Client.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Client.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Server.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Server.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/enum.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/enum.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/irc.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sources/Classes/Client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/Classes/Client.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sources/Classes/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/Classes/Server.cpp" afterDir="false" />
@@ -63,7 +65,7 @@
       <updated>1701328405457</updated>
       <workItem from="1701328408351" duration="2798000" />
       <workItem from="1701331343705" duration="4554000" />
-      <workItem from="1701337669414" duration="2161000" />
+      <workItem from="1701337669414" duration="14553000" />
     </task>
     <servers />
   </component>

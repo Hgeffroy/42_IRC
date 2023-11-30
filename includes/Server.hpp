@@ -21,8 +21,8 @@ private:
 
 	std::string			_password;
 	std::vector<Client> _clients;
-	fd_set				_fdWrite;
-	fd_set				_fdRead;
+	fd_set				_fdWrite; // Ceux a qui le serveur va ecrire
+	fd_set				_fdRead; // Ceux que le serveur doit lire
 
 	Server();
 	static int			setPort(std::string& portstr);
