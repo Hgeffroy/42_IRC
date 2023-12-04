@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/04 16:23:43 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/04 17:47:09 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ int Client::getCmd(std::string buffer)
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
-	std::cout << "cmd is: " << cmd << std::endl;
+	std::cout << "cmd is: " << cmd << "END" << std::endl;
 
 	int i = 0;
 	while (i < 5)
 	{
-		if (buffer == cmds[i])
+		if (cmd == cmds[i])
 			break;
 		i++;
 	}
@@ -88,7 +88,7 @@ void	Client::setPass(std::string& s, std::string& serverPass)
 		std::cout << "Incorrect password" << std::endl;
 }
 
-void	Client::setNick(std::string s)
+void	Client::setNick(std::string s) // Verifier qu'il n'y a pas de doublon ?
 {
 	if (_passwordOk)
 	{
@@ -99,7 +99,7 @@ void	Client::setNick(std::string s)
 		std::cout << "Please enter the password first" << std::endl;
 }
 
-void	Client::setUser(std::string s)
+void	Client::setUser(std::string s) // Doublon ?
 {
 	if (_passwordOk)
 	{
@@ -115,6 +115,7 @@ int	Client::setInfos(std::string serverPass) // Faire avec le getcmd et un switc
 {
 	std::string str = _bufRead;
 	int cmd = getCmd(str);
+	// if (cmd < 0)
 
 	std::cout << "cmd is in int: " << cmd << std::endl;
 	std::cout << "Setting infos" << std::endl;
@@ -123,10 +124,13 @@ int	Client::setInfos(std::string serverPass) // Faire avec le getcmd et un switc
 	{
 		case PASS:
 			setPass(str, serverPass);
+			break ;
 		case NICK:
 			setNick(str);
+			break ;
 		case USER:
 			setUser(str);
+			break ;
 		default:
 			; // Faire une gestion d'erreur
 	}
@@ -168,6 +172,7 @@ void	Client::read(std::vector<Client>& clients, std::string pass) // Le serveur 
 	else // Verifier la commande
 	{
 		int cmd = getCmd(_bufRead);
+		// if (cmd < 0)
 		for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
 			if (it->getType() == FD_CLIENT && &(*it) != this) // Il faudra verifier quels destinataires on vise, pour l'instant on envoie a tous y compris les non connnectes et la commande !!
 				send(it->getFd(), _bufRead, r, 0);
