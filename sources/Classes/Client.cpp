@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 16:21:04 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/04 10:11:11 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,35 @@ int	Client::setInfos(std::string pass)
 	std::string str = _bufRead;
 
 	std::cout << "Setting infos" << std::endl;
-	if (str.substr(0, 4) == "PASS")
+	if (str.substr(0, 5) == "PASS ") // Whitespaces a skip ou pas ?
 	{
-		std::cout << "Setting password: " << str.substr(5) << std::endl;
-		std::cout << "Good password: " << pass << std::endl;
-		std::cout << "This is supposed to be a space:" << str.c_str()[4] << "END" << std::endl;
-		std::cout << (str.c_str()[4] == ' ') << " ; " << (str.substr(5).c_str() == pass.c_str()) << std::endl;
-		if (str.c_str()[4] == ' ' && str.substr(5) == pass)
+		if (_passwordOk)
+			std::cout << "Password already entered" << std::endl;
+		if (str.substr(5) == pass)
 		{
 			_passwordOk = true;
 			std::cout << "Correct password" << std::endl;
 		}
+		else
+			std::cout << "Incorrect password" << std::endl;
 	}
+	else if (str.substr(0, 5) == "NICK ") // Whitespaces ?
+	{
+		if (_passwordOk)
+			_nickname = str.substr(5);
+		else
+			std::cout << "Please enter the password first" << std::endl;
+	}
+	else if (_passwordOk && str.substr(0, 5) == "USER ") // Whitespaces ?
+	{
+		if (_passwordOk)
+			_username = str.substr(5);
+		else
+			std::cout << "PLease enter the password first" << std::endl;	
+	}
+	if (_passwordOk && !_username.empty() && !_nickname.empty())
+		_connected = true;
 	return (0);
-//	else if (_passwordOk && ...)
 }
 
 /**  Public member functions  *****************************************************************************************/
@@ -86,7 +101,8 @@ void	Client::write() // Le serveur ecrit au client
 
 void	Client::read(std::vector<Client>& clients, std::string pass) // Le serveur lit ce que lui envoit le client
 {
-	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0);
+	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
+	_bufRead[std::strlen(_bufRead) - 1] = 0; // Correction du \n, on verra si on garde.
 
 	std::cout << "Client sending to server" << std::endl;
 	if (r <= 0)
@@ -107,7 +123,7 @@ void	Client::read(std::vector<Client>& clients, std::string pass) // Le serveur 
 	else
 	{
 		for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
-			if (it->getType() == FD_CLIENT && &(*it) != this)
-				send(it->getFd(), _bufRead, r, 0); //
+			if (it->getType() == FD_CLIENT && &(*it) != this) // Il faudra verifier quels destinataires on vise, pour l'instant on envoie a tous y compris les non connnectes !
+				send(it->getFd(), _bufRead, r, 0);
 	}
 }

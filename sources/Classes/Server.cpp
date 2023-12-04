@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 16:08:50 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/04 09:35:00 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ std::string	Server::setPassword(std::string& pass)
 	return (pass);
 }
 
-void	Server::accept(Client& client) // Creer un nouveau client !!
+void	Server::accept(Client& client)
 {
 	int					cs;
 	struct sockaddr_in	csin;
