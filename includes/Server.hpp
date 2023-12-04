@@ -19,10 +19,11 @@ class	Server
 {
 private:
 
-	std::string			_password;
-	std::vector<Client> _clients;
-	fd_set				_fdWrite; // Ceux a qui le serveur va ecrire
-	fd_set				_fdRead; // Ceux que le serveur doit lire
+	std::string				_password;
+	std::vector<Client> 	_clients;
+	std::vector<Channel>	_channels;
+	fd_set					_fdWrite; // Ceux a qui le serveur va ecrire
+	fd_set					_fdRead; // Ceux que le serveur doit lire
 
 	Server();
 	static int			setPort(std::string& portstr);

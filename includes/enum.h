@@ -20,4 +20,13 @@ enum	e_type
 	FD_CHANNEL
 };
 
+enum	e_cmd
+{
+	PASS,
+	NICK,
+	USER,
+	PRIVMSG,
+	JOIN
+};
+
 #endif

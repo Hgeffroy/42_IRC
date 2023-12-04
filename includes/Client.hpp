@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 16:09:10 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:58:04 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,20 @@ class	Client
 {
 private:
 
-	int			_type;
-	int 		_fd;
-	bool		_connected;
-	bool		_passwordOk;
-	std::string _nickname;
-	std::string	_username;
-	char 		_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
-	char 		_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
+	int							_type;
+	int 						_fd;
+	bool						_connected;
+	bool						_passwordOk;
+	std::string 				_nickname;
+	std::string					_username;
+	char 						_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
+	char 						_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
 
-	int	setInfos(std::string pass);
+	int	setInfos(std::string serverPass);
+	int getCmd(std::string buffer);
+	void	setPass(std::string& s, std::string& serverPass);
+	void	setNick(std::string s);
+	void	setUser(std::string s);
 
 public:
 

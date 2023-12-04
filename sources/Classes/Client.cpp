@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/04 10:11:11 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/04 16:23:43 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,37 +55,82 @@ void	Client::setType(int newType)
 
 /**  Private member functions  ****************************************************************************************/
 
-int	Client::setInfos(std::string pass)
+int Client::getCmd(std::string buffer)
+{
+	const std::string cmds[5] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN"};
+
+	int end = static_cast<int>(buffer.find(' '));
+	std::string cmd = buffer.substr(0, end);
+	std::cout << "cmd is: " << cmd << std::endl;
+
+	int i = 0;
+	while (i < 5)
+	{
+		if (buffer == cmds[i])
+			break;
+		i++;
+	}
+	if (i == 5)
+		return (-1);
+	return (i);
+}
+
+void	Client::setPass(std::string& s, std::string& serverPass)
+{
+	if (_passwordOk)
+		std::cout << "Password already entered" << std::endl;
+	if (s.substr(5) == serverPass) // Whitespaces ?
+	{
+		_passwordOk = true;
+		std::cout << "Correct password" << std::endl;
+	}
+	else
+		std::cout << "Incorrect password" << std::endl;
+}
+
+void	Client::setNick(std::string s)
+{
+	if (_passwordOk)
+	{
+		_nickname = s.substr(5); // Whitespaces ?
+		std::cout << "Nickname set to: " << _nickname << std::endl;
+	}
+	else
+		std::cout << "Please enter the password first" << std::endl;
+}
+
+void	Client::setUser(std::string s)
+{
+	if (_passwordOk)
+	{
+		_username = s.substr(5);
+		std::cout << "Username set to: " << _username << std::endl;
+	}
+	else
+		std::cout << "Please enter the password first" << std::endl;
+}
+
+
+int	Client::setInfos(std::string serverPass) // Faire avec le getcmd et un switch
 {
 	std::string str = _bufRead;
+	int cmd = getCmd(str);
 
+	std::cout << "cmd is in int: " << cmd << std::endl;
 	std::cout << "Setting infos" << std::endl;
-	if (str.substr(0, 5) == "PASS ") // Whitespaces a skip ou pas ?
+
+	switch(cmd)
 	{
-		if (_passwordOk)
-			std::cout << "Password already entered" << std::endl;
-		if (str.substr(5) == pass)
-		{
-			_passwordOk = true;
-			std::cout << "Correct password" << std::endl;
-		}
-		else
-			std::cout << "Incorrect password" << std::endl;
+		case PASS:
+			setPass(str, serverPass);
+		case NICK:
+			setNick(str);
+		case USER:
+			setUser(str);
+		default:
+			; // Faire une gestion d'erreur
 	}
-	else if (str.substr(0, 5) == "NICK ") // Whitespaces ?
-	{
-		if (_passwordOk)
-			_nickname = str.substr(5);
-		else
-			std::cout << "Please enter the password first" << std::endl;
-	}
-	else if (_passwordOk && str.substr(0, 5) == "USER ") // Whitespaces ?
-	{
-		if (_passwordOk)
-			_username = str.substr(5);
-		else
-			std::cout << "PLease enter the password first" << std::endl;	
-	}
+
 	if (_passwordOk && !_username.empty() && !_nickname.empty())
 		_connected = true;
 	return (0);
@@ -118,12 +163,14 @@ void	Client::read(std::vector<Client>& clients, std::string pass) // Le serveur 
 			}
 		}
 	}
-	else if (_connected == false)
+	else if (!_connected)
 		setInfos(pass);
-	else
+	else // Verifier la commande
 	{
+		int cmd = getCmd(_bufRead);
 		for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
-			if (it->getType() == FD_CLIENT && &(*it) != this) // Il faudra verifier quels destinataires on vise, pour l'instant on envoie a tous y compris les non connnectes !
+			if (it->getType() == FD_CLIENT && &(*it) != this) // Il faudra verifier quels destinataires on vise, pour l'instant on envoie a tous y compris les non connnectes et la commande !!
 				send(it->getFd(), _bufRead, r, 0);
 	}
+	std::memset( _bufRead, 0, BUFFER_SIZE); // On vide le buffer !
 }

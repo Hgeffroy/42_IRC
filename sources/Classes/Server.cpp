@@ -118,7 +118,6 @@ void	Server::checkFd()
 
 	for (it = _clients.begin(); it != _clients.end() && i > 0; ++it)
 	{
-		std::cout << "Check client on socket: " << it->getFd() << std::endl;
 		if (FD_ISSET(it->getFd(), &_fdRead))
 		{
 			if (it->getType() == FD_SERV)
