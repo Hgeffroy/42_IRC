@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/04 17:47:09 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:21:17 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int Client::getCmd(std::string buffer)
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
-	std::cout << "cmd is: " << cmd << "END" << std::endl;
 
 	int i = 0;
 	while (i < 5)
@@ -111,14 +110,11 @@ void	Client::setUser(std::string s) // Doublon ?
 }
 
 
-int	Client::setInfos(std::string serverPass) // Faire avec le getcmd et un switch
+int	Client::setInfos(std::string serverPass)
 {
 	std::string str = _bufRead;
 	int cmd = getCmd(str);
 	// if (cmd < 0)
-
-	std::cout << "cmd is in int: " << cmd << std::endl;
-	std::cout << "Setting infos" << std::endl;
 
 	switch(cmd)
 	{
@@ -140,6 +136,35 @@ int	Client::setInfos(std::string serverPass) // Faire avec le getcmd et un switc
 	return (0);
 }
 
+void	Client::sendMsg(std::vector<Client>& c)
+{
+	std::string str = _bufRead;
+	int sep1 = static_cast<int>(str.find(' '));
+	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
+
+	// Mettre des protections ici !
+
+	std::string	dest = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	if (std::isalpha(dest[0]))
+	{
+		std::cout << _nickname << " tries to send a msg to " << dest << std::endl;
+		for (std::vector<Client>::iterator it = c.begin(); it != c.end(); ++it)
+		{
+			if (it->_nickname == dest && it->_connected) // Envoyer une erreur si le destinataire existe pas
+			{
+				send(it->getFd(), _bufRead + sep2 + 1, str.length() - sep2 - 1, 0); // C'est du jamais vu
+				send(it->getFd(), "\n", 1, 0);
+			}
+		}
+	}
+//	else if ()
+}
+
+void	Client::join(std::vector<Channel>& channels)
+{
+
+}
+
 /**  Public member functions  *****************************************************************************************/
 
 void	Client::write() // Le serveur ecrit au client
@@ -148,34 +173,40 @@ void	Client::write() // Le serveur ecrit au client
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
 }
 
-void	Client::read(std::vector<Client>& clients, std::string pass) // Le serveur lit ce que lui envoit le client
+void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 {
+	std::vector<Client>&	c = s.getClients();
 	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
 	_bufRead[std::strlen(_bufRead) - 1] = 0; // Correction du \n, on verra si on garde.
 
-	std::cout << "Client sending to server" << std::endl;
 	if (r <= 0)
-	{
-		close(_fd);
-		std::cout << "Client on socket " << _fd << " gone" << std::endl;
-		for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
-		{
-			if (&(*it) == this)
-			{
-				it = clients.erase(it);
-				break;
-			}
-		}
-	}
+		s.clientLeave(_fd);
 	else if (!_connected)
-		setInfos(pass);
+		setInfos(s.getPass());
+
 	else // Verifier la commande
 	{
 		int cmd = getCmd(_bufRead);
-		// if (cmd < 0)
-		for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
-			if (it->getType() == FD_CLIENT && &(*it) != this) // Il faudra verifier quels destinataires on vise, pour l'instant on envoie a tous y compris les non connnectes et la commande !!
-				send(it->getFd(), _bufRead, r, 0);
+		if (cmd < 0)
+		{
+			std::cout << "Error sent" << std::endl;
+			send(this->getFd(), "CMD DOES NOT EXIST\n", 20, 0);
+		}
+
+
+		switch(cmd)
+		{
+			case PRIVMSG:
+				sendMsg(c);
+				break ;
+			case JOIN:
+				join(s.getChannels());
+				break;
+			default:
+				break ;
+		}
+
+
 	}
 	std::memset( _bufRead, 0, BUFFER_SIZE); // On vide le buffer !
 }

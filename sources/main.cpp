@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:57:17 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 08:48:48 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 10:27:08 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	main(int ac, char** av)
 {
+
 	if (ac != 3)
 	{
 		std::cout << "Wrong usage:" << std::endl;

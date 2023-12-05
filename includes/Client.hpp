@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/04 15:58:04 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 12:53:21 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define CLIENT_HPP
 
 # include "irc.h"
+# include "Server.hpp"
+
+class Server;
 
 class	Client
 {
@@ -23,16 +26,18 @@ private:
 	int 						_fd;
 	bool						_connected;
 	bool						_passwordOk;
-	std::string 				_nickname;
-	std::string					_username;
+	std::string 				_nickname; // Imposer de commencer par un alpha !
+	std::string					_username; // Imposer de commencer par un alpha !
 	char 						_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
 	char 						_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
 
-	int	setInfos(std::string serverPass);
-	int getCmd(std::string buffer);
+	int		setInfos(std::string serverPass);
+	int 	getCmd(std::string buffer);
 	void	setPass(std::string& s, std::string& serverPass);
 	void	setNick(std::string s);
 	void	setUser(std::string s);
+	void	sendMsg(std::vector<Client>& c);
+	void	join(std::vector<Channel>& channels);
 
 public:
 
@@ -46,7 +51,7 @@ public:
 	void			setType(int newType);
 
 	void	write();
-	void	read(std::vector<Client>& clients, std::string pass);
+	void	read(Server& s);
 
 };
 

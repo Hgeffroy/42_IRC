@@ -19,6 +19,12 @@ Channel::Channel()
 
 }
 
+Channel::Channel(std::string& name, Client& op) : _name(name)
+{
+	_members.push_back(op);
+	_ops.push_back(op);
+}
+
 Channel::~Channel()
 {
 

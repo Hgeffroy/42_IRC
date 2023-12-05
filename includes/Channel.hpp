@@ -15,11 +15,24 @@
 
 # include "irc.h"
 
+class	Client;
+
 class	Channel
 {
-public:
+
+private:
+
+	const std::string	_name;
+	std::vector<Client>	_members;
+	std::vector<Client>	_ops;
+
 	Channel();
+
+public:
+
+	Channel(std::string& name, Client& op);
 	~Channel();
+
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/04 09:35:00 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 12:40:05 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,23 @@ Server::Server(std::string portstr, std::string password)
 	if (listen(s, 128) < 0)
 		throw std::exception();
 	_clients.push_back(Client(FD_SERV, s));
+}
+
+/**  Setters and Getters  *********************************************************************************************/
+
+std::vector<Client>&	Server::getClients()
+{
+	return (_clients);
+}
+
+std::vector<Channel>&	Server::getChannels()
+{
+	return (_channels);
+}
+
+std::string	Server::getPass() const
+{
+	return (_password);
 }
 
 /**  Private member functions  ****************************************************************************************/
@@ -96,6 +113,19 @@ int	Server::higherFd() const
 
 /**  Public member functions  *****************************************************************************************/
 
+void	Server::clientLeave(int fd)
+{
+	close(fd);
+	std::cout << "Client on socket " << fd << " gone" << std::endl;
+	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (it->getFd() == fd)
+		{
+			it = _clients.erase(it); // Verifier qu'on a bien efface sur le serveur !
+			break;
+		}
+	}
+}
 
 void	Server::initFd()
 {
@@ -123,16 +153,13 @@ void	Server::checkFd()
 			if (it->getType() == FD_SERV)
 				accept(*it);
 			else if (it->getType() == FD_CLIENT)
-				it->read(_clients, _password); // Continue si le read a fait sortir le client !!
+				it->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
 		}
 		if (FD_ISSET(it->getFd(), &_fdWrite))
 		{
 			i--;
-			it->write();
+//			it->write();
 		}
 	}
 }
-
-
-
