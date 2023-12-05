@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 12:40:05 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:21:17 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	Server::higherFd() const
 
 /**  Public member functions  *****************************************************************************************/
 
-void	Server::clientLeave(int fd)
+void	Server::delClient(int fd) // Attention a bien del dans les chan aussi ? Normalement ok si je passe bien les refs ? Ou pas ?
 {
 	close(fd);
 	std::cout << "Client on socket " << fd << " gone" << std::endl;
@@ -125,6 +125,11 @@ void	Server::clientLeave(int fd)
 			break;
 		}
 	}
+}
+
+void	Server::addChannel(Channel newChannel)
+{
+	_channels.push_back(newChannel);
 }
 
 void	Server::initFd()

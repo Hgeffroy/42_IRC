@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 14:21:17 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 16:02:52 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,9 +160,30 @@ void	Client::sendMsg(std::vector<Client>& c)
 //	else if ()
 }
 
-void	Client::join(std::vector<Channel>& channels)
+void	Client::join(Server& s)
 {
+	std::string str = _bufRead;
+	int sep1 = static_cast<int>(str.find(' '));
+	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
 
+	// Mettre des protections !!
+
+	std::string	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	if (channelName[0] != '#')
+		; // Send une erreur ici
+
+	std::vector<Channel>			channels = s.getChannels();
+	std::vector<Channel>::iterator	it;
+
+	for (it = channels.begin(); it != channels.end(); ++it)
+	{
+		if (it->getName() == channelName)
+		{
+			it->addUser(*this);
+			return ;
+		}
+	}
+	s.addChannel(Channel(channelName, *this));
 }
 
 /**  Public member functions  *****************************************************************************************/
@@ -180,7 +201,7 @@ void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 	_bufRead[std::strlen(_bufRead) - 1] = 0; // Correction du \n, on verra si on garde.
 
 	if (r <= 0)
-		s.clientLeave(_fd);
+		s.delClient(_fd);
 	else if (!_connected)
 		setInfos(s.getPass());
 
@@ -200,7 +221,7 @@ void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 				sendMsg(c);
 				break ;
 			case JOIN:
-				join(s.getChannels());
+				join(s);
 				break;
 			default:
 				break ;

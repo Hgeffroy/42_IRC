@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 12:53:21 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 15:18:03 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ private:
 	void	setNick(std::string s);
 	void	setUser(std::string s);
 	void	sendMsg(std::vector<Client>& c);
-	void	join(std::vector<Channel>& channels);
+	void	join(Server& s);
 
 public:
 

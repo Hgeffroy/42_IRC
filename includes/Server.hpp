@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 10:27:08 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:21:17 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ public:
 	std::vector<Channel>&	getChannels(); // Volontairement pas const, je veux bien la ref de ce truc pas une copie !!!
 	std::string				getPass() const;
 
-	void	clientLeave(int _fd);
+	void	delClient(int _fd);
+	void	addChannel(Channel newChannel);
 
 	void	initFd();
 	void	checkFd();
