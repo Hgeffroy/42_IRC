@@ -16,7 +16,17 @@
 enum	e_type
 {
 	FD_SERV,		// Client pas encore accepte
-	FD_CLIENT		// Client accepte
+	FD_CLIENT,		// Client accepte
+	FD_CHANNEL
+};
+
+enum	e_cmd
+{
+	PASS,
+	NICK,
+	USER,
+	PRIVMSG,
+	JOIN
 };
 
 #endif

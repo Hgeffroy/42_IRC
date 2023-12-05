@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 11:25:33 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 16:02:52 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client() : _type(0)
-{
-	std::memset( _bufRead, 0, BUFFER_SIZE);
-	std::memset( _bufWrite, 0, BUFFER_SIZE);
-}
-
-Client::Client(int type, int socket) : _type(type), _fd(socket)
+Client::Client(int type, int socket) : _type(type), _fd(socket), _connected(false), _passwordOk(false), _nickname(""), _username("")
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
@@ -38,12 +32,12 @@ int Client::getType() const
 	return (_type);
 }
 
-std::string	Client::getBufRead() const
+const char*	Client::getBufRead() const
 {
 	return (_bufRead);
 }
 
-std::string	Client::getBufWrite() const
+const char*	Client::getBufWrite() const
 {
 	return (_bufWrite);
 }
@@ -59,29 +53,181 @@ void	Client::setType(int newType)
 	_type = newType;
 }
 
-/**  Public member functions  *****************************************************************************************/
+/**  Private member functions  ****************************************************************************************/
 
-void	Client::write()
+int Client::getCmd(std::string buffer)
 {
-	std::cout << "Client writing" << std::endl;
+	const std::string cmds[5] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN"};
+
+	int end = static_cast<int>(buffer.find(' '));
+	std::string cmd = buffer.substr(0, end);
+
+	int i = 0;
+	while (i < 5)
+	{
+		if (cmd == cmds[i])
+			break;
+		i++;
+	}
+	if (i == 5)
+		return (-1);
+	return (i);
 }
 
-void	Client::read(std::vector<Client> clients)
+void	Client::setPass(std::string& s, std::string& serverPass)
 {
-	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0);
-
-	std::cout << "Client reading" << std::endl;
-	if (r <= 0)
+	if (_passwordOk)
+		std::cout << "Password already entered" << std::endl;
+	if (s.substr(5) == serverPass) // Whitespaces ?
 	{
-		close(_fd);
-		std::cout << "Client gone" << std::endl;
+		_passwordOk = true;
+		std::cout << "Correct password" << std::endl;
 	}
 	else
+		std::cout << "Incorrect password" << std::endl;
+}
+
+void	Client::setNick(std::string s) // Verifier qu'il n'y a pas de doublon ?
+{
+	if (_passwordOk)
 	{
-		for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); it++)
+		_nickname = s.substr(5); // Whitespaces ?
+		std::cout << "Nickname set to: " << _nickname << std::endl;
+	}
+	else
+		std::cout << "Please enter the password first" << std::endl;
+}
+
+void	Client::setUser(std::string s) // Doublon ?
+{
+	if (_passwordOk)
+	{
+		_username = s.substr(5);
+		std::cout << "Username set to: " << _username << std::endl;
+	}
+	else
+		std::cout << "Please enter the password first" << std::endl;
+}
+
+
+int	Client::setInfos(std::string serverPass)
+{
+	std::string str = _bufRead;
+	int cmd = getCmd(str);
+	// if (cmd < 0)
+
+	switch(cmd)
+	{
+		case PASS:
+			setPass(str, serverPass);
+			break ;
+		case NICK:
+			setNick(str);
+			break ;
+		case USER:
+			setUser(str);
+			break ;
+		default:
+			; // Faire une gestion d'erreur
+	}
+
+	if (_passwordOk && !_username.empty() && !_nickname.empty())
+		_connected = true;
+	return (0);
+}
+
+void	Client::sendMsg(std::vector<Client>& c)
+{
+	std::string str = _bufRead;
+	int sep1 = static_cast<int>(str.find(' '));
+	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
+
+	// Mettre des protections ici !
+
+	std::string	dest = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	if (std::isalpha(dest[0]))
+	{
+		std::cout << _nickname << " tries to send a msg to " << dest << std::endl;
+		for (std::vector<Client>::iterator it = c.begin(); it != c.end(); ++it)
 		{
-			if (it->getType() == FD_CLIENT && &(*it) != this)
-				send(it->getFd(), _bufRead, r, 0);
+			if (it->_nickname == dest && it->_connected) // Envoyer une erreur si le destinataire existe pas
+			{
+				send(it->getFd(), _bufRead + sep2 + 1, str.length() - sep2 - 1, 0); // C'est du jamais vu
+				send(it->getFd(), "\n", 1, 0);
+			}
 		}
 	}
+//	else if ()
+}
+
+void	Client::join(Server& s)
+{
+	std::string str = _bufRead;
+	int sep1 = static_cast<int>(str.find(' '));
+	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
+
+	// Mettre des protections !!
+
+	std::string	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	if (channelName[0] != '#')
+		; // Send une erreur ici
+
+	std::vector<Channel>			channels = s.getChannels();
+	std::vector<Channel>::iterator	it;
+
+	for (it = channels.begin(); it != channels.end(); ++it)
+	{
+		if (it->getName() == channelName)
+		{
+			it->addUser(*this);
+			return ;
+		}
+	}
+	s.addChannel(Channel(channelName, *this));
+}
+
+/**  Public member functions  *****************************************************************************************/
+
+void	Client::write() // Le serveur ecrit au client
+{
+	std::cout << "Server sending to client" << std::endl;
+	std::memset( _bufWrite, 0, BUFFER_SIZE);
+}
+
+void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
+{
+	std::vector<Client>&	c = s.getClients();
+	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
+	_bufRead[std::strlen(_bufRead) - 1] = 0; // Correction du \n, on verra si on garde.
+
+	if (r <= 0)
+		s.delClient(_fd);
+	else if (!_connected)
+		setInfos(s.getPass());
+
+	else // Verifier la commande
+	{
+		int cmd = getCmd(_bufRead);
+		if (cmd < 0)
+		{
+			std::cout << "Error sent" << std::endl;
+			send(this->getFd(), "CMD DOES NOT EXIST\n", 20, 0);
+		}
+
+
+		switch(cmd)
+		{
+			case PRIVMSG:
+				sendMsg(c);
+				break ;
+			case JOIN:
+				join(s);
+				break;
+			default:
+				break ;
+		}
+
+
+	}
+	std::memset( _bufRead, 0, BUFFER_SIZE); // On vide le buffer !
 }

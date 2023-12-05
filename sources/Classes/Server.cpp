@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/30 11:18:25 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:21:17 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,23 @@ Server::Server(std::string portstr, std::string password)
 	_clients.push_back(Client(FD_SERV, s));
 }
 
+/**  Setters and Getters  *********************************************************************************************/
+
+std::vector<Client>&	Server::getClients()
+{
+	return (_clients);
+}
+
+std::vector<Channel>&	Server::getChannels()
+{
+	return (_channels);
+}
+
+std::string	Server::getPass() const
+{
+	return (_password);
+}
+
 /**  Private member functions  ****************************************************************************************/
 
 int	Server::setPort(std::string& portstr)
@@ -72,14 +89,14 @@ std::string	Server::setPassword(std::string& pass)
 	return (pass);
 }
 
-void	Server::accept(Client& client) // Creer un nouveau client !!
+void	Server::accept(Client& client)
 {
 	int					cs;
 	struct sockaddr_in	csin;
 	socklen_t			csin_len = sizeof(csin);
 
 	cs = ::accept(client.getFd(), reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
-	std::cout << "New client!" << std::endl;
+	std::cout << "New client on socket: " << cs << std::endl;
 	_clients.push_back(Client(FD_CLIENT, cs));
 }
 
@@ -96,6 +113,24 @@ int	Server::higherFd() const
 
 /**  Public member functions  *****************************************************************************************/
 
+void	Server::delClient(int fd) // Attention a bien del dans les chan aussi ? Normalement ok si je passe bien les refs ? Ou pas ?
+{
+	close(fd);
+	std::cout << "Client on socket " << fd << " gone" << std::endl;
+	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (it->getFd() == fd)
+		{
+			it = _clients.erase(it); // Verifier qu'on a bien efface sur le serveur !
+			break;
+		}
+	}
+}
+
+void	Server::addChannel(Channel newChannel)
+{
+	_channels.push_back(newChannel);
+}
 
 void	Server::initFd()
 {
@@ -106,7 +141,7 @@ void	Server::initFd()
 	for (it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		FD_SET(it->getFd(), &_fdRead);
-		if (!it->getBufRead().empty())
+		if (std::strlen(it->getBufWrite()))
 			FD_SET(it->getFd(), &_fdWrite);
 	}
 }
@@ -118,22 +153,18 @@ void	Server::checkFd()
 
 	for (it = _clients.begin(); it != _clients.end() && i > 0; ++it)
 	{
-		std::cout << "Check client on socket: " << it->getFd() << std::endl;
 		if (FD_ISSET(it->getFd(), &_fdRead))
 		{
 			if (it->getType() == FD_SERV)
 				accept(*it);
 			else if (it->getType() == FD_CLIENT)
-				it->read(_clients);
+				it->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
 		}
 		if (FD_ISSET(it->getFd(), &_fdWrite))
 		{
 			i--;
-			it->write();
+//			it->write();
 		}
 	}
 }
-
-
-

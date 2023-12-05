@@ -29,6 +29,7 @@
 # include <vector>
 # include <algorithm>
 # include <unistd.h>
+# include <stdbool.h>
 
 # include "defines.h"
 # include "enum.h"
