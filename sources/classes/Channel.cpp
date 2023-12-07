@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 15:47:10 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/06 08:23:28 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ std::string Channel::getName() const
 	return(_name);
 }
 
+std::vector<Client> Channel::getMembers() const
+{
+	return (_members);
+}
+
 /**  Public member functions  *****************************************************************************************/
 
 void	Channel::addUser(Client& newClient)
 {
 	_members.push_back(newClient);
+	std::cout << newClient.getNick() << " joined channel " << _name << std::endl;
 }

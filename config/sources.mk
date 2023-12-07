@@ -3,14 +3,16 @@
 #                                                         :::      ::::::::    #
 #    sources.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
+#    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/11/27 10:26:10 by twang            ###   ########.fr        #
+#    Updated: 2023/12/06 12:24:36 by hgeffroy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SOURCES		=	sources/Classes/Channel.cpp									\
-				sources/Classes/Client.cpp									\
-				sources/Classes/Server.cpp									\
+SOURCES		=	sources/classes/Channel.cpp									\
+				sources/classes/Client.cpp									\
+				sources/classes/Server.cpp									\
+				sources/utils/getIP.cpp										\
+				sources/utils/getTime.cpp									\
 				sources/main.cpp

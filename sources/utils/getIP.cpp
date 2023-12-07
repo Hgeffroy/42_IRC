@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   irc.hpp                                            :+:      :+:    :+:   */
+/*   getIP.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/06 12:33:58 by hgeffroy         ###   ########.fr       */
+/*   Created: 2023/12/06 10:32:32 by hgeffroy          #+#    #+#             */
+/*   Updated: 2023/12/06 10:40:52 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_IRC_HPP
-# define FT_IRC_HPP
+#include "irc.hpp"
 
-# include "Channel.hpp"
-# include "Client.hpp"
-# include "Server.hpp"
+std::string	getIP()
+{
+	char szBuffer[1024];
 
-# include "replies.h"
-# include "errors.h"
-
-std::string	getIP();
-std::string getTime(Server& s);
-
-#endif
-
+	struct hostent *host = gethostbyname(szBuffer);
+	if (!host)
+		return ("");
+	return (host->h_name);
+}

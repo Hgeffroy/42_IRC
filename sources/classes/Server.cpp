@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 14:21:17 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/06 12:24:36 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ Server::~Server()
 
 }
 
-Server::Server(std::string portstr, std::string password)
+Server::Server(std::string portstr, std::string password) :  _creationTime(time(0)), _name("MyIrcServ")
 {
 	struct sockaddr_in	sin;
 	int					port;
@@ -60,6 +60,16 @@ std::vector<Channel>&	Server::getChannels()
 std::string	Server::getPass() const
 {
 	return (_password);
+}
+
+std::string	Server::getName() const
+{
+	return (_name);
+}
+
+time_t* 	Server::getCreationTime()
+{
+	return (&_creationTime);
 }
 
 /**  Private member functions  ****************************************************************************************/

@@ -23,17 +23,19 @@
 # include <arpa/inet.h>
 # include <cstdlib>
 # include <cstring>
+# include <ctime>
 # include <string>
 # include <exception>
 # include <cerrno>
 # include <vector>
 # include <algorithm>
 # include <unistd.h>
-# include <stdbool.h>
+# include <netdb.h>
 
 # include "defines.h"
 # include "enum.h"
 
 # include <cctype> // Pas inclus dans cstdlib ?
+# include <cstdio>
 
 #endif
