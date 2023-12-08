@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/07 15:22:23 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/08 10:47:13 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client(int type, int socket) : _type(type), _fd(socket), _connected(false), _passwordOk(false), _nickname(""), _username("")
+Client::Client(int type, int socket) : _type(type), _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
@@ -200,9 +200,10 @@ void	Client::sendDM(Server& s, std::string& dest, std::string& msg)
 	{
 		if (it->_nickname == dest && it->_connected) // Envoyer une erreur si le destinataire existe pas
 		{
-			sendToClient(it->_fd, msg);
+			std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg;
+			sendToClient(it->_fd, fullMsg);
 			if (it->_away)
-				sendToClient(_fd, RPL_AWAY(_nickname, it->_nickname, msg));
+				sendToClient(_fd, RPL_AWAY(_nickname, it->_nickname));
 			return ;
 		}
 	}
@@ -219,7 +220,10 @@ void	Client::sendChan(Server& s, std::string& dest, std::string& msg)
 		{
 			std::vector<Client>	members = it->getMembers();
 			for (std::vector<Client>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
-				sendToClient(it2->_fd, msg);
+			{
+				std::string	fullMsg = ":" + _nickname + " PRIVMSG " + it2->_nickname + " :" + msg;
+				sendToClient(it2->_fd, fullMsg);
+			}
 			return ;
 		}
 	}
@@ -233,7 +237,10 @@ void	Client::sendBroadcast(Server& s, std::string& msg)
 	for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
 	{
 		if (it->_connected) // Envoyer une erreur si le destinataire existe pas
+		{
+			std::string	fullMsg = ":" + _nickname + " PRIVMSG " + it->_nickname + " :" + msg;
 			sendToClient(it->_fd, msg);
+		}
 	}
 }
 

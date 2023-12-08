@@ -22,20 +22,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4f70d2d-1f54-40e3-93be-9e3848bb169f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/includes.mk" beforeDir="false" afterPath="$PROJECT_DIR$/config/includes.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sources.mk" beforeDir="false" afterPath="$PROJECT_DIR$/config/sources.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Channel.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Channel.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Client.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Client.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Server.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Server.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/defines.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/defines.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/irc.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/irc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/Classes/Channel.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/Classes/Client.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/Classes/Server.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/errors.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/errors.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/replies.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/replies.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/classes/Client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Client.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,11 +145,6 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Makefile Application.all" />
       <item itemvalue="Makefile Application.debug" />
@@ -181,6 +166,7 @@
       <updated>1701932549613</updated>
       <workItem from="1701932551698" duration="7622000" />
       <workItem from="1701941837149" duration="12868000" />
+      <workItem from="1702023960972" duration="2211000" />
     </task>
     <servers />
   </component>

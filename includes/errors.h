@@ -14,30 +14,30 @@
 # define ERRORS_H
 
 // 401
-# define ERR_NOSUCHNICK(client, nickname)		std::string("401 ") + client + " " + nickname + " :No such nick/channel" + ENDLINE
+# define ERR_NOSUCHNICK(client, nickname)		std::string(":server ") + "401 " + client + " " + nickname + " :No such nick/channel" + ENDLINE
 // 402
-# define ERR_NOSUCHSERVER(client, servname)		std::string("402 ") + client + " " + servname + " :No such server" + ENDLINE
+# define ERR_NOSUCHSERVER(client, servname)		std::string(":server ") + "402 " + client + " " + servname + " :No such server" + ENDLINE
 // 403
-# define ERR_NOSUCHCHANNEL(client, channel)		std::string("403 ") + client + " " + channel + " :No such channel" + ENDLINE
+# define ERR_NOSUCHCHANNEL(client, channel)		std::string(":server ") + "403 " + client + " " + channel + " :No such channel" + ENDLINE
 // 404
-# define ERR_CANNOTSENDTOCHAN(client, channel)	std::string("404 ") + client + " " + channel + " :Cannot send to channel" + ENDLINE
+# define ERR_CANNOTSENDTOCHAN(client, channel)	std::string(":server ") + "404 " + client + " " + channel + " :Cannot send to channel" + ENDLINE
 // 405
-# define ERR_TOOMANYCHANNELS(client, channel)	std::string("405 ") + client + " " + channel + " :You have joined too many channels" + ENDLINE
+# define ERR_TOOMANYCHANNELS(client, channel)	std::string(":server ") + "405 " + client + " " + channel + " :You have joined too many channels" + ENDLINE
 // 412
-# define ERR_NOTEXTTOSEND(client)				std::string("412 ") + client + " " + " :No text to send" + ENDLINE
+# define ERR_NOTEXTTOSEND(client)				std::string(":server ") + "412 " + client + " " + " :No text to send" + ENDLINE
 
 // 431
-# define ERR_NONICKNAMEGIVEN(client)			std::string("431 ") + client + " " + " :No nickanme given" + ENDLINE
+# define ERR_NONICKNAMEGIVEN(client)			std::string(":server ") + "431 " + client + " " + " :No nickanme given" + ENDLINE
 // 432
-# define ERR_ERRONEUSNICKNAME(client, nick)		std::string("432 ") + client + " " + nick + " :Erroneus nickname" + ENDLINE
+# define ERR_ERRONEUSNICKNAME(client, nick)		std::string(":server ") + "432 " + client + " " + nick + " :Erroneus nickname" + ENDLINE
 // 433
-# define ERR_NICKNAMEINUSE(client, nick)		std::string("433 ") + client + " " + nick + " :Nickname is already in use" + ENDLINE
+# define ERR_NICKNAMEINUSE(client, nick)		std::string(":server ") + "433 " + client + " " + nick + " :Nickname is already in use" + ENDLINE
 
 // 461
-# define ERR_NEEDMOREPARAMS(client, command)	std::string("461 ") + client + " " + command + " :Not enough parameters" + ENDLINE
+# define ERR_NEEDMOREPARAMS(client, command)	std::string(":server ") + "461 " + client + " " + command + " :Not enough parameters" + ENDLINE
 // 462
-# define ERR_ALREADYREGISTERED(client)			std::string("462 ") + client + " :You may not register" + ENDLINE
+# define ERR_ALREADYREGISTERED(client)			std::string(":server ") + "462 " + client + " :You may not register" + ENDLINE
 // 464
-# define ERR_PASSWDMISMATCH(client)				std::string("464 ") + client + " :Password incorrect" + ENDLINE
+# define ERR_PASSWDMISMATCH(client)				std::string(":server ") + "464 " + client + " :Password incorrect" + ENDLINE
 
 #endif
