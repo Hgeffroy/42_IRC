@@ -28,6 +28,7 @@
 # include <exception>
 # include <cerrno>
 # include <vector>
+# include <map>
 # include <algorithm>
 # include <unistd.h>
 # include <netdb.h>

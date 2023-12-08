@@ -23,9 +23,13 @@
   <component name="ChangeListManager">
     <list default="true" id="c4f70d2d-1f54-40e3-93be-9e3848bb169f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/errors.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/errors.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Channel.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Channel.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Server.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Server.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/irc.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/replies.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/replies.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/classes/Channel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Channel.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sources/classes/Client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Client.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/classes/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Server.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +170,7 @@
       <updated>1701932549613</updated>
       <workItem from="1701932551698" duration="7622000" />
       <workItem from="1701941837149" duration="12868000" />
-      <workItem from="1702023960972" duration="2211000" />
+      <workItem from="1702023960972" duration="11660000" />
     </task>
     <servers />
   </component>

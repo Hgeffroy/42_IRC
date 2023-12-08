@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/08 10:47:13 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:34:55 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ Client::Client(int type, int socket) : _type(type), _fd(socket), _connected(fals
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
+	std::cout << "Salut je suis le constructeur de Client" << std::endl;
 }
 
 Client::~Client()
 {
-
+	std::cout << "Salut je suis le destructeur de Client" << std::endl;
 }
 
 /**  Setters and getters  *********************************************************************************************/
@@ -203,7 +204,7 @@ void	Client::sendDM(Server& s, std::string& dest, std::string& msg)
 			std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg;
 			sendToClient(it->_fd, fullMsg);
 			if (it->_away)
-				sendToClient(_fd, RPL_AWAY(_nickname, it->_nickname));
+				sendToClient(_fd, RPL_AWAY(_nickname, it->_nickname)); // Le RPL away ne permet pour l'instant pas de set le message away
 			return ;
 		}
 	}
@@ -218,11 +219,11 @@ void	Client::sendChan(Server& s, std::string& dest, std::string& msg)
 	{
 		if (it->getName() == dest)
 		{
-			std::vector<Client>	members = it->getMembers();
-			for (std::vector<Client>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
+			std::map<std::string, std::string>	members = it->getMembers();
+			for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
 			{
-				std::string	fullMsg = ":" + _nickname + " PRIVMSG " + it2->_nickname + " :" + msg;
-				sendToClient(it2->_fd, fullMsg);
+				std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg; // Ce msg est pas bon
+				sendToClient(s.getClientFd(it2->first), fullMsg);
 			}
 			return ;
 		}
@@ -279,6 +280,9 @@ void	Client::join(Server& s, std::string& str)
 	if (channelName[0] != '#')
 		; // Send une erreur ici
 
+	std::string fullMsg = ":" + _nickname + " JOIN " + channelName;
+	sendToClient(_fd, fullMsg);
+
 	std::vector<Channel>&			channels = s.getChannels();
 	std::vector<Channel>::iterator	it;
 
@@ -287,10 +291,17 @@ void	Client::join(Server& s, std::string& str)
 		if (it->getName() == channelName)
 		{
 			it->addUser(*this);
+			sendToClient(_fd, RPL_TOPIC(_nickname, channelName, it->getTopic()));
+			sendToClient(_fd, RPL_NAMREPLY(_nickname, "=", channelName, "@RandomUser")); // A changer !!
+			sendToClient(_fd, RPL_ENDOFNAMES(_nickname, channelName));
+
 			return ;
 		}
 	}
 	s.addChannel(Channel(channelName, *this));
+	sendToClient(_fd, RPL_TOPIC(_nickname, channelName, it->getTopic()));
+	sendToClient(_fd, RPL_NAMREPLY(_nickname, "=", channelName, "@RandomUser")); // A changer !!
+	sendToClient(_fd, RPL_ENDOFNAMES(_nickname, channelName));
 }
 
 std::vector<std::string>	Client::splitBuf()
@@ -333,7 +344,7 @@ void	Client::execCmd(Server &s, std::string& str)
 	else // Verifier la commande
 	{
 		int cmd = getCmd(str);
-		if (cmd < 0)
+		if (cmd < 0 && str != "")
 		{
 			std::cout << "Error sent" << std::endl; // Actually need to send one
 		}
@@ -341,10 +352,10 @@ void	Client::execCmd(Server &s, std::string& str)
 		switch (cmd)
 		{
 			case PRIVMSG:
-				sendMsg(s, str); // A refaire probablement avec str
+				sendMsg(s, str);
 				break;
 			case JOIN:
-				join(s, str); // A refaire probablement avec str
+				join(s, str);
 				break;
 			default:
 				break;
@@ -356,7 +367,7 @@ void	Client::execCmd(Server &s, std::string& str)
 
 void	Client::sendToClient(int fd, std::string str) const
 {
-	send(fd, str.c_str(), str.length(), 0);
+	send(fd, str.c_str(), str.length(), MSG_DONTWAIT + MSG_NOSIGNAL); // Check les flags
 }
 
 void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
