@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   irc.hpp                                            :+:      :+:    :+:   */
+/*   getTime.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/06 12:33:58 by hgeffroy         ###   ########.fr       */
+/*   Created: 2023/12/06 12:21:33 by hgeffroy          #+#    #+#             */
+/*   Updated: 2023/12/06 12:28:51 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_IRC_HPP
-# define FT_IRC_HPP
+#include "irc.hpp"
 
-# include "Channel.hpp"
-# include "Client.hpp"
-# include "Server.hpp"
+std::string	getTime(Server &s)
+{
+	struct tm	tstruct;
+	char 		buffer[16];
 
-# include "replies.h"
-# include "errors.h"
+	tstruct = *localtime(s.getCreationTime());
+	strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", &tstruct);
 
-std::string	getIP();
-std::string getTime(Server& s);
-
-#endif
-
+	return (buffer);
+}

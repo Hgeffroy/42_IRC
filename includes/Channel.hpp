@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 15:15:28 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:09:59 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ class	Channel
 
 private:
 
-	const std::string	_name;
-	std::vector<Client>	_members;
-	std::vector<Client>	_ops;
+	const std::string					_name;
+	std::map<std::string, std::string>	_members;
+	std::string 						_topic;
 
 	Channel();
 
@@ -33,7 +33,9 @@ public:
 	Channel(std::string& name, Client& op);
 	~Channel();
 
-	std::string getName() const;
+	std::string 						getName() const;
+	std::string 						getTopic() const;
+	std::map<std::string, std::string>	getMembers() const;
 
 	void	addUser(Client& newClient);
 

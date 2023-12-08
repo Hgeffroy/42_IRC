@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/05 14:21:17 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:39:38 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ Server::~Server()
 
 }
 
-Server::Server(std::string portstr, std::string password)
+Server::Server(std::string portstr, std::string password) :  _creationTime(time(0)), _name("MyIrcServ")
 {
 	struct sockaddr_in	sin;
 	int					port;
@@ -62,6 +62,16 @@ std::string	Server::getPass() const
 	return (_password);
 }
 
+std::string	Server::getName() const
+{
+	return (_name);
+}
+
+time_t* 	Server::getCreationTime()
+{
+	return (&_creationTime);
+}
+
 /**  Private member functions  ****************************************************************************************/
 
 int	Server::setPort(std::string& portstr)
@@ -97,7 +107,9 @@ void	Server::accept(Client& client)
 
 	cs = ::accept(client.getFd(), reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
 	std::cout << "New client on socket: " << cs << std::endl;
-	_clients.push_back(Client(FD_CLIENT, cs));
+	Client newClient(FD_CLIENT, cs);
+	_clients.push_back(newClient);
+	sleep(2);
 }
 
 int	Server::higherFd() const
@@ -112,6 +124,18 @@ int	Server::higherFd() const
 }
 
 /**  Public member functions  *****************************************************************************************/
+
+int Server::getClientFd(std::string nickname)
+{
+	std::vector<Client>::iterator it;
+
+	for (it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (nickname == it->getNick())
+			return (it->getFd());
+	}
+	return (-1);
+}
 
 void	Server::delClient(int fd) // Attention a bien del dans les chan aussi ? Normalement ok si je passe bien les refs ? Ou pas ?
 {
