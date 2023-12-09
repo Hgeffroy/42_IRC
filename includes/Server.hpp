@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/08 13:29:20 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:25:55 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,21 @@ class	Server
 
 private:
 
-	time_t 					_creationTime;
-	std::string				_name;
-	std::string				_password;
-	std::vector<Client> 	_clients; // Stocker des pointeurs !!
-	std::vector<Channel>	_channels; // Stocker des pointeurs !!
-	fd_set					_fdWrite; // Ceux a qui le serveur va ecrire
-	fd_set					_fdRead; // Ceux que le serveur doit lire
+	time_t 							_creationTime;
+	std::string						_name;
+	std::string						_password;
+	std::map<std::string, Client*> 	_clients;
+	std::vector<Client*>			_newClients;
+	std::vector<Channel*>			_channels;
+	fd_set							_fdWrite; // Ceux a qui le serveur va ecrire
+	fd_set							_fdRead; // Ceux que le serveur doit lire
 
 	Server();
 
 	static int			setPort(std::string& portstr);
 	static std::string	setPassword(std::string& pass);
 
-	void				accept(Client& client);
+	void				accept(Client* client);
 	int 				higherFd() const;
 
 public:
@@ -46,15 +47,16 @@ public:
 	~Server();
 	Server(std::string port, std::string password);
 
-	std::vector<Client>&	getClients(); // Volontairement pas const, je veux bien la ref de ce truc pas une copie !!!
-	std::vector<Channel>&	getChannels(); // Volontairement pas const, je veux bien la ref de ce truc pas une copie !!!
-	std::string				getPass() const;
-	std::string 			getName() const;
-	time_t* 				getCreationTime();
+	std::map<std::string, Client*>	getClients() const;
+	std::vector<Client*>			getNewClients() const;
+	std::vector<Channel*>			getChannels() const;
+	std::string						getPass() const;
+	std::string 					getName() const;
+	time_t* 						getCreationTime();
 
 	int 	getClientFd(std::string nickname);
 	void	delClient(int _fd);
-	void	addChannel(Channel newChannel);
+	void	addChannel(Channel* newChannel);
 
 	void	initFd();
 	void	checkFd();

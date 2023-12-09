@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/08 14:34:55 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:25:45 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,9 @@ void	Client::setNick(std::string str, Server& s) // Verifier qu'il n'y a pas de 
 	else
 		nick = str.substr(5, nextSpace - 5);
 
-	for (std::vector<Client>::iterator it = s.getClients().begin(); it != s.getClients().end(); ++it)
+	for (std::vector<Client*>::iterator it = s.getNewClients().begin(); it != s.getNewClients().end(); ++it)
 	{
-		if (it->getNick() == nick)
+		if ((*it)->getNick() == nick)
 		{
 			sendToClient(_fd, ERR_NICKNAMEINUSE(_nickname, nick));
 			return ;
@@ -143,9 +143,9 @@ void	Client::setUser(std::string str, Server& s) // Doublon ?
 	else
 		usr = str.substr(5, nextSpace - 5);
 
-	for (std::vector<Client>::iterator it = s.getClients().begin(); it != s.getClients().end(); ++it)
+	for (std::vector<Client*>::iterator it = s.getNewClients().begin(); it != s.getNewClients().end(); ++it)
 	{
-		if (it->getUser() == usr)
+		if ((*it)->getUser() == usr)
 		{
 			sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
 			return ;
@@ -183,8 +183,12 @@ int	Client::setInfos(Server& s, std::string& str)
 			; // Faire une gestion d'erreur
 	}
 
-	if (_passwordOk && !_username.empty() && !_nickname.empty())
+	if (_passwordOk && !_username.empty() && !_nickname.empty()) // Faire ca dans la classe Server !!
 	{
+		std::map<std::string, Client*> clients = s.getClients();
+
+		clients[_nickname] = this; // ou &(*this) ?
+		// Delete de newClients.
 		_connected = true;
 		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
 		sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
@@ -195,31 +199,26 @@ int	Client::setInfos(Server& s, std::string& str)
 
 void	Client::sendDM(Server& s, std::string& dest, std::string& msg)
 {
-	std::vector<Client>&	clients = s.getClients();
+	std::map<std::string, Client*>	clients = s.getClients();
 	std::cout << _nickname << " tries to send a msg to client " << dest << std::endl;
-	for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
-	{
-		if (it->_nickname == dest && it->_connected) // Envoyer une erreur si le destinataire existe pas
-		{
-			std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg;
-			sendToClient(it->_fd, fullMsg);
-			if (it->_away)
-				sendToClient(_fd, RPL_AWAY(_nickname, it->_nickname)); // Le RPL away ne permet pour l'instant pas de set le message away
-			return ;
-		}
-	}
-	sendToClient(_fd, ERR_NOSUCHNICK(_nickname, dest));
+
+	std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg;
+	sendToClient(clients[dest]->_fd, fullMsg);
+	if (clients[dest]->_away)
+		sendToClient(_fd, RPL_AWAY(_nickname, clients[dest]->_nickname)); // Le RPL away ne permet pour l'instant pas de set le message away
+				
+	// sendToClient(_fd, ERR_NOSUCHNICK(_nickname, dest));
 }
 
 void	Client::sendChan(Server& s, std::string& dest, std::string& msg)
 {
-	std::vector<Channel>&	channels = s.getChannels();
+	std::vector<Channel*>	channels = s.getChannels();
 	std::cout << _nickname << " tries to send a msg to channel " << dest << std::endl;
-	for (std::vector<Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
+	for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
-		if (it->getName() == dest)
+		if ((*it)->getName() == dest)
 		{
-			std::map<std::string, std::string>	members = it->getMembers();
+			std::map<std::string, std::string>	members = (*it)->getMembers();
 			for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
 			{
 				std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg; // Ce msg est pas bon
@@ -233,15 +232,12 @@ void	Client::sendChan(Server& s, std::string& dest, std::string& msg)
 
 void	Client::sendBroadcast(Server& s, std::string& msg)
 {
-	std::vector<Client>&	clients = s.getClients();
+	std::map<std::string, Client*>	clients = s.getClients();
 	std::cout << _nickname << " tries to send a msg in broadcast" << std::endl;
-	for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
+	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
 	{
-		if (it->_connected) // Envoyer une erreur si le destinataire existe pas
-		{
-			std::string	fullMsg = ":" + _nickname + " PRIVMSG " + it->_nickname + " :" + msg;
-			sendToClient(it->_fd, msg);
-		}
+		std::string	fullMsg = ":" + _nickname + " PRIVMSG " + it->first+ " :" + msg;
+		sendToClient(it->second->_fd, msg);
 	}
 }
 
@@ -283,23 +279,24 @@ void	Client::join(Server& s, std::string& str)
 	std::string fullMsg = ":" + _nickname + " JOIN " + channelName;
 	sendToClient(_fd, fullMsg);
 
-	std::vector<Channel>&			channels = s.getChannels();
-	std::vector<Channel>::iterator	it;
+	std::vector<Channel*>			channels = s.getChannels();
+	std::vector<Channel*>::iterator	it;
 
 	for (it = channels.begin(); it != channels.end(); ++it)
 	{
-		if (it->getName() == channelName)
+		if ((*it)->getName() == channelName)
 		{
-			it->addUser(*this);
-			sendToClient(_fd, RPL_TOPIC(_nickname, channelName, it->getTopic()));
+			(*it)->addUser(*this);
+			sendToClient(_fd, RPL_TOPIC(_nickname, channelName, (*it)->getTopic()));
 			sendToClient(_fd, RPL_NAMREPLY(_nickname, "=", channelName, "@RandomUser")); // A changer !!
 			sendToClient(_fd, RPL_ENDOFNAMES(_nickname, channelName));
 
 			return ;
 		}
 	}
-	s.addChannel(Channel(channelName, *this));
-	sendToClient(_fd, RPL_TOPIC(_nickname, channelName, it->getTopic()));
+	Channel* newChannel = new Channel(channelName, *this);
+	s.addChannel(newChannel);
+	sendToClient(_fd, RPL_TOPIC(_nickname, channelName, (*it)->getTopic()));
 	sendToClient(_fd, RPL_NAMREPLY(_nickname, "=", channelName, "@RandomUser")); // A changer !!
 	sendToClient(_fd, RPL_ENDOFNAMES(_nickname, channelName));
 }
