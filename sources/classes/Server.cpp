@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/09 14:29:08 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/09 16:05:50 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ Server::Server(std::string portstr, std::string password) :  _creationTime(time(
 		throw std::runtime_error("bind failed");
 	if (listen(s, 128) < 0)
 		throw std::runtime_error("listen failed");
-	Client* newClient = new Client(FD_SERV, s);
-	_clients["listener"] = newClient;
+	_listener = s;
+	// Client* newClient = new Client(FD_SERV, s);
+	// _clients["listener"] = newClient;
 }
 
 /**  Setters and Getters  *********************************************************************************************/
@@ -105,13 +106,13 @@ std::string	Server::setPassword(std::string& pass)
 	return (pass);
 }
 
-void	Server::accept(Client* client)
+void	Server::accept()
 {
 	int					cs;
 	struct sockaddr_in	csin;
 	socklen_t			csin_len = sizeof(csin);
 
-	cs = ::accept(client->getFd(), reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
+	cs = ::accept(_listener, reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
 	std::cout << "New client on socket: " << cs << std::endl;
 	Client* newClient = new Client(FD_CLIENT, cs);
 	_newClients.push_back(newClient);
@@ -119,7 +120,7 @@ void	Server::accept(Client* client)
 
 int	Server::higherFd() const
 {
-	int												max = 0;
+	int												max = _listener;
 	std::vector<Client*>::const_iterator			it;
 	std::map<std::string, Client*>::const_iterator	it2;
 
@@ -177,6 +178,8 @@ void	Server::initFd()
 	FD_ZERO(&_fdRead);
 	FD_ZERO(&_fdWrite);
 	
+	FD_SET(_listener, &_fdRead);
+	
 	for (it = _newClients.begin(); it != _newClients.end(); ++it)
 	{
 		FD_SET((*it)->getFd(), &_fdRead);
@@ -198,13 +201,17 @@ void	Server::checkFd()
 	std::map<std::string, Client*>::iterator	it2;
 	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, &_fdWrite, NULL, NULL); // Faire une fonction pour le premier argument.
 
+	if (FD_ISSET(_listener, &_fdRead))
+	{
+		accept();
+		i--;
+	}
+
 	for (it = _newClients.begin(); it != _newClients.end() && i > 0; ++it)
 	{
 		if (FD_ISSET((*it)->getFd(), &_fdRead))
 		{
-			if ((*it)->getType() == FD_SERV) // Socket
-				accept(*it);
-			else if ((*it)->getType() == FD_CLIENT)
+			if ((*it)->getType() == FD_CLIENT)
 				(*it)->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
 		}
@@ -219,9 +226,7 @@ void	Server::checkFd()
 	{
 		if (FD_ISSET(it2->second->getFd(), &_fdRead))
 		{
-			if (it2->second->getType() == FD_SERV) // Socket
-				accept(it2->second);
-			else if (it2->second->getType() == FD_CLIENT)
+			if (it2->second->getType() == FD_CLIENT)
 				it2->second->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
 		}

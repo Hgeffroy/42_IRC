@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/09 14:25:45 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/09 15:49:23 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,9 @@ void	Client::setNick(std::string str, Server& s) // Verifier qu'il n'y a pas de 
 	else
 		nick = str.substr(5, nextSpace - 5);
 
-	for (std::vector<Client*>::iterator it = s.getNewClients().begin(); it != s.getNewClients().end(); ++it)
+	for (std::map<std::string, Client*>::iterator it = s.getClients().begin(); it != s.getClients().end(); ++it)
 	{
-		if ((*it)->getNick() == nick)
+		if (it->second->getNick() == nick)
 		{
 			sendToClient(_fd, ERR_NICKNAMEINUSE(_nickname, nick));
 			return ;
@@ -143,9 +143,9 @@ void	Client::setUser(std::string str, Server& s) // Doublon ?
 	else
 		usr = str.substr(5, nextSpace - 5);
 
-	for (std::vector<Client*>::iterator it = s.getNewClients().begin(); it != s.getNewClients().end(); ++it)
+	for (std::map<std::string, Client*>::iterator it = s.getClients().begin(); it != s.getClients().end(); ++it)
 	{
-		if ((*it)->getUser() == usr)
+		if (it->second->getUser() == usr)
 		{
 			sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
 			return ;

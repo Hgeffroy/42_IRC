@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/09 14:25:55 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/09 16:05:02 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class	Server
 
 private:
 
+	int								_listener;
 	time_t 							_creationTime;
 	std::string						_name;
 	std::string						_password;
@@ -39,7 +40,7 @@ private:
 	static int			setPort(std::string& portstr);
 	static std::string	setPassword(std::string& pass);
 
-	void				accept(Client* client);
+	void				accept();
 	int 				higherFd() const;
 
 public:
