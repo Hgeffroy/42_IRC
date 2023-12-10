@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/08 14:09:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:42:12 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ private:
 
 public:
 
-	Channel(std::string& name, Client& op);
+	Channel(std::string& name, std::string& founder);
 	~Channel();
 
 	std::string 						getName() const;

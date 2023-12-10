@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/08 14:09:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:41:51 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ Channel::Channel()
 
 }
 
-Channel::Channel(std::string& name, Client& op) : _name(name), _topic("Random topic")
+Channel::Channel(std::string& name, std::string& founder) : _name(name), _topic("Random topic")
 {
-	_members[op.getNick()] = "@";
+	_members[founder] = "@";
 	std::cout << "Channel " << _name << " was created" << std::endl;
 }
 
