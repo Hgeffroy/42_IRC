@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/09 15:49:23 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:44:06 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client(int type, int socket) : _type(type), _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
+Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
@@ -27,11 +27,6 @@ Client::~Client()
 }
 
 /**  Setters and getters  *********************************************************************************************/
-
-int Client::getType() const
-{
-	return (_type);
-}
 
 const char*	Client::getBufWrite() const
 {
@@ -115,7 +110,9 @@ void	Client::setNick(std::string str, Server& s) // Verifier qu'il n'y a pas de 
 	else
 		nick = str.substr(5, nextSpace - 5);
 
-	for (std::map<std::string, Client*>::iterator it = s.getClients().begin(); it != s.getClients().end(); ++it)
+	std::map<std::string, Client*>	clients = s.getClients();
+
+	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 	{
 		if (it->second->getNick() == nick)
 		{
@@ -138,12 +135,15 @@ void	Client::setUser(std::string str, Server& s) // Doublon ?
 {
 	int 		nextSpace = static_cast<int>(str.find_first_of(" \n\r", 6));
 	std::string usr;
+	
 	if (nextSpace == static_cast<int>(std::string::npos))
 		usr = str.substr(5);
 	else
 		usr = str.substr(5, nextSpace - 5);
 
-	for (std::map<std::string, Client*>::iterator it = s.getClients().begin(); it != s.getClients().end(); ++it)
+	std::map<std::string, Client*>	clients = s.getClients();
+
+	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 	{
 		if (it->second->getUser() == usr)
 		{
@@ -294,9 +294,9 @@ void	Client::join(Server& s, std::string& str)
 			return ;
 		}
 	}
-	Channel* newChannel = new Channel(channelName, *this);
+	Channel* newChannel = new Channel(channelName, _nickname);
 	s.addChannel(newChannel);
-	sendToClient(_fd, RPL_TOPIC(_nickname, channelName, (*it)->getTopic()));
+	sendToClient(_fd, RPL_TOPIC(_nickname, channelName, newChannel->getTopic()));
 	sendToClient(_fd, RPL_NAMREPLY(_nickname, "=", channelName, "@RandomUser")); // A changer !!
 	sendToClient(_fd, RPL_ENDOFNAMES(_nickname, channelName));
 }

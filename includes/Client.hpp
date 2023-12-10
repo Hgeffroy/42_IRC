@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/07 14:19:53 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:22:53 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ class	Client
 
 private:
 
-	int							_type;
 	int 						_fd;
 	bool						_connected;
 	bool						_passwordOk;
@@ -51,7 +50,7 @@ private:
 
 public:
 
-	Client(int type, int socket);
+	Client(int socket);
 	~Client();
 
 	int 			getType() const;
