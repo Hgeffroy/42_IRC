@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/09 16:05:50 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:23:45 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ Server::Server(std::string portstr, std::string password) :  _creationTime(time(
 	if (listen(s, 128) < 0)
 		throw std::runtime_error("listen failed");
 	_listener = s;
-	// Client* newClient = new Client(FD_SERV, s);
-	// _clients["listener"] = newClient;
 }
 
 /**  Setters and Getters  *********************************************************************************************/
@@ -114,7 +112,7 @@ void	Server::accept()
 
 	cs = ::accept(_listener, reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
 	std::cout << "New client on socket: " << cs << std::endl;
-	Client* newClient = new Client(FD_CLIENT, cs);
+	Client* newClient = new Client(cs);
 	_newClients.push_back(newClient);
 }
 
@@ -211,8 +209,7 @@ void	Server::checkFd()
 	{
 		if (FD_ISSET((*it)->getFd(), &_fdRead))
 		{
-			if ((*it)->getType() == FD_CLIENT)
-				(*it)->read(*this); // Continue si le read a fait sortir le client !!
+			(*it)->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
 		}
 		if (FD_ISSET((*it)->getFd(), &_fdWrite))
@@ -226,8 +223,7 @@ void	Server::checkFd()
 	{
 		if (FD_ISSET(it2->second->getFd(), &_fdRead))
 		{
-			if (it2->second->getType() == FD_CLIENT)
-				it2->second->read(*this); // Continue si le read a fait sortir le client !!
+			it2->second->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
 		}
 		if (FD_ISSET(it2->second->getFd(), &_fdWrite))

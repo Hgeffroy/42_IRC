@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/09 15:49:23 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:23:03 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client(int type, int socket) : _type(type), _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
+Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
@@ -27,11 +27,6 @@ Client::~Client()
 }
 
 /**  Setters and getters  *********************************************************************************************/
-
-int Client::getType() const
-{
-	return (_type);
-}
 
 const char*	Client::getBufWrite() const
 {
