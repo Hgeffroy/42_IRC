@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   irc.hpp                                            :+:      :+:    :+:   */
+/*   printMap.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/06 12:33:58 by hgeffroy         ###   ########.fr       */
+/*   Created: 2023/12/11 14:28:15 by hgeffroy          #+#    #+#             */
+/*   Updated: 2023/12/11 14:28:15 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_IRC_HPP
-# define FT_IRC_HPP
+#include "irc.hpp"
 
-# include "Channel.hpp"
-# include "Client.hpp"
-# include "Server.hpp"
-
-# include "replies.h"
-# include "errors.h"
-
-std::string	getIP();
-std::string getTime(Server& s);
-void		printClients(std::map<std::string, Client*> map);
-
-
-#endif
-
+void	printClients(std::map<std::string, Client*> map)
+{
+	std::map<std::string, Client*>::iterator it;
+	for (it = map.begin(); it != map.end(); ++it)
+	{
+		std::cout << "First: " << it->first << " Second: " << it->second->getNick() << std::endl;
+	}
+}
