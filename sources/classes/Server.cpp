@@ -47,19 +47,19 @@ Server::Server(std::string portstr, std::string password) :  _creationTime(time(
 
 /**  Setters and Getters  *********************************************************************************************/
 
-std::map<std::string, Client*>	Server::getClients() const
+std::map<std::string, Client*>&	Server::getClients()
 {
 	return (_clients);
+}
+
+std::vector<Channel*>&	Server::getChannels()
+{
+	return (_channels);
 }
 
 std::vector<Client*>	Server::getNewClients() const
 {
 	return (_newClients);
-}
-
-std::vector<Channel*>	Server::getChannels() const
-{
-	return (_channels);
 }
 
 std::string	Server::getPass() const

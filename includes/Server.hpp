@@ -48,9 +48,9 @@ public:
 	~Server();
 	Server(std::string port, std::string password);
 
-	std::map<std::string, Client*>	getClients() const;
+	std::map<std::string, Client*>&	getClients();
+	std::vector<Channel*>&			getChannels();
 	std::vector<Client*>			getNewClients() const;
-	std::vector<Channel*>			getChannels() const;
 	std::string						getPass() const;
 	std::string 					getName() const;
 	time_t* 						getCreationTime();

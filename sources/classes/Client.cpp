@@ -185,7 +185,7 @@ int	Client::setInfos(Server& s, std::string& str)
 
 	if (_passwordOk && !_username.empty() && !_nickname.empty()) // Faire ca dans la classe Server !!
 	{
-		std::map<std::string, Client*> clients = s.getClients();
+		std::map<std::string, Client*>& clients = s.getClients();
 
 		clients[_nickname] = this; // ou &(*this) ?
 		// Delete de newClients.
