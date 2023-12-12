@@ -6,11 +6,19 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 08:31:06 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:29:11 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
+
+void	sendChannelRPL(int fd, std::string client, std::string channel, std::string topic, std::string symbol, std::string nickPrefixed)
+{
+	::sendToClient(fd, RPL_TOPIC(client, channel, topic));
+	::sendToClient(fd, RPL_NAMREPLY(client, symbol, channel, nickPrefixed)); // A changer !!
+	::sendToClient(fd, RPL_ENDOFNAMES(client, channel));
+}
+
 
 void	join(Server& s, Client& c, std::string& str)
 {
@@ -34,16 +42,12 @@ void	join(Server& s, Client& c, std::string& str)
 		if ((*it)->getName() == channelName)
 		{
 			(*it)->addUser(c);
-			::sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), channelName, (*it)->getTopic()));
-			::sendToClient(c.getFd(), RPL_NAMREPLY(c.getNick(), "=", channelName, "@RandomUser")); // A changer !!
-			::sendToClient(c.getFd(), RPL_ENDOFNAMES(c.getNick(), channelName));
-
+			sendChannelRPL(c.getFd(), c.getNick(), channelName, (*it)->getTopic(), "=", "@randomUser");
 			return ;
 		}
 	}
 	Channel* newChannel = new Channel(channelName, c.getNick());
 	s.addChannel(newChannel);
-	::sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), channelName, newChannel->getTopic()));
-	::sendToClient(c.getFd(), RPL_NAMREPLY(c.getNick(), "=", channelName, "@RandomUser")); // A changer !!
-	::sendToClient(c.getFd(), RPL_ENDOFNAMES(c.getNick(), channelName));
+	sendChannelRPL(c.getFd(), c.getNick(), channelName, newChannel->getTopic(), "=", "@randomUser");
+
 }

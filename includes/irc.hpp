@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 09:30:24 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:31:10 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 // Utils
 std::string	getIP();
 std::string getTime(Server& s);
-void		printClients(std::map<std::string, Client*> map);
 void		sendToClient(int fd, std::string str);
+void		printClients(std::map<std::string, Client*> map);
 
 // Cmds
 

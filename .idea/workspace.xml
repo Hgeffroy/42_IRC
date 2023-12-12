@@ -22,6 +22,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ccef0a06-1dcc-450c-bc13-11c139607535" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/sources/cmds/join.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/cmds/nick.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/cmds/pass.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/cmds/privmsg.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/cmds/user.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/utils/sendToClient.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/sources.mk" beforeDir="false" afterPath="$PROJECT_DIR$/config/sources.mk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/Channel.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Channel.hpp" afterDir="false" />
@@ -99,6 +105,10 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "hgeffroy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
@@ -169,7 +179,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702369227850</updated>
-      <workItem from="1702369229863" duration="54000" />
+      <workItem from="1702369229863" duration="775000" />
     </task>
     <servers />
   </component>
