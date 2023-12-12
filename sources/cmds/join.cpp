@@ -14,12 +14,16 @@
 
 void	join(Server& s, Client& c, std::string& str)
 {
+	std::string channelName;
 	int sep1 = static_cast<int>(str.find(' '));
 	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
 
 	// Mettre des protections !!
-
-	std::string	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	if (sep2 == -1) {
+		channelName = str.substr(sep1 + 1, str.size() - sep1 - 2);
+	}
+	else
+		channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
 	if (channelName[0] != '#')
 		; // Send une erreur ici
 
