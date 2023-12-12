@@ -17,6 +17,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/getTime.cpp									\
 				sources/utils/printMap.cpp									\
 				sources/utils/sendToClient.cpp								\
+				sources/cmds/mode_a.cpp										\
 				sources/cmds/join.cpp										\
 				sources/cmds/nick.cpp										\
 				sources/cmds/pass.cpp										\

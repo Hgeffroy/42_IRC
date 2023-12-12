@@ -26,7 +26,8 @@ enum	e_cmd
 	NICK,
 	USER,
 	PRIVMSG,
-	JOIN
+	JOIN,
+	MODE
 };
 
 #endif
