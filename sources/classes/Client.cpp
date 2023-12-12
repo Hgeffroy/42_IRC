@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/10 09:44:06 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:27:11 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,32 @@ std::string Client::getUser() const
 	return (_username);
 }
 
+bool	Client::getConnected() const
+{
+	return (_connected);
+}
+
+bool	Client::getAway() const
+{
+	return (_away);
+}
+
+void	Client::setPassOk()
+{
+	_passwordOk = true;
+}
+
+void	Client::setUser(std::string& str)
+{
+		_username = str;
+}
+
+void	Client::setNick(std::string& str)
+{
+		_nickname = str;
+}
+
+
 /**  Private member functions  ****************************************************************************************/
 
 int Client::getCmd(std::string& buffer)
@@ -69,100 +95,6 @@ int Client::getCmd(std::string& buffer)
 	return (i);
 }
 
-void	Client::setPass(std::string& str, Server& s)
-{
-	if (_connected)
-	{
-		sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
-		return ;
-	}
-
-	int 		nextSpace = static_cast<int>(str.find_first_of(" \n\r", 6));
-	std::string pass;
-	if (nextSpace == static_cast<int>(std::string::npos))
-		pass = str.substr(5);
-	else
-		pass = str.substr(5, nextSpace - 5);
-
-	std::cout << "Pass is: " << pass << " of size " << pass.size() << std::endl;
-
-	if (pass.empty())
-	{
-		sendToClient(_fd, ERR_NEEDMOREPARAMS(_nickname, "PASS"));
-		return ;
-	}
-
-	if (pass == s.getPass())
-	{
-		_passwordOk = true;
-		std::cout << "Correct password" << std::endl;
-	}
-	else
-		sendToClient(_fd, ERR_PASSWDMISMATCH(_nickname)); // May close connection
-}
-
-void	Client::setNick(std::string str, Server& s) // Verifier qu'il n'y a pas de doublon ?
-{
-	int 		nextSpace = static_cast<int>(str.find_first_of(" \n\r", 6));
-	std::string nick;
-	if (nextSpace == static_cast<int>(std::string::npos))
-		nick = str.substr(5);
-	else
-		nick = str.substr(5, nextSpace - 5);
-
-	std::map<std::string, Client*>	clients = s.getClients();
-
-	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
-	{
-		if (it->second->getNick() == nick)
-		{
-			sendToClient(_fd, ERR_NICKNAMEINUSE(_nickname, nick));
-			return ;
-		}
-	}
-
-	if (nick.empty())
-	{
-		sendToClient(_fd, ERR_NONICKNAMEGIVEN(_nickname));
-		return ;
-	}
-
-	_nickname = nick; // Whitespaces ?
-	std::cout << "Nickname set to: " << _nickname << std::endl;
-}
-
-void	Client::setUser(std::string str, Server& s) // Doublon ?
-{
-	int 		nextSpace = static_cast<int>(str.find_first_of(" \n\r", 6));
-	std::string usr;
-	
-	if (nextSpace == static_cast<int>(std::string::npos))
-		usr = str.substr(5);
-	else
-		usr = str.substr(5, nextSpace - 5);
-
-	std::map<std::string, Client*>	clients = s.getClients();
-
-	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
-	{
-		if (it->second->getUser() == usr)
-		{
-			sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
-			return ;
-		}
-	}
-
-	if (usr.empty())
-	{
-		sendToClient(_fd, ERR_NEEDMOREPARAMS(_nickname, "USER"));
-		return ;
-	}
-
-	_username = usr;
-	std::cout << "Username set to: " << _username << std::endl;
-}
-
-
 int	Client::setInfos(Server& s, std::string& str)
 {
 	int cmd = getCmd(str);
@@ -171,13 +103,13 @@ int	Client::setInfos(Server& s, std::string& str)
 	switch(cmd)
 	{
 		case PASS:
-			setPass(str, s);
+			::pass(s, *this, str);
 			break ;
 		case NICK:
-			setNick(str, s);
+			::nick(s, *this, str);
 			break ;
 		case USER:
-			setUser(str, s);
+			::user(s, *this, str);
 			break ;
 		default:
 			; // Faire une gestion d'erreur
@@ -190,115 +122,11 @@ int	Client::setInfos(Server& s, std::string& str)
 		clients[_nickname] = this; // ou &(*this) ?
 		// Delete de newClients.
 		_connected = true;
-		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
-		sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
-		sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
+		::sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
+		::sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
+		::sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
 	}
 	return (0);
-}
-
-void	Client::sendDM(Server& s, std::string& dest, std::string& msg)
-{
-	std::map<std::string, Client*>	clients = s.getClients();
-	std::cout << _nickname << " tries to send a msg to client " << dest << std::endl;
-
-	std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg;
-	sendToClient(clients[dest]->_fd, fullMsg);
-	if (clients[dest]->_away)
-		sendToClient(_fd, RPL_AWAY(_nickname, clients[dest]->_nickname)); // Le RPL away ne permet pour l'instant pas de set le message away
-				
-	// sendToClient(_fd, ERR_NOSUCHNICK(_nickname, dest));
-}
-
-void	Client::sendChan(Server& s, std::string& dest, std::string& msg)
-{
-	std::vector<Channel*>	channels = s.getChannels();
-	std::cout << _nickname << " tries to send a msg to channel " << dest << std::endl;
-	for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
-	{
-		if ((*it)->getName() == dest)
-		{
-			std::map<std::string, std::string>	members = (*it)->getMembers();
-			for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
-			{
-				std::string	fullMsg = ":" + _nickname + " PRIVMSG " + dest + " :" + msg; // Ce msg est pas bon
-				sendToClient(s.getClientFd(it2->first), fullMsg);
-			}
-			return ;
-		}
-	}
-	sendToClient(_fd, ERR_CANNOTSENDTOCHAN(_nickname, dest));
-}
-
-void	Client::sendBroadcast(Server& s, std::string& msg)
-{
-	std::map<std::string, Client*>	clients = s.getClients();
-	std::cout << _nickname << " tries to send a msg in broadcast" << std::endl;
-	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
-	{
-		std::string	fullMsg = ":" + _nickname + " PRIVMSG " + it->first+ " :" + msg;
-		sendToClient(it->second->_fd, msg);
-	}
-}
-
-void	Client::sendMsg(Server& s, std::string& str)
-{
-	int sep1 = static_cast<int>(str.find(' '));
-	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
-
-	// Mettre des protections ici !
-
-	std::string	dest = str.substr(sep1 + 1, sep2 - sep1 - 1);
-	std::string msg = str.substr(sep2 + 1);
-
-	if (msg.empty())
-	{
-		sendToClient(_fd, ERR_NOTEXTTOSEND(_nickname));
-		return ;
-	}
-
-	if (std::isalpha(dest[0]))
-		sendDM(s, dest, msg);
-	else if (dest[0] == '#')
-		sendChan(s, dest, msg);
-	else if (dest[0] == '$')
-		; // Send to all clients on server (broadcast)
-}
-
-void	Client::join(Server& s, std::string& str)
-{
-	int sep1 = static_cast<int>(str.find(' '));
-	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
-
-	// Mettre des protections !!
-
-	std::string	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
-	if (channelName[0] != '#')
-		; // Send une erreur ici
-
-	std::string fullMsg = ":" + _nickname + " JOIN " + channelName;
-	sendToClient(_fd, fullMsg);
-
-	std::vector<Channel*>			channels = s.getChannels();
-	std::vector<Channel*>::iterator	it;
-
-	for (it = channels.begin(); it != channels.end(); ++it)
-	{
-		if ((*it)->getName() == channelName)
-		{
-			(*it)->addUser(*this);
-			sendToClient(_fd, RPL_TOPIC(_nickname, channelName, (*it)->getTopic()));
-			sendToClient(_fd, RPL_NAMREPLY(_nickname, "=", channelName, "@RandomUser")); // A changer !!
-			sendToClient(_fd, RPL_ENDOFNAMES(_nickname, channelName));
-
-			return ;
-		}
-	}
-	Channel* newChannel = new Channel(channelName, _nickname);
-	s.addChannel(newChannel);
-	sendToClient(_fd, RPL_TOPIC(_nickname, channelName, newChannel->getTopic()));
-	sendToClient(_fd, RPL_NAMREPLY(_nickname, "=", channelName, "@RandomUser")); // A changer !!
-	sendToClient(_fd, RPL_ENDOFNAMES(_nickname, channelName));
 }
 
 std::vector<std::string>	Client::splitBuf()
@@ -349,10 +177,10 @@ void	Client::execCmd(Server &s, std::string& str)
 		switch (cmd)
 		{
 			case PRIVMSG:
-				sendMsg(s, str);
+				::sendMsg(s, *this, str);
 				break;
 			case JOIN:
-				join(s, str);
+				::join(s, *this, str);
 				break;
 			default:
 				break;
@@ -361,11 +189,6 @@ void	Client::execCmd(Server &s, std::string& str)
 }
 
 /**  Public member functions  *****************************************************************************************/
-
-void	Client::sendToClient(int fd, std::string str) const
-{
-	send(fd, str.c_str(), str.length(), MSG_DONTWAIT + MSG_NOSIGNAL); // Check les flags
-}
 
 void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 {

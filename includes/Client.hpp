@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/10 09:22:53 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:03:39 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +36,33 @@ private:
 	void						execCmd(Server &s, std::string& str);
 	std::vector<std::string>	splitBuf();
 
-	void	setNick(std::string str, Server& s);
-	void	setUser(std::string str, Server& s);
-	void	setPass(std::string& str, Server& s);
+//	void	setNick(std::string str, Server& s);
+//	void	setUser(std::string str, Server& s);
 	int		setInfos(Server& s, std::string& str);
-
-	void	sendDM(Server& s, std::string& dest, std::string& msg);
-	void	sendChan(Server& s, std::string& dest, std::string& msg);
-	void	sendBroadcast(Server& s, std::string& msg);
-	void	sendMsg(Server& s, std::string& str);
-
-	void	join(Server& s, std::string& str);
+//	void	setPass(std::string& str, Server& s);
+//
+//	void	sendDM(Server& s, std::string& dest, std::string& msg);
+//	void	sendChan(Server& s, std::string& dest, std::string& msg);
+//	void	sendBroadcast(Server& s, std::string& msg);
+//	void	sendMsg(Server& s, std::string& str);
+//
+//	void	join(Server& s, std::string& str);
 
 public:
 
 	Client(int socket);
 	~Client();
 
-	int 			getType() const;
 	int 			getFd() const;
 	const char*		getBufWrite() const;
 	std::string 	getNick() const;
 	std::string 	getUser() const;
+	bool			getConnected() const;
+	bool			getAway() const;
+	void			setPassOk();
+	void			setUser(std::string& str);
+	void			setNick(std::string& str);
 
-	void	sendToClient(int fd, std::string str) const;
 	void	read(Server& s);
 
 };

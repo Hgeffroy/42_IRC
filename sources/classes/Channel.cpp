@@ -19,7 +19,7 @@ Channel::Channel()
 
 }
 
-Channel::Channel(std::string& name, std::string& founder) : _name(name), _topic("Random topic")
+Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic("Random topic")
 {
 	_members[founder] = "@";
 	std::cout << "Channel " << _name << " was created" << std::endl;

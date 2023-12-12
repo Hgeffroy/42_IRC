@@ -30,7 +30,7 @@ private:
 
 public:
 
-	Channel(std::string& name, std::string& founder);
+	Channel(std::string const& name, std::string const& founder);
 	~Channel();
 
 	std::string 						getName() const;

@@ -16,4 +16,10 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/getIP.cpp										\
 				sources/utils/getTime.cpp									\
 				sources/utils/printMap.cpp									\
+				sources/utils/sendToClient.cpp								\
+				sources/cmds/join.cpp										\
+				sources/cmds/nick.cpp										\
+				sources/cmds/pass.cpp										\
+				sources/cmds/privmsg.cpp									\
+				sources/cmds/user.cpp										\
 				sources/main.cpp
