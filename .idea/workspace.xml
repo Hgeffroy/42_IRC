@@ -21,13 +21,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="971414d4-292c-4d68-a954-36a88c0d6927" name="Changes" comment="">
+    <list default="true" id="ccef0a06-1dcc-450c-bc13-11c139607535" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/sources.mk" beforeDir="false" afterPath="$PROJECT_DIR$/config/sources.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Server.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Server.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Channel.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Channel.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Client.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Client.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/irc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/classes/Channel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Channel.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sources/classes/Client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Client.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/classes/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Server.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +85,7 @@
   "customColor": "",
   "associatedIndex": 8
 }]]></component>
-  <component name="ProjectId" id="2ZOpXydwNzKdbZW3TejIHtLu5Go" />
+  <component name="ProjectId" id="2ZQzjcaf7F9asolR83OCjFjZWgA" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -98,11 +99,8 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "hgeffroy",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -166,12 +164,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="971414d4-292c-4d68-a954-36a88c0d6927" name="Changes" comment="" />
-      <created>1702303024374</created>
+      <changelist id="ccef0a06-1dcc-450c-bc13-11c139607535" name="Changes" comment="" />
+      <created>1702369227850</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1702303024374</updated>
-      <workItem from="1702303026531" duration="501000" />
+      <updated>1702369227850</updated>
+      <workItem from="1702369229863" duration="54000" />
     </task>
     <servers />
   </component>
