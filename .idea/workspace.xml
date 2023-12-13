@@ -23,14 +23,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7ba04085-8a50-40d8-96d8-5cc70eed31cf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/sources.mk" beforeDir="false" afterPath="$PROJECT_DIR$/config/sources.mk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Client.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Client.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/enum.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/enum.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/irc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/irc.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/replies.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/replies.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/classes/Channel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Channel.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/classes/Client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/classes/Client.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/cmds/join.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/cmds/join.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/cmds/who.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/cmds/who.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/utils/sendToClient.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sources/utils/sendToClient.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +169,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702454218752</updated>
-      <workItem from="1702454220910" duration="1864000" />
+      <workItem from="1702454220910" duration="5773000" />
     </task>
     <servers />
   </component>
