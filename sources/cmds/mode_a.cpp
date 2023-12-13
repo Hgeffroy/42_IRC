@@ -1,21 +1,13 @@
 #include "irc.hpp"
 
-void	setUserLimit(Server &s, Client &c, std::string str, std::string target)
+void	setUserLimit(Server &s, Client &c, Channel *ch, std::string str)
 {
-	std::vector< Channel* > chan = s.getChannels();
-	std::vector< Channel* >::iterator it;
-	for (it = chan.begin(); it != chan.end(); ++it)
-	{
-		if ((*it)->getName() == target) {
-			break ;
-		}
+	std::map<std::string, std::string> members = ch->getMembers();
+	std::cout << members[c.getNick()] << std::endl;
+	if (members[c.getNick()] != "@") {
+		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		return ;
 	}
-	//std::map<std::string, std::string>	members;
-	//std::map<std::string, std::string>::iterator	itMembers;
-	//for (itMembers = members.begin(); it != members.end(); ++it)
-	//{
-
-	//}
 }
 
 void	mode(Server& s, Client& c, std::string& str)
@@ -27,16 +19,9 @@ void	mode(Server& s, Client& c, std::string& str)
 		end = str.size() - 1;
 	target = str.substr(start + 1, end - start - 1);
 	std::cout << "-" << target << "-" << std::endl;
-	std::vector< Channel* > chan = s.getChannels();
-	std::vector< Channel* >::iterator it;
-	for (it = chan.begin(); it != chan.end(); ++it)
-	{
-		if ((*it)->getName() == target) {
-			break ;
-		}
-	}
-	if (it == chan.end()) {
-		std::cerr << "DIDNT FIND A CHANNEL NAMED LIKE THIS" << std::endl;
+	std::map<std::string, Channel*>	chan = s.getChannels();
+	if (!chan[target]) {
+		std::cerr << "NO CHANNEL" << std::endl;
 		return ;
 	}
 	std::string modeStr = str.substr(end, str.size() - end - 1);
@@ -62,7 +47,7 @@ void	mode(Server& s, Client& c, std::string& str)
 		/* code */
 		break;
 	case l:
-		setUserLimit(s, c, modeStr, target);
+		setUserLimit(s, c, chan[target], modeStr);
 		break;
 	default:
 		std::cerr << "Not an option that we coded" << std::endl;
