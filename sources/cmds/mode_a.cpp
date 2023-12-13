@@ -21,4 +21,6 @@ void	mode(Server& s, Client& c, std::string& str)
 		std::cerr << "DIDNT FIND A CHANNEL NAMED LIKE THIS" << std::endl;
 		return ;
 	}
+	std::string modeStr = str.substr(end, str.size() - end - 1);
+	std::cout << "=" << modeStr << "=" << std::endl;
 }
