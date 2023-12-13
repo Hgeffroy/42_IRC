@@ -50,7 +50,7 @@ void	join(Server& s, Client& c, std::string& str)
 
 	std::map<std::string, Channel*>			channels = s.getChannels();
 
-	if (channels[channelName] && channels[channelName]->underUserLimit())
+	if (channels[channelName] && channels[channelName]->getUnderUserLimit())
 	{
 		channels[channelName]->addUser(c);
 		sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), channelName, (channels[channelName])->getTopic(), "=", "@randomUser");
