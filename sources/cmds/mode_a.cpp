@@ -2,7 +2,8 @@
 
 void	mode(Server& s, Client& c, std::string& str)
 {
-	std::string target;
+	std::string	target;
+
 	int start = str.find(' ');
 	int end = str.find(' ', start + 1);
 	if (end == -1)
@@ -32,7 +33,7 @@ void	mode(Server& s, Client& c, std::string& str)
 	switch (modeOption)
 	{
 	case i:
-		/* code */
+		i_opt(chan, c, modeStr);
 		break;
 	case t:
 		/* code */

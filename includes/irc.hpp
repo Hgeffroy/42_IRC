@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 09:30:24 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/13 12:19:07 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	sendMsg(Server& s, Client& c, std::string& str);
 void	user(Server& s, Client& c, std::string& str);
 void	mode(Server& s, Client& c, std::string& str);
 
+void	i_opt(std::vector< Channel* >& channel, Client& c, std::string& params);
 
 #endif
 
