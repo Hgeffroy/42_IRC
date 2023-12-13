@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/29 13:35:08 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/13 08:59:37 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ enum	e_cmd
 	USER,
 	PRIVMSG,
 	JOIN,
-	MODE
+	MODE,
+	WHO
 };
 
-enum	e_modeo
+enum	e_mode
 {
 	i = 105,
 	t = 116,

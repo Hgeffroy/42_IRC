@@ -19,7 +19,7 @@ Channel::Channel()
 
 }
 
-Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic("Random topic"), _userLimit(-1), _nbUsers(1)
+Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic(""), _userLimit(-1), _nbUsers(1)
 {
 	_members[founder] = "@";
 	std::cout << "Channel -" << _name << "- was created" << std::endl;

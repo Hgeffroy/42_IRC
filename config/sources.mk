@@ -23,4 +23,5 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/cmds/pass.cpp										\
 				sources/cmds/privmsg.cpp									\
 				sources/cmds/user.cpp										\
+				sources/cmds/who.cpp										\
 				sources/main.cpp

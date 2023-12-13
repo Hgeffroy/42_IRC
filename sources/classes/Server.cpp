@@ -52,7 +52,7 @@ std::map<std::string, Client*>&	Server::getClients()
 	return (_clients);
 }
 
-std::vector<Channel*>&	Server::getChannels()
+std::map<std::string, Channel*>&	Server::getChannels()
 {
 	return (_channels);
 }
@@ -165,7 +165,7 @@ void	Server::delClient(int fd) // Attention a bien del dans les chan aussi ? Nor
 
 void	Server::addChannel(Channel* newChannel)
 {
-	_channels.push_back(newChannel);
+	_channels[newChannel->getName()] = newChannel;
 }
 
 void	Server::initFd()
