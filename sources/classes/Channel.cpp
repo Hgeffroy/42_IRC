@@ -47,13 +47,24 @@ std::string Channel::getTopic() const
 	return (_topic);
 }
 
-bool	Channel::underUserLimit() const
+bool	Channel::getUnderUserLimit() const
 {
 	if (_userLimit == -1)
 		return (true);
 	else if (_nbUsers < _userLimit)
 		return (true);
 	return (false);
+}
+
+int	Channel::getNbUsers() const
+{
+	return (_nbUsers);
+}
+
+
+void	Channel::setUserLimit( int lim )
+{
+	_userLimit = lim;
 }
 
 
