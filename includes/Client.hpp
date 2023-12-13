@@ -36,17 +36,7 @@ private:
 	void						execCmd(Server &s, std::string& str);
 	std::vector<std::string>	splitBuf();
 
-//	void	setNick(std::string str, Server& s);
-//	void	setUser(std::string str, Server& s);
 	int		setInfos(Server& s, std::string& str);
-//	void	setPass(std::string& str, Server& s);
-//
-//	void	sendDM(Server& s, std::string& dest, std::string& msg);
-//	void	sendChan(Server& s, std::string& dest, std::string& msg);
-//	void	sendBroadcast(Server& s, std::string& msg);
-//	void	sendMsg(Server& s, std::string& str);
-//
-//	void	join(Server& s, std::string& str);
 
 public:
 

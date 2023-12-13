@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 09:27:11 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/13 09:08:58 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,20 @@ void	Client::setNick(std::string& str)
 
 int Client::getCmd(std::string& buffer)
 {
-	const std::string cmds[5] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN"};
+	const int			nbcmd = 7;
+	const std::string 	cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
 
 	int i = 0;
-	while (i < 5)
+	while (i < nbcmd)
 	{
 		if (cmd == cmds[i])
 			break;
 		i++;
 	}
-	if (i == 5)
+	if (i == nbcmd)
 		return (-1);
 	return (i);
 }
@@ -181,6 +182,9 @@ void	Client::execCmd(Server &s, std::string& str)
 				break;
 			case JOIN:
 				::join(s, *this, str);
+				break;
+			case WHO:
+				::who(s, *this, str);
 				break;
 			default:
 				break;
