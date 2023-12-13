@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 09:31:10 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/13 08:59:37 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,12 @@ void		sendToClient(int fd, std::string str);
 void		printClients(std::map<std::string, Client*> map);
 
 // Cmds
-
 void	join(Server& s, Client& c, std::string& str);
 void	nick(Server& s, Client& c, std::string& str);
 void	pass(Server& s, Client& c, std::string& str);
 void	sendMsg(Server& s, Client& c, std::string& str);
 void	user(Server& s, Client& c, std::string& str);
-
+void	who(Server& s, Client& c, std::string& str);
 
 #endif
 

@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/11/29 13:35:08 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/13 08:59:37 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ enum	e_cmd
 	NICK,
 	USER,
 	PRIVMSG,
-	JOIN
+	JOIN,
+	MODE,
+	WHO
 };
 
 #endif

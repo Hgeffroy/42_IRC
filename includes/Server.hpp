@@ -29,9 +29,9 @@ private:
 	time_t 							_creationTime;
 	std::string						_name;
 	std::string						_password;
-	std::map<std::string, Client*> 	_clients;
 	std::vector<Client*>			_newClients;
-	std::vector<Channel*>			_channels;
+	std::map<std::string, Client*> 	_clients;
+	std::map<std::string, Channel*>	_channels;
 	fd_set							_fdWrite; // Ceux a qui le serveur va ecrire
 	fd_set							_fdRead; // Ceux que le serveur doit lire
 
@@ -48,12 +48,12 @@ public:
 	~Server();
 	Server(std::string port, std::string password);
 
-	std::map<std::string, Client*>&	getClients();
-	std::vector<Channel*>&			getChannels();
-	std::vector<Client*>			getNewClients() const;
-	std::string						getPass() const;
-	std::string 					getName() const;
-	time_t* 						getCreationTime();
+	std::map<std::string, Client*>&		getClients();
+	std::map<std::string, Channel*>&	getChannels();
+	std::vector<Client*>				getNewClients() const;
+	std::string							getPass() const;
+	std::string 						getName() const;
+	time_t* 							getCreationTime();
 
 	int 	getClientFd(std::string nickname);
 	void	delClient(int _fd);

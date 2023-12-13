@@ -27,20 +27,18 @@ void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 
 void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 {
-	std::vector<Channel*>	channels = s.getChannels();
+	std::map<std::string, Channel*>	channels = s.getChannels();
 	std::cout << c.getNick() << " tries to send a msg to channel " << dest << std::endl;
-	for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+
+	if ((channels[dest])->getName() == dest)
 	{
-		if ((*it)->getName() == dest)
+		std::map<std::string, std::string>	members = (channels[dest])->getMembers();
+		for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
 		{
-			std::map<std::string, std::string>	members = (*it)->getMembers();
-			for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
-			{
-				std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg; // Ce msg est pas bon
-				::sendToClient(s.getClientFd(it2->first), fullMsg);
-			}
-			return ;
+			std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg; // Ce msg est pas bon
+			::sendToClient(s.getClientFd(it2->first), fullMsg);
 		}
+		return ;
 	}
 	::sendToClient(c.getFd(), ERR_CANNOTSENDTOCHAN(c.getNick(), dest));
 }
