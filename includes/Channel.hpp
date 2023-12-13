@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/10 09:42:12 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/13 16:17:20 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ private:
 	const std::string					_name;
 	std::map<std::string, std::string>	_members;
 	std::string 						_topic;
+	int									_userLimit;
+	int									_nbUsers;
+
+	bool								_inviteOnly;
+	bool								_keyProtect;
+	std::string							_password;
 
 	Channel();
 
@@ -36,8 +42,18 @@ public:
 	std::string 						getName() const;
 	std::string 						getTopic() const;
 	std::map<std::string, std::string>	getMembers() const;
+	
+	bool								underUserLimit() const;
 
-	void	addUser(Client& newClient);
+	bool								getInviteStatus() const;
+	bool								getKeyStatus() const;
+	std::string							getPassword() const;
+
+	void								setInviteStatus(bool status);
+	void								setKeyStatus(bool status);
+	void								setPassword(std::string password);
+
+	void								addUser(Client& newClient);
 
 };
 

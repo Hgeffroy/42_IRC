@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/10 09:41:51 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/13 16:17:11 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ Channel::Channel()
 
 }
 
-Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic("Random topic")
+Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic(""), _userLimit(-1), _nbUsers(1)
 {
 	_members[founder] = "@";
-	std::cout << "Channel " << _name << " was created" << std::endl;
+	std::cout << "Channel -" << _name << "- was created" << std::endl;
 }
 
 Channel::~Channel()
@@ -37,14 +37,53 @@ std::string Channel::getName() const
 	return(_name);
 }
 
+std::string Channel::getTopic() const
+{
+	return (_topic);
+}
+
 std::map<std::string, std::string> Channel::getMembers() const
 {
 	return (_members);
 }
 
-std::string Channel::getTopic() const
+bool	Channel::getInviteStatus() const
 {
-	return (_topic);
+	return (_inviteOnly);
+}
+
+bool	Channel::getKeyStatus() const
+{
+	return (_keyProtect);
+}
+
+std::string	Channel::getPassword() const
+{
+	return (_password);
+}
+
+void	Channel::setInviteStatus(bool status)
+{
+	_inviteOnly = status;
+}
+
+void	Channel::setKeyStatus(bool status)
+{
+	_keyProtect = status;
+}
+
+void	Channel::setPassword(std::string password)
+{
+	_password = password;
+}
+
+bool	Channel::underUserLimit() const
+{
+	if (_userLimit == -1)
+		return (true);
+	else if (_nbUsers < _userLimit)
+		return (true);
+	return (false);
 }
 
 
