@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/13 16:29:43 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/13 16:33:16 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	i_opt(Server &s, Client &c, Channel *channel, std::string params)
 void	k_opt(Server &s, Client &c, Channel *channel, std::string params)
 {
 	( void )c; //verifier si le client a les droits pour ajouter un mode 
-	( void )s;
+	( void )s; //regarder quels elements du server peuvent servir?? 
 	std::cout << BLUE << channel->getName() << END << std::endl;
 	std::cout << YELLOW << params << END << std::endl;
 	for( std::size_t i = 0; i < params.size(); i++ )
