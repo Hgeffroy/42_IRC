@@ -38,14 +38,14 @@ void	join(Server& s, Client& c, std::string& str)
 
 	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
 	if (channelName[0] != '#')
-		; // Send une erreur ici
+		return ; // Send une erreur ici
 
 	std::string fullMsg = ":" + c.getNick() + " JOIN " + channelName;
 	::sendToClient(c.getFd(), fullMsg);
 
 	std::map<std::string, Channel*>			channels = s.getChannels();
 
-	if (channels[channelName] && channels[channelName]->underUserLimit())
+	if (channels[channelName] && channels[channelName]->getUnderUserLimit())
 	{
 		channels[channelName]->addUser(c);
 		sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), channelName, (channels[channelName])->getTopic(), "=", "@randomUser");
