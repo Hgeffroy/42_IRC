@@ -35,11 +35,15 @@ void	join(Server& s, Client& c, std::string& str)
 	{
 		if ((*it)->getName() == channelName)
 		{
-			(*it)->addUser(c);
-			::sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), channelName, (*it)->getTopic()));
-			::sendToClient(c.getFd(), RPL_NAMREPLY(c.getNick(), "=", channelName, "@RandomUser")); // A changer !!
-			::sendToClient(c.getFd(), RPL_ENDOFNAMES(c.getNick(), channelName));
-
+			if ((*it)->underUserLimit())
+			{
+				(*it)->addUser(c);
+				::sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), channelName, (*it)->getTopic()));
+				::sendToClient(c.getFd(), RPL_NAMREPLY(c.getNick(), "=", channelName, "@RandomUser")); // A changer !!
+				::sendToClient(c.getFd(), RPL_ENDOFNAMES(c.getNick(), channelName));
+			}
+			else
+				std::cerr << "NO MORE SPACE FOR MORE USER" << std::endl;
 			return ;
 		}
 	}

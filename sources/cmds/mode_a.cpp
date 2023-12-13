@@ -1,5 +1,23 @@
 #include "irc.hpp"
 
+void	setUserLimit(Server &s, Client &c, std::string str, std::string target)
+{
+	std::vector< Channel* > chan = s.getChannels();
+	std::vector< Channel* >::iterator it;
+	for (it = chan.begin(); it != chan.end(); ++it)
+	{
+		if ((*it)->getName() == target) {
+			break ;
+		}
+	}
+	//std::map<std::string, std::string>	members;
+	//std::map<std::string, std::string>::iterator	itMembers;
+	//for (itMembers = members.begin(); it != members.end(); ++it)
+	//{
+
+	//}
+}
+
 void	mode(Server& s, Client& c, std::string& str)
 {
 	std::string target;
@@ -44,7 +62,7 @@ void	mode(Server& s, Client& c, std::string& str)
 		/* code */
 		break;
 	case l:
-		/* code */
+		setUserLimit(s, c, modeStr, target);
 		break;
 	default:
 		std::cerr << "Not an option that we coded" << std::endl;

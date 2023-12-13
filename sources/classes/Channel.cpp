@@ -19,10 +19,10 @@ Channel::Channel()
 
 }
 
-Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic("Random topic")
+Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic("Random topic"), _userLimit(-1), _nbUsers(1)
 {
 	_members[founder] = "@";
-	std::cout << "Channel " << _name << " was created" << std::endl;
+	std::cout << "Channel -" << _name << "- was created" << std::endl;
 }
 
 Channel::~Channel()
@@ -45,6 +45,15 @@ std::map<std::string, std::string> Channel::getMembers() const
 std::string Channel::getTopic() const
 {
 	return (_topic);
+}
+
+bool	Channel::underUserLimit() const
+{
+	if (_userLimit == -1)
+		return (true);
+	else if (_nbUsers < _userLimit)
+		return (true);
+	return (false);
 }
 
 

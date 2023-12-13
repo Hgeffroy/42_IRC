@@ -25,6 +25,8 @@ private:
 	const std::string					_name;
 	std::map<std::string, std::string>	_members;
 	std::string 						_topic;
+	int									_userLimit;
+	int									_nbUsers;
 
 	Channel();
 
@@ -36,6 +38,7 @@ public:
 	std::string 						getName() const;
 	std::string 						getTopic() const;
 	std::map<std::string, std::string>	getMembers() const;
+	bool								underUserLimit() const;
 
 	void	addUser(Client& newClient);
 
