@@ -105,7 +105,7 @@ header:
 #--re, clean & fclean----------------------------------------------------------#
 
 re:
-		clear
+#clear
 		$(MAKE) fclean
 		$(MAKE) -j all
 
@@ -114,7 +114,7 @@ clean:
 		$(PRINT_CLEAN)
 
 fclean:
-		clear
+#clear
 		$(MAKE) clean
 		$(RM) $(NAME)
 		$(PRINT_FCLEAN)

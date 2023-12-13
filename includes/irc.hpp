@@ -32,6 +32,8 @@ void	nick(Server& s, Client& c, std::string& str);
 void	pass(Server& s, Client& c, std::string& str);
 void	sendMsg(Server& s, Client& c, std::string& str);
 void	user(Server& s, Client& c, std::string& str);
+void	mode(Server& s, Client& c, std::string& str);
+
 void	who(Server& s, Client& c, std::string& str);
 
 #endif

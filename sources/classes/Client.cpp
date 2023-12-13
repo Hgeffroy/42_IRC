@@ -183,6 +183,9 @@ void	Client::execCmd(Server &s, std::string& str)
 			case JOIN:
 				::join(s, *this, str);
 				break;
+			case MODE:
+				::mode(s, *this, str);
+				break;
 			case WHO:
 				::who(s, *this, str);
 				break;

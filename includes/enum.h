@@ -31,4 +31,13 @@ enum	e_cmd
 	WHO
 };
 
+enum	e_mode
+{
+	i = 105,
+	t = 116,
+	k = 107,
+	o = 111,
+	l = 108
+};
+
 #endif

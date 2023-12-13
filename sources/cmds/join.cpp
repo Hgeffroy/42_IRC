@@ -29,12 +29,14 @@ void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string chann
 
 void	join(Server& s, Client& c, std::string& str)
 {
+	std::string channelName;
 	int sep1 = static_cast<int>(str.find(' '));
 	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
-
+	if (sep2 == -1)
+		sep2 = str.size() - 1;
 	// Mettre des protections !!
 
-	std::string	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
 	if (channelName[0] != '#')
 		; // Send une erreur ici
 
@@ -43,12 +45,14 @@ void	join(Server& s, Client& c, std::string& str)
 
 	std::map<std::string, Channel*>			channels = s.getChannels();
 
-	if (channels[channelName])
+	if (channels[channelName] && channels[channelName]->underUserLimit())
 	{
 		channels[channelName]->addUser(c);
 		sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), channelName, (channels[channelName])->getTopic(), "=", "@randomUser");
 		return;
 	}
+	else
+		std::cerr << "RPL no channel or NO MORE SPACE FOR MORE USER" << std::endl;
 	Channel* newChannel = new Channel(channelName, c.getNick());
 	s.addChannel(newChannel);
 	sendChannelRPL(c.getFd(), newChannel, c.getNick(), channelName, newChannel->getTopic(), "=", "@randomUser");
