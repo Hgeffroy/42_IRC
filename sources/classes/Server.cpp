@@ -156,11 +156,11 @@ void	Server::delClient(int fd) // Attention a bien del dans les chan aussi ? Nor
 	{
 		if (it->second->getFd() == fd)
 		{
-			delete it->second;
+			//delete it->second;
+			_clients.erase(it->first);
 			break;
 		}
 	}
-	
 }
 
 void	Server::addChannel(Channel* newChannel)

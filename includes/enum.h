@@ -30,4 +30,13 @@ enum	e_cmd
 	MODE
 };
 
+enum	e_modeo
+{
+	i = 105,
+	t = 116,
+	k = 107,
+	o = 111,
+	l = 108
+};
+
 #endif
