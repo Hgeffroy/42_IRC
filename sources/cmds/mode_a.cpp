@@ -20,5 +20,5 @@ void	mode(Server& s, Client& c, std::string& str)
 	if (it == chan.end()) {
 		std::cerr << "DIDNT FIND A CHANNEL NAMED LIKE THIS" << std::endl;
 		return ;
-	}
+	}std::map<std::string, Client*> 	_clients
 }
