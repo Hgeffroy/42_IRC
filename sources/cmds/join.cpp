@@ -12,6 +12,9 @@
 
 #include "irc.hpp"
 
+static std::string	getChannelName(std::string& str);
+static std::string	getChannelPass(std::string& str);
+
 void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string channel, std::string topic, std::string symbol, std::string nickPrefixed)
 {
 	std::map<std::string, std::string>::iterator	it;
@@ -29,21 +32,19 @@ void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string chann
 
 void	join(Server& s, Client& c, std::string& str)
 {
-	std::string channelName;
-	int sep1 = static_cast<int>(str.find(' '));
-	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
-	if (sep2 == -1)
-	{
-		if (str[sep2] == '\n')
-			sep2 = str.size() - 1;
-		else
-			sep2 = str.size();
-	}
-	// Mettre des protections !!
+	std::string	channelName = getChannelName(str);
+	std::string	channelPass = getChannelPass(str);
 
-	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
-	if (channelName[0] != '#')
-		return ; // Send une erreur ici
+	if ( channelName.empty() )
+	{
+		std::cerr << RED << "Invalid Channel" << END << std::endl;
+		return ;
+	}
+	if ( channelPass.empty() )
+	{
+		std::cerr << RED << "Invalid Password" << END << std::endl;
+		return ;
+	}
 
 	std::string fullMsg = ":" + c.getNick() + " JOIN " + channelName;
 	::sendToClient(c.getFd(), fullMsg);
@@ -66,4 +67,41 @@ void	join(Server& s, Client& c, std::string& str)
 	Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
 	s.addChannel(newChannel);
 	sendChannelRPL(c.getFd(), newChannel, c.getNick(), channelName, newChannel->getTopic(), "=", "@randomUser");
+}
+
+static std::string	getChannelName(std::string& str)
+{
+	std::string	channelName;
+
+	int sep1 = static_cast<int>(str.find(' '));
+	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
+	if (sep2 == -1)
+	{
+		if (str[sep2] == '\n')
+			sep2 = str.size() - 1;
+		else
+			sep2 = str.size();
+	}
+	// Mettre des protections !!
+	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	if (channelName[0] != '#')
+		return ( "" ); // Send une erreur ici
+	return ( channelName );
+}
+
+static std::string	getChannelPass(std::string& str)
+{
+	std::string	channelPass;
+
+	std::cout << YELLOW << str << END << std::endl;
+
+	std::size_t	first_space = str.find( ' ' );
+	std::size_t	second_space = str.find( ' ', first_space + 1 );
+	if ( second_space != std::string::npos )
+	{
+		channelPass = str.substr( second_space + 1 );
+		std::cout << YELLOW << "-" << channelPass << "-" << END << std::endl;
+		return ( channelPass );
+	}
+	return ( "" );
 }
