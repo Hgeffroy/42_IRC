@@ -26,6 +26,9 @@
 // 412
 # define ERR_NOTEXTTOSEND(client)				std::string(":server ") + "412 " + client + " " + " :No text to send" + ENDLINE
 
+// 421
+# define ERR_UNKNOWNCOMMAND(client, command)	std::string(":server ") + "421 " + client + " " + command + " :Unknown command" + ENDLINE 
+
 // 431
 # define ERR_NONICKNAMEGIVEN(client)			std::string(":server ") + "431 " + client + " " + " :No nickanme given" + ENDLINE
 // 432
@@ -47,4 +50,6 @@
 // 472
 # define ERR_UNKNOWNMODE(client, modechar)		std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
 
+// 723
+# define ERR_NOPRIVS(client)					std::string(":server ") + "723 " + client + " :Insufficient oper privileges." + ENDLINE
 #endif
