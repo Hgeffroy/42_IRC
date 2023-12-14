@@ -33,7 +33,12 @@ void	join(Server& s, Client& c, std::string& str)
 	int sep1 = static_cast<int>(str.find(' '));
 	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
 	if (sep2 == -1)
-		sep2 = str.size() - 1;
+	{
+		if (str[sep2] == '\n')
+			sep2 = str.size() - 1;
+		else
+			sep2 = str.size();
+	}
 	// Mettre des protections !!
 
 	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
