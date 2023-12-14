@@ -49,6 +49,11 @@
 # define ERR_CHANNELISFULL(client, channel)		std::string(":server ") + "471 " + client + " " + channel + " :Cannot join channel (+l)" + ENDLINE
 // 472
 # define ERR_UNKNOWNMODE(client, modechar)		std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
+// 501
+# define ERR_UMODEUNKNOWNFLAG(client)			std::string(":server ") + "501 " + client + " :Unknown MODE flag" + ENDLINE
+
+// 696
+# define ERR_INVALIDMODEPARAM(client, target, errMode, param, desc)	std::string(":server ") + "696 " + client + " " + target + " " + errMode + " " + param + " :" + desc + ENDLINE
 
 // 723
 # define ERR_NOPRIVS(client)					std::string(":server ") + "723 " + client + " :Insufficient oper privileges." + ENDLINE

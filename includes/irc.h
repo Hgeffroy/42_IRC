@@ -33,6 +33,8 @@
 # include <unistd.h>
 # include <signal.h>
 # include <netdb.h>
+# include <sstream>
+# include <stdlib.h>
 
 # include "defines.h"
 # include "enum.h"

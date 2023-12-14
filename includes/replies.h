@@ -40,4 +40,7 @@
 // 366 (:channel ?)
 # define RPL_ENDOFNAMES(channel)														std::string(":server ") + "366 " + channel + " :End of /NAMES list" + ENDLINE
 
+// 381
+# define RPL_YOUREOPER(client)															std::string(":server ") + "381 " + client + " :You are now an IRC operator" + ENDLINE
+
 #endif
