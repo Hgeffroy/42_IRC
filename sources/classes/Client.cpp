@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 10:43:47 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 11:26:00 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
+Client::Client(int socket) : _fd(socket), _connected(false), _invited(false), _passwordOk(false), _away(false), _nickname(""), _username("")
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
@@ -52,6 +52,11 @@ std::string Client::getUser() const
 bool	Client::getConnected() const
 {
 	return (_connected);
+}
+
+bool	Client::getInvited() const
+{
+	return (_invited);
 }
 
 bool	Client::getAway() const
@@ -128,7 +133,7 @@ int	Client::setInfos(Server& s, std::string& str)
 		::sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
 		::sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
 		::sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
-		::sendToClient(_fd, RPL_ISUPPORT());
+		::sendToClient(_fd, RPL_ISUPPORT(_nickname, "10", "50")); // A changer avec le define
 	}
 	return (0);
 }
@@ -148,7 +153,6 @@ std::vector<std::string>	Client::splitBuf()
 	res.push_back(tempStr);
 
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;
-		std::cout << sep1 << " -la- " << sep2 << std::endl;
 
 	int i = 1; // Securite a enlever quand ca marchera.
 
@@ -159,7 +163,6 @@ std::vector<std::string>	Client::splitBuf()
 		sep2 = static_cast<int>(buffer.find("\r\n", sep1 + 1));
 		sep = std::min(sep1, sep2);
 
-		std::cout << sep1 << " -ici- " << sep2 << std::endl;
 		tempStr = buffer.substr(prev + 1, sep - prev - 1);
 		if (tempStr[tempStr.length() - 1] == '\n')
 			tempStr.erase(tempStr.length() - 1, 1);

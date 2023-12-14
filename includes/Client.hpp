@@ -49,6 +49,7 @@ public:
 	std::string		getNick() const;
 	std::string		getUser() const;
 	bool			getConnected() const;
+	bool			getInvited() const;
 	bool			getAway() const;
 	void			setPassOk();
 	void			setUser(std::string& str);
