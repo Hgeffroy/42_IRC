@@ -139,9 +139,13 @@ std::vector<std::string>	Client::splitBuf()
 	int	sep2 = static_cast<int>(buffer.find("\r\n"));
 	int	prev = 0;
 	int sep = std::min(sep1, sep2);
-	res.push_back(buffer.substr(prev, sep));
+	std::string tempStr = buffer.substr(prev, sep);
+	if (tempStr[tempStr.length() - 1] == '\n')
+		tempStr.erase(tempStr.length() - 1, 1);
+	res.push_back(tempStr);
 
-	std::cout << "res[0] = " << res[0] << std::endl;
+	std::cout << "res[0] =" << res[0] << "=" << std::endl;
+		std::cout << sep1 << " -la- " << sep2 << std::endl;
 
 	int i = 1; // Securite a enlever quand ca marchera.
 
@@ -152,8 +156,12 @@ std::vector<std::string>	Client::splitBuf()
 		sep2 = static_cast<int>(buffer.find("\r\n", sep1 + 1));
 		sep = std::min(sep1, sep2);
 
-		res.push_back(buffer.substr(prev + 1, sep - prev - 1));
-		std::cout << "res[" << i << "] = " << res[i] << std::endl;
+		std::cout << sep1 << " -ici- " << sep2 << std::endl;
+		tempStr = buffer.substr(prev + 1, sep - prev - 1);
+		if (tempStr[tempStr.length() - 1] == '\n')
+			tempStr.erase(tempStr.length() - 1, 1);
+		res.push_back(tempStr);
+		std::cout << "res[" << i << "] =" << res[i] << "=" << std::endl;
 		i++;
 	}
 
@@ -186,8 +194,8 @@ void	Client::execCmd(Server &s, std::string& str)
 			case MODE:
 				::mode(s, *this, str);
 				break;
-			case WHO:
-				::who(s, *this, str);
+			//case WHO:
+			//	::who(s, *this, str);
 				break;
 			default:
 				break;
