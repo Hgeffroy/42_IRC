@@ -26,13 +26,13 @@ void	i_opt(Client &c, Channel *channel, std::string params)
 //check option +k et rien derriere
 	if ( !checkOption( params ) )
 	{
-		std::cerr << "NOT GOOD OPTION" << std::endl;
+		std::cerr << RED << "BAD OPTION" << END << std::endl;
 		return ;
 	}
 //check if client is operator
 	if ( !isOperator( c, channel ) )
 	{
-		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		std::cerr << RED << "NO OPERATOR PRIVILEGE" << END << std::endl;
 		return ;
 	}
 
@@ -51,13 +51,13 @@ void	k_opt(Client &c, Channel *channel, std::string params)
 //check option +k et rien derriere
 	if ( !checkOption( params ) )
 	{
-		std::cerr << "NOT GOOD OPTION" << std::endl;
+		std::cerr << RED << "BAD OPTION" << END << std::endl;
 		return ;
 	}
 //check if client is operator
 	if ( !isOperator( c, channel ) )
 	{
-		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		std::cerr << RED << "NO OPERATOR PRIVILEGE" << END << std::endl;
 		return ;
 	}
 	for( std::size_t i = 0; i < params.size(); i++ )
@@ -73,7 +73,7 @@ static void	add_IOpt(Channel *channel)
 {
 	if ( channel->getInviteStatus( ) )
 	{
-		std::cout << "Deja set connard" << std::endl;
+		std::cerr << RED << "+i option already set." << END << std::endl;
 		return ;
 	}
 	channel->setInviteStatus( true );
@@ -84,10 +84,11 @@ static void	remove_IOpt(Channel *channel)
 {
 	if ( !channel->getInviteStatus( ) )
 	{
-		std::cout << "Ce n'etais pas en invite only" << std::endl;
+		std::cerr << RED << "+i option was not on." << END << std::endl;
 		return ;
 	}
 	channel->setInviteStatus( false );
+	std::cout << GREEN << "-i option on channel : " << channel->getName() << " is unset successfully."  << END << std::endl;
 }
 
 static void	add_KOpt(Channel *channel, std::string param)
@@ -95,13 +96,13 @@ static void	add_KOpt(Channel *channel, std::string param)
 	std::string	password = getPassword( param );
 	if ( password.empty( ) )
 	{
-		std::cout << "Invalid password" << std::endl;
+		std::cerr << "Invalid password" << std::endl;
 		return ;
 	}
 
 	if ( channel->getKeyStatus( ) )
 	{
-		std::cout << "Deja set connard" << std::endl;
+		std::cerr << RED << "+k option already set." << END << std::endl;
 		return ;
 	}
 	channel->setKeyStatus( true );
@@ -114,17 +115,17 @@ static void	remove_KOpt(Channel *channel)
 {
 	if ( !channel->getKeyStatus( ) )
 	{
-		std::cout << "Ce n'etais pas en invite only" << std::endl;
+		std::cerr << RED << "+k option was not on." << END << std::endl;
 		return ;
 	}
 	channel->setKeyStatus( false );
-	std::cout << "-k option on channel : " << channel->getName() << " is unset." << std::endl;
+	std::cout << GREEN << "-k option on channel : " << channel->getName() << " is unset successfully." << END << std::endl;
 }
 
 static bool	isOperator(Client &c, Channel *channel)
 {
 	std::map< std::string, std::string >members = channel->getMembers();
-	if ( members[ c.getNick( ) ] != "@" )
+	if ( members[ c.getNick( ) ] != "@" && members[ c.getNick( ) ] != "~" )
 		return ( false );
 	return ( true );
 }
@@ -134,7 +135,6 @@ static bool	checkOption(std::string params)
 	std::size_t first_space = params.find( ' ' );
 	std::size_t second_space = params.find( ' ', first_space + 1 );
 	std::string	option = params.substr( first_space + 1, second_space - 1 );
-	std::cout << option << std::endl;
 	if ( option.size() > 2 )
 		return( false ) ;
 	return ( true );
@@ -152,9 +152,7 @@ static std::string	getPassword( std::string param )
 			return ( "" );
 	}
 	else
-	{
-		std::cout << "YOU NEED TO SET A PASSWORD MORON" << std::endl;
 		return ( "" );
-	}
+
 	return ( password );
 }
