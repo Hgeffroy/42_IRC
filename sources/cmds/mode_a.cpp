@@ -1,9 +1,68 @@
 #include "irc.hpp"
 
-void	setUserLimit(Client &c, Channel *ch, std::string str)
+void	opPrivilege(Client &c, Channel &ch, std::string str)
 {
-	std::map<std::string, std::string> members = ch->getMembers();
-	if (members[c.getNick()] != "@") {
+	std::map<std::string, std::string> members = ch.getMembers();
+	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
+		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		return ;
+	}
+	size_t	i = 0;
+	int sign = 1;
+	for (i = 0; i < str.length(); i++)
+	{
+		if (str[i] == '-') {
+			sign = -1;
+			break;
+		}
+		else if (str[i] == '+') {
+			break;
+		}
+		else if (str[i] != ' ') {
+			std::cerr << "NO SIGN +/- ERROR" << std::endl;
+			return ;
+		}
+	}
+	i += 2;
+	if (str[i] != ' ') {
+		std::cerr << "Need to separate +l et args" << std::endl;
+		return ;
+	}
+	i++;
+	std::string who;
+	if (i < str.length()) {
+		who = str.substr(i, str.length() - i);
+	}
+	else {
+		std::cerr << "No arg after +/-l" << std::endl;
+		return ;
+	}
+	if (members[c.getNick()] == "~") {
+		if (members[who] != "~") {
+			if (sign == -1) {
+				ch.setPrivilege(who, "");
+			}
+			else {
+				ch.setPrivilege(who, "@");
+			}
+		}
+	}
+	else if (members[c.getNick()] == "@") {
+		if (members[who] != "~" && members[who] != "@") {
+			if (sign == -1) {
+				ch.setPrivilege(who, "");
+			}
+			else {
+				ch.setPrivilege(who, "@");
+			}
+		}
+	}
+}
+
+void	setUserLimit(Client &c, Channel &ch, std::string str)
+{
+	std::map<std::string, std::string> members = ch.getMembers();
+	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
 		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
 		return ;
 	}
@@ -11,7 +70,9 @@ void	setUserLimit(Client &c, Channel *ch, std::string str)
 	for (i = 0; i < str.length(); i++)
 	{
 		if (str[i] == '-') {
-			ch->setUserLimit(-1);
+			if (str[i + 2] == '\0') {
+				ch.setUserLimit(-1);
+			}
 			return;
 		}
 		if (str[i] == '+') {
@@ -49,9 +110,8 @@ void	setUserLimit(Client &c, Channel *ch, std::string str)
 		std::cerr << "ERROR NOT A INT" << std::endl;
 		return ;
 	}
-	if (ch->getNbUsers() <= lim) {
-		ch->setUserLimit(lim);
-		std::cout << "LIMIT IS ON=" << ch->getUserLimit() << std::endl;
+	if (ch.getNbUsers() <= lim) {
+		ch.setUserLimit(lim);
 	}
 	else
 		std::cerr << "IMPOSSIBLE TOO MANY USER INSIDE ALREADY" << std::endl;
@@ -93,10 +153,10 @@ void	mode(Server& s, Client& c, std::string& str)
 		/* code */
 		break;
 	case o:
-		/* code */
+		opPrivilege(c, *(chan[target]), modeStr);
 		break;
 	case l:
-		setUserLimit(c, chan[target], modeStr);
+		setUserLimit(c, *(chan[target]), modeStr);
 		break;
 	default:
 		std::cerr << "Not an option that we coded" << std::endl;

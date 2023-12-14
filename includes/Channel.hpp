@@ -41,6 +41,8 @@ public:
 	int									getNbUsers() const;
 	int									getUserLimit() const;
 	void								setUserLimit( int lim );
+	void								setPrivilege( std::string who, std::string privilege );
+
 
 	void	addUser(Client& newClient);
 
