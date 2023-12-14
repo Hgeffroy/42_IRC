@@ -6,24 +6,31 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 13:29:03 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 13:45:28 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string channel, std::string topic, std::string symbol, std::string nickPrefixed)
+void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string username, std::string channel, std::string topic, std::string symbol)
 {
 	std::map<std::string, std::string>::iterator	it;
 	std::map<std::string, std::string>				members = chan->getMembers();
+
+	::sendToClient(fd, JOIN_MSG(client, username, getIP(), channel));
 
 	if (!chan->getTopic().empty())
 		::sendToClient(fd, RPL_TOPIC(client, channel, topic)); // Seulement s'il y a un topic !
 
 	for (it = members.begin(); it != members.end(); ++it)
-		::sendToClient(fd, RPL_NAMREPLY(client, symbol, channel, nickPrefixed)); // A changer !!
+	{
+		std::string prefix = it->second;
+		if (it->second == "~")
+			prefix = "@";
+		::sendToClient(fd, RPL_NAMREPLY(client, symbol, channel, prefix + it->first)); // A changer !!
+	}
 
-	::sendToClient(fd, RPL_ENDOFNAMES(client, channel));
+	::sendToClient(fd, RPL_ENDOFNAMES(channel));
 }
 
 
@@ -45,9 +52,6 @@ void	join(Server& s, Client& c, std::string& str)
 	if (channelName[0] != '#')
 		return ; // Send une erreur ici
 
-	std::string fullMsg = ":" + c.getNick() + " JOIN " + channelName;
-	::sendToClient(c.getFd(), fullMsg);
-
 	std::map<std::string, Channel*>			channels = s.getChannels();
 
 	if (channels[channelName]) {
@@ -55,7 +59,7 @@ void	join(Server& s, Client& c, std::string& str)
 		if (channels[channelName]->getUserLimit() == -1 || channels[channelName]->getNbUsers() < channels[channelName]->getUserLimit())
 		{
 			channels[channelName]->addUser(c);
-			sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), channelName, (channels[channelName])->getTopic(), "=", "@randomUser");
+			sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), c.getUser(), channelName, (channels[channelName])->getTopic(), "=");
 			return;
 		}
 		else {
@@ -65,5 +69,5 @@ void	join(Server& s, Client& c, std::string& str)
 	}
 	Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
 	s.addChannel(newChannel);
-	sendChannelRPL(c.getFd(), newChannel, c.getNick(), channelName, newChannel->getTopic(), "=", "@randomUser");
+	sendChannelRPL(c.getFd(), newChannel, c.getNick(), c.getUser(), channelName, newChannel->getTopic(), "=");
 }

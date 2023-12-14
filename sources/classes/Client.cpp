@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 10:43:47 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 11:26:00 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	Client::setInfos(Server& s, std::string& str)
 		::sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
 		::sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
 		::sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
-		::sendToClient(_fd, RPL_ISUPPORT());
+		::sendToClient(_fd, RPL_ISUPPORT(_nickname, "10", "50")); // A changer avec le define
 	}
 	return (0);
 }
