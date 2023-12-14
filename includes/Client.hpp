@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/13 19:35:45 by wangthea         ###   ########.fr       */
+/*   Updated: 2023/12/14 08:40:20 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ private:
 	int							_fd;
 	bool						_connected;
 	bool						_invited;
-	bool						_operator;
 	bool						_passwordOk;
 	bool						_away;
 	std::string 				_nickname; // Imposer de commencer par un alpha !
