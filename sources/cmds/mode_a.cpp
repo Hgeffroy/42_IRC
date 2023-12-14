@@ -38,12 +38,12 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		return ;
 	}
 	if (members.find(who) != members.end()) {
-
+		::sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), who, ch.getName()));
+		return ;
 	}
 	if (members[c.getNick()] == "~") {
 		std::cout << members[who] << std::endl; 
 		if (members[who] != "~") {
-			std::cout << "TEST1" << std::endl;
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
 			}
@@ -54,7 +54,6 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 	}
 	else if (members[c.getNick()] == "@") {
 		if (members[who] != "~" && members[who] != "@") {
-			std::cout << "TEST2" << std::endl;
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
 			}
