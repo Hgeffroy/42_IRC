@@ -148,7 +148,6 @@ std::vector<std::string>	Client::splitBuf()
 	res.push_back(tempStr);
 
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;
-		std::cout << sep1 << " -la- " << sep2 << std::endl;
 
 	int i = 1; // Securite a enlever quand ca marchera.
 
@@ -159,7 +158,6 @@ std::vector<std::string>	Client::splitBuf()
 		sep2 = static_cast<int>(buffer.find("\r\n", sep1 + 1));
 		sep = std::min(sep1, sep2);
 
-		std::cout << sep1 << " -ici- " << sep2 << std::endl;
 		tempStr = buffer.substr(prev + 1, sep - prev - 1);
 		if (tempStr[tempStr.length() - 1] == '\n')
 			tempStr.erase(tempStr.length() - 1, 1);

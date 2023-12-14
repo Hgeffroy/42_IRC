@@ -40,5 +40,4 @@
 // 366 (:channel ?)
 # define RPL_ENDOFNAMES(channel)														std::string(":server ") + "366 " + channel + " :End of /NAMES list" + ENDLINE
 
-
 #endif
