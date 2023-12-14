@@ -62,7 +62,7 @@ void	join(Server& s, Client& c, std::string& str)
 			return;
 		}
 	}
-	Channel* newChannel = new Channel(channelName, c.getNick());
+	Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
 	s.addChannel(newChannel);
 	sendChannelRPL(c.getFd(), newChannel, c.getNick(), channelName, newChannel->getTopic(), "=", "@randomUser");
 }

@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 09:18:51 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 11:10:31 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@ Server::Server()
 
 Server::~Server()
 {
+	std::map<std::string, Client*>::iterator	itClients;
+	std::map<std::string, Channel*>::iterator	itChannel;
+	std::vector<Client*>::iterator				itNewClients;
+
+	for (itChannel = _channels.begin(); itChannel != _channels.end(); ++itChannel)
+		delete itChannel->second;
+
+	for (itClients = _clients.begin(); itClients != _clients.end(); ++itClients)
+		delete itClients->second;
+
+	for (itNewClients = _newClients.begin(); itNewClients != _newClients.end(); ++itNewClients)
+		delete *itNewClients;
+
 	close(_listener);
 	std::cout << "Salut, je suis le destructeur de server" << std::endl;
 }
@@ -30,12 +43,14 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 	struct sockaddr_in	sin;
 	int					port;
 	int 				s;
+	int 				optval = 1;
 
 	port = setPort(portstr);
 	_password = setPassword(password);
 	s = socket(PF_INET, SOCK_STREAM, 0); // Check le 0 (Check si SOCK_STREAM n'a qu'un seul protocole), a recup !!
 	if (s < 0)
 		throw std::runtime_error("socket failed");
+	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
 	sin.sin_family = AF_INET;
 	sin.sin_addr.s_addr = INADDR_ANY;
 	sin.sin_port = htons(port);
