@@ -85,13 +85,13 @@ void	mode(Server& s, Client& c, std::string& str)
 	switch (modeOption)
 	{
 	case i:
-		i_opt(s, c, chan[target], modeStr);
+		i_opt(c, chan[target], modeStr);
 		break;
 	case t:
 		/* code */
 		break;
 	case k:
-		k_opt(s, c, chan[target], modeStr);
+		k_opt(c, chan[target], modeStr);
 		break;
 	case o:
 		/* code */

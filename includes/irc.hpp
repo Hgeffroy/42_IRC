@@ -39,8 +39,8 @@ void	sendMsg(Server& s, Client& c, std::string& str);
 void	user(Server& s, Client& c, std::string& str);
 void	mode(Server& s, Client& c, std::string& str);
 
-void	i_opt(Server &s, Client &c, Channel *channel, std::string params);
-void	k_opt(Server &s, Client &c, Channel *channel, std::string params);
+void	i_opt(Client &c, Channel *channel, std::string params);
+void	k_opt(Client &c, Channel *channel, std::string params);
 
 void	who(Server& s, Client& c, std::string& str);
 

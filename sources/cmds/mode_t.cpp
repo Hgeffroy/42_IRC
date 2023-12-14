@@ -12,19 +12,17 @@
 
 #include "irc.hpp"
 
-static void	add_IOpt(Channel *channel);
-static void	remove_IOpt(Channel *channel);
-static void	add_KOpt(Channel *channel, std::string param);
-static void	remove_KOpt(Channel *channel);
-static bool	isOperator(Client &c, Channel *channel);
-static bool	checkOption(std::string params);
+static void			add_IOpt(Channel *channel);
+static void			remove_IOpt(Channel *channel);
+static void			add_KOpt(Channel *channel, std::string param);
+static void			remove_KOpt(Channel *channel);
+static bool			isOperator(Client &c, Channel *channel);
+static bool			checkOption(std::string params);
+static std::string	getPassword( std::string param );
 
 //i: Set/remove Invite-only channel
-void	i_opt(Server &s, Client &c, Channel *channel, std::string params)
+void	i_opt(Client &c, Channel *channel, std::string params)
 {
-	//client ne pourra plus rentrer dans le server sans etre invité - ajout variable bool invited dans le client
-	( void )s;
-
 //check option +k et rien derriere
 	if ( !checkOption( params ) )
 	{
@@ -48,10 +46,8 @@ void	i_opt(Server &s, Client &c, Channel *channel, std::string params)
 }
 
 //k: Set/remove the channel key (password)
-void	k_opt(Server &s, Client &c, Channel *channel, std::string params)
+void	k_opt(Client &c, Channel *channel, std::string params)
 {
-	( void )s; //regarder quels elements du server peuvent servir??
-
 //check option +k et rien derriere
 	if ( !checkOption( params ) )
 	{
@@ -64,7 +60,6 @@ void	k_opt(Server &s, Client &c, Channel *channel, std::string params)
 		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
 		return ;
 	}
-	/* il faudrait mettre ca plus haut juste avnt de switch*/
 	for( std::size_t i = 0; i < params.size(); i++ )
 	{
 		if ( params[i] == '+' )
@@ -82,6 +77,7 @@ static void	add_IOpt(Channel *channel)
 		return ;
 	}
 	channel->setInviteStatus( true );
+	std::cout << BLUE << "+i option on channel : " << channel->getName() << " is set." << END << std::endl;
 }
 
 static void	remove_IOpt(Channel *channel)
@@ -109,29 +105,9 @@ static void	add_KOpt(Channel *channel, std::string param)
 		return ;
 	}
 	channel->setKeyStatus( true );
-	channel->setPassword( passwor );
-	std::cout << "+k option on channel : " << channel->getName() << " is set with password : -";
-	std::cout << channel->getPassword() << "-" << std::endl;
-}
-
-static std::string	getPassword( std::string param )
-{
-	std::string	password;
-	std::size_t	first_space = param.find( ' ' );
-	std::size_t	second_space = param.find( ' ', first_space + 1 );
-	if ( second_space != std::string::npos )
-	{
-		password = param.substr( second_space + 1 );
-		if ( password.empty() )
-			return ( "" );
-		channel->setPassword( password );
-	}
-	else
-	{
-		std::cout << "YOU NEED TO SET A PASSWORD MORON" << std::endl;
-		return ( "" );
-	}
-	return ( password );
+	channel->setPassword( password );
+	std::cout << YELLOW << "+k option on channel : " << channel->getName() << " is set with password : -";
+	std::cout << channel->getPassword() << "-" << END << std::endl;
 }
 
 static void	remove_KOpt(Channel *channel)
@@ -162,4 +138,23 @@ static bool	checkOption(std::string params)
 	if ( option.size() > 2 )
 		return( false ) ;
 	return ( true );
+}
+
+static std::string	getPassword( std::string param )
+{
+	std::string	password;
+	std::size_t	first_space = param.find( ' ' );
+	std::size_t	second_space = param.find( ' ', first_space + 1 );
+	if ( second_space != std::string::npos )
+	{
+		password = param.substr( second_space + 1 );
+		if ( password.empty() )
+			return ( "" );
+	}
+	else
+	{
+		std::cout << "YOU NEED TO SET A PASSWORD MORON" << std::endl;
+		return ( "" );
+	}
+	return ( password );
 }
