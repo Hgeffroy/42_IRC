@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/14 10:08:55 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/14 10:29:01 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,33 +96,42 @@ static void	remove_IOpt(Channel *channel)
 
 static void	add_KOpt(Channel *channel, std::string param)
 {
-	std::string	password;
-	std::size_t	first_space = param.find( ' ' );
-	std::size_t	second_space = param.find( ' ', first_space + 1 );
-	if ( second_space != std::string::npos )
+	std::string	password = getPassword( param );
+	if ( password.empty( ) )
 	{
-		password = param.substr( second_space + 1 );
-		std::cout << "Mot de passe : -" << password << "-" << std::endl;
-		if ( password.empty() )
-			return ;
-		channel->setPassword( password );
-		std::cout << YELLOW << channel->getPassword() << END << std::endl;
-	}
-	else
-	{
-		std::cout << "YOU NEED TO SET A PASSWORD MORON" << std::endl;
+		std::cout << "Invalid password" << std::endl;
 		return ;
 	}
-	
+
 	if ( channel->getKeyStatus( ) )
 	{
 		std::cout << "Deja set connard" << std::endl;
 		return ;
 	}
 	channel->setKeyStatus( true );
-	channel->setPassword( "NON" );
+	channel->setPassword( passwor );
 	std::cout << "+k option on channel : " << channel->getName() << " is set with password : -";
-	std::cout << password << "-" << std::endl;
+	std::cout << channel->getPassword() << "-" << std::endl;
+}
+
+static std::string	getPassword( std::string param )
+{
+	std::string	password;
+	std::size_t	first_space = param.find( ' ' );
+	std::size_t	second_space = param.find( ' ', first_space + 1 );
+	if ( second_space != std::string::npos )
+	{
+		password = param.substr( second_space + 1 );
+		if ( password.empty() )
+			return ( "" );
+		channel->setPassword( password );
+	}
+	else
+	{
+		std::cout << "YOU NEED TO SET A PASSWORD MORON" << std::endl;
+		return ( "" );
+	}
+	return ( password );
 }
 
 static void	remove_KOpt(Channel *channel)
@@ -133,7 +142,7 @@ static void	remove_KOpt(Channel *channel)
 		return ;
 	}
 	channel->setKeyStatus( false );
-	//vider le password ?? inutile il suffit de l'ignorer et de l'ecraser apres le nouveau.
+	std::cout << "-k option on channel : " << channel->getName() << " is unset." << std::endl;
 }
 
 static bool	isOperator(Client &c, Channel *channel)
