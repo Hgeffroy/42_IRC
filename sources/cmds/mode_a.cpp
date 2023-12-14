@@ -49,8 +49,10 @@ void	setUserLimit(Client &c, Channel *ch, std::string str)
 		std::cerr << "ERROR NOT A INT" << std::endl;
 		return ;
 	}
-	if (ch->getNbUsers() < lim)
+	if (ch->getNbUsers() <= lim) {
 		ch->setUserLimit(lim);
+		std::cout << "LIMIT IS ON=" << ch->getUserLimit() << std::endl;
+	}
 	else
 		std::cerr << "IMPOSSIBLE TOO MANY USER INSIDE ALREADY" << std::endl;
 }
@@ -68,13 +70,17 @@ void	mode(Server& s, Client& c, std::string& str)
 		std::cerr << "NO CHANNEL" << std::endl;
 		return ;
 	}
-	std::string modeStr = str.substr(end, str.size() - end - 1);
+	std::string modeStr = str.substr(end, str.size() - end);
 	int modeOption = 0;
-	for ( std::size_t i = 0; i < modeStr.length(); i++ )
+	std::cout << modeStr << std::endl;
+	for ( std::size_t i = 0; i <= modeStr.length(); i++ )
 	{
-		if ( modeStr[i] == '-' || modeStr[i] == '+' )
+		if ( modeStr[i] == '-' || modeStr[i] == '+' ) {
 			modeOption = modeStr[i + 1];
+			break;
+		}
 	}
+	std::cout << "Debug :" << static_cast<char>(modeOption) << "=" << std::endl;
 	switch (modeOption)
 	{
 	case i:

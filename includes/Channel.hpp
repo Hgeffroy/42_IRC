@@ -39,7 +39,7 @@ public:
 	std::string 						getTopic() const;
 	std::map<std::string, std::string>	getMembers() const;
 	int									getNbUsers() const;
-	bool								getUnderUserLimit() const;
+	int									getUserLimit() const;
 	void								setUserLimit( int lim );
 
 	void	addUser(Client& newClient);
