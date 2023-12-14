@@ -59,7 +59,7 @@ void	join(Server& s, Client& c, std::string& str)
 			return;
 		}
 		else {
-			std::cerr << "RPL NO MORE SPACE FOR MORE USER" << std::endl;
+			::sendToClient(c.getFd(), ERR_CHANNELISFULL(c.getNick(), channelName));
 			return;
 		}
 	}

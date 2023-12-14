@@ -33,11 +33,18 @@
 // 433
 # define ERR_NICKNAMEINUSE(client, nick)		std::string(":server ") + "433 " + client + " " + nick + " :Nickname is already in use" + ENDLINE
 
+// 441
+# define ERR_USERNOTINCHANNEL(client, nick, channel)	std::string(":server ") + "441 " + client + " " + nick + " " + channel + " :They aren't on that channel" + ENDLINE
+
 // 461
 # define ERR_NEEDMOREPARAMS(client, command)	std::string(":server ") + "461 " + client + " " + command + " :Not enough parameters" + ENDLINE
 // 462
 # define ERR_ALREADYREGISTERED(client)			std::string(":server ") + "462 " + client + " :You may not register" + ENDLINE
 // 464
 # define ERR_PASSWDMISMATCH(client)				std::string(":server ") + "464 " + client + " :Password incorrect" + ENDLINE
+// 471
+# define ERR_CHANNELISFULL(client, channel)		std::string(":server ") + "471 " + client + " " + channel + " :Cannot join channel (+l)" + ENDLINE
+// 472
+# define ERR_UNKNOWNMODE(client, modechar)		std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
 
 #endif
