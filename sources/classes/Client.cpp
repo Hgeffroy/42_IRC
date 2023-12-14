@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/13 09:08:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 10:05:49 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,7 @@ void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 	if (r <= 0)
 		s.delClient(_fd);
 
-//	std::cout << "Received from client " << _fd << ": " << std::endl;
-//	std::cout << _bufRead << std::endl;
+	std::cout << RED << "From " << _fd << ": " << _bufRead << END << std::endl;
 
 	std::vector<std::string>	cmds = splitBuf();
 
