@@ -45,6 +45,8 @@ public:
 	int									getNbUsers() const;
 	int									getUserLimit() const;
 	void								setUserLimit( int lim );
+	void								setPrivilege( std::string who, std::string privilege );
+
 
 	bool								getInviteStatus() const;
 	bool								getKeyStatus() const;

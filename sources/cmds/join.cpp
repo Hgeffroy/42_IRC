@@ -51,18 +51,19 @@ void	join(Server& s, Client& c, std::string& str)
 	std::map<std::string, Channel*>			channels = s.getChannels();
 
 	if (channels[channelName]) {
-		if (channels[channelName]->getNbUsers() < channels[channelName]->getUserLimit())
+		std::cout << channels[channelName]->getNbUsers() << " < " << channels[channelName]->getUserLimit() << std::endl;
+		if (channels[channelName]->getUserLimit() == -1 || channels[channelName]->getNbUsers() < channels[channelName]->getUserLimit())
 		{
 			channels[channelName]->addUser(c);
 			sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), channelName, (channels[channelName])->getTopic(), "=", "@randomUser");
 			return;
 		}
 		else {
-			std::cerr << "RPL no channel or NO MORE SPACE FOR MORE USER" << std::endl;
+			std::cerr << "RPL NO MORE SPACE FOR MORE USER" << std::endl;
 			return;
 		}
 	}
-	Channel* newChannel = new Channel(channelName, c.getNick());
+	Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
 	s.addChannel(newChannel);
 	sendChannelRPL(c.getFd(), newChannel, c.getNick(), channelName, newChannel->getTopic(), "=", "@randomUser");
 }

@@ -12,7 +12,7 @@
 
 #include "irc.hpp"
 
-void	nick(Server& s, Client& c, std::string& str) // Verifier qu'il n'y a pas de doublon ?
+void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 {
 	int 		nextSpace = static_cast<int>(str.find_first_of(" \n\r", 6));
 	std::string nick;
