@@ -6,14 +6,24 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:57:17 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/06 15:24:45 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 09:21:16 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
+void	test(int sig)
+{
+	std::cout << "Alloooooo" << std::endl;
+	if (sig == SIGINT)
+		throw	std::exception();
+}
+
 int	main(int ac, char** av)
 {
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &test);
 
 	if (ac != 3)
 	{
@@ -25,7 +35,7 @@ int	main(int ac, char** av)
 	try
 	{
 		Server	serv(av[1], av[2]);
-		while (1)
+		while (true)
 		{
 			serv.initFd();
 			serv.checkFd();

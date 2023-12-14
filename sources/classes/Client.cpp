@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/13 09:08:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 07:53:44 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false),
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
-	std::cout << "Salut je suis le constructeur de Client" << std::endl;
+//	std::cout << "Salut je suis le constructeur de Client" << std::endl;
 }
 
 Client::~Client()
 {
-	std::cout << "Salut je suis le destructeur de Client" << std::endl;
+//	std::cout << "Salut je suis le destructeur de Client" << std::endl;
 }
 
 /**  Setters and getters  *********************************************************************************************/
@@ -130,7 +130,7 @@ int	Client::setInfos(Server& s, std::string& str)
 	return (0);
 }
 
-std::vector<std::string>	Client::splitBuf()
+std::vector<std::string>	Client::splitBuf() // A revoir
 {
 	std::string 				buffer = _bufRead;
 	std::vector<std::string>	res;
@@ -141,7 +141,7 @@ std::vector<std::string>	Client::splitBuf()
 	int sep = std::min(sep1, sep2);
 	res.push_back(buffer.substr(prev, sep));
 
-	std::cout << "res[0] = " << res[0] << std::endl;
+//	std::cout << "res[0] = " << res[0] << std::endl;
 
 	int i = 1; // Securite a enlever quand ca marchera.
 
@@ -153,16 +153,16 @@ std::vector<std::string>	Client::splitBuf()
 		sep = std::min(sep1, sep2);
 
 		res.push_back(buffer.substr(prev + 1, sep - prev - 1));
-		std::cout << "res[" << i << "] = " << res[i] << std::endl;
+//		std::cout << "res[" << i << "] = " << res[i] << std::endl;
 		i++;
 	}
 
 	return (res);
 }
 
-void	Client::execCmd(Server &s, std::string& str)
+void	Client::execCmd(Server &s, std::string& str) // A sortir de Clients ?
 {
-	std::cout << "Executing cmd" << std::endl;
+//	std::cout << "Executing cmd" << std::endl;
 
 	if (!_connected)
 		setInfos(s, str);
@@ -204,8 +204,7 @@ void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 	if (r <= 0)
 		s.delClient(_fd);
 
-//	std::cout << "Received from client " << _fd << ": " << std::endl;
-//	std::cout << _bufRead << std::endl;
+	std::cout << RED << _fd << ": " << _bufRead << END;
 
 	std::vector<std::string>	cmds = splitBuf();
 

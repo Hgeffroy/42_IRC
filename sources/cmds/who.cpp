@@ -12,7 +12,7 @@
 
 #include "irc.hpp"
 
-void	who(Server& s, Client& c, std::string& str)
+void	who(Server& s, Client& c, std::string& str) // Verifier que le chan existe !!
 {
 	int 								space = static_cast<int>(str.find(' '));
 	std::string 						mask = str.substr(space + 1, str.length() - (space + 1));

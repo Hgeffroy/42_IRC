@@ -40,5 +40,5 @@ void	user(Server& s, Client& c, std::string& str) // Doublon ?
 	}
 
 	c.setUser(usr);
-	std::cout << "Username set to: " << c.getUser() << std::endl;
+//	std::cout << "Username set to: " << c.getUser() << std::endl;
 }

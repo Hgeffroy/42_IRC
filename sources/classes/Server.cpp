@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/10 09:23:45 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 09:18:51 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ Server::Server()
 
 Server::~Server()
 {
-
+	close(_listener);
+	std::cout << "Salut, je suis le destructeur de server" << std::endl;
 }
 
-Server::Server(std::string portstr, std::string password) :  _creationTime(time(0)), _name("MyIrcServ")
+Server::Server(std::string portstr, std::string password) : _creationTime(time(0)), _name("MyIrcServ")
 {
 	struct sockaddr_in	sin;
 	int					port;
