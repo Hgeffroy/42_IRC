@@ -47,13 +47,9 @@ std::string Channel::getTopic() const
 	return (_topic);
 }
 
-bool	Channel::getUnderUserLimit() const
+int	Channel::getUserLimit() const
 {
-	if (_userLimit == -1)
-		return (true);
-	else if (_nbUsers < _userLimit)
-		return (true);
-	return (false);
+	return (_userLimit);
 }
 
 int	Channel::getNbUsers() const
@@ -74,4 +70,5 @@ void	Channel::addUser(Client& newClient)
 {
 	_members[newClient.getNick()] = "";
 	std::cout << newClient.getNick() << " joined channel " << _name << std::endl;
+	_nbUsers++;
 }
