@@ -39,5 +39,5 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier qu'il n'y a pas de
 	}
 
 	c.setNick(nick); // Whitespaces ?
-	std::cout << "Nickname set to: " << c.getNick() << std::endl;
+//	std::cout << "Nickname set to: " << c.getNick() << std::endl;
 }

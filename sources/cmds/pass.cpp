@@ -27,7 +27,7 @@ void	pass(Server& s, Client& c, std::string& str)
 	else
 		pass = str.substr(5, nextSpace - 5);
 
-	std::cout << "Pass is: " << pass << " of size " << pass.size() << std::endl;
+//	std::cout << "Pass is: " << pass << " of size " << pass.size() << std::endl;
 
 	if (pass.empty())
 	{
@@ -38,7 +38,7 @@ void	pass(Server& s, Client& c, std::string& str)
 	if (pass == s.getPass())
 	{
 		c.setPassOk();
-		std::cout << "Correct password" << std::endl;
+//		std::cout << "Correct password" << std::endl;
 	}
 	else
 		::sendToClient(c.getFd(), ERR_PASSWDMISMATCH(c.getNick())); // May close connection

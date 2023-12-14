@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/13 13:56:57 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/14 10:12:09 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 # define RPL_AWAY(client, nick)															std::string(":server ") + "301 " + client + " " + nick + " :is away" + ENDLINE
 
 // 315
-# define RPL_ENDOFWHO(client, mask)														std::string(":server ") + "315 " + client + " " + mask + " :End of WHO list" + ENDLINE
+# define RPL_ENDOFWHO(client, mask)														std::string(":server ") + "315 " + client + " " + mask + " :End of /WHO list" + ENDLINE
 // 332 (:channel ?)
 # define RPL_TOPIC(client, channel, topic)												std::string(" ") + "332 " + client + " " + channel + " :" + topic + ENDLINE
 // 352
-# define RPL_WHOREPLY(client, channel, username, host, nick, flags, hopcount, realname)	std::string(":server ") + "352 " + client + " " + channel + " " + username + " " + host + " server " + nick + " " + flags + " :" + hopcount + " " + realname + ENDLINE
+# define RPL_WHOREPLY(client, channel, username, host, nick, realname)					std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " " + host + " server " + " :" + realname + ENDLINE
 // 353 (:channel ?)
 # define RPL_NAMREPLY(client, symbol, channel, nickPrefixed)							std::string(" ") + "353 " + client + " " + symbol + " " + channel + " :" + nickPrefixed + "{" + nickPrefixed + "}" + ENDLINE
 // 366 (:channel ?)
