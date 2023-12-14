@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/13 09:08:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 10:43:47 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false),
 
 Client::~Client()
 {
+	close(_fd);
 	std::cout << "Salut je suis le destructeur de Client" << std::endl;
 }
 
@@ -126,6 +127,8 @@ int	Client::setInfos(Server& s, std::string& str)
 		::sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
 		::sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
 		::sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
+		::sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
+		::sendToClient(_fd, RPL_ISUPPORT());
 	}
 	return (0);
 }
@@ -212,8 +215,7 @@ void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 	if (r <= 0)
 		s.delClient(_fd);
 
-//	std::cout << "Received from client " << _fd << ": " << std::endl;
-//	std::cout << _bufRead << std::endl;
+	std::cout << RED << "From " << _fd << ": " << _bufRead << END << std::endl;
 
 	std::vector<std::string>	cmds = splitBuf();
 
