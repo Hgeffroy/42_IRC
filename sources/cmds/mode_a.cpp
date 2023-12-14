@@ -37,8 +37,13 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		std::cerr << "No arg after +/-l" << std::endl;
 		return ;
 	}
+	if (members.find(who) != members.end()) {
+
+	}
 	if (members[c.getNick()] == "~") {
+		std::cout << members[who] << std::endl; 
 		if (members[who] != "~") {
+			std::cout << "TEST1" << std::endl;
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
 			}
@@ -49,6 +54,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 	}
 	else if (members[c.getNick()] == "@") {
 		if (members[who] != "~" && members[who] != "@") {
+			std::cout << "TEST2" << std::endl;
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
 			}
@@ -127,12 +133,11 @@ void	mode(Server& s, Client& c, std::string& str)
 	target = str.substr(start + 1, end - start - 1);
 	std::map<std::string, Channel*>	chan = s.getChannels();
 	if (!chan[target]) {
-		std::cerr << "NO CHANNEL" << std::endl;
+		::sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
 	std::string modeStr = str.substr(end, str.size() - end);
 	int modeOption = 0;
-	std::cout << modeStr << std::endl;
 	for ( std::size_t i = 0; i <= modeStr.length(); i++ )
 	{
 		if ( modeStr[i] == '-' || modeStr[i] == '+' ) {
@@ -140,7 +145,6 @@ void	mode(Server& s, Client& c, std::string& str)
 			break;
 		}
 	}
-	std::cout << "Debug :" << static_cast<char>(modeOption) << "=" << std::endl;
 	switch (modeOption)
 	{
 	case i:
@@ -159,7 +163,10 @@ void	mode(Server& s, Client& c, std::string& str)
 		setUserLimit(c, *(chan[target]), modeStr);
 		break;
 	default:
-		std::cerr << "Not an option that we coded" << std::endl;
+		char errMode[2];
+		errMode[0] = modeOption;
+		errMode[1] = '\0';
+		::sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
 		break;
 	}
 }
