@@ -34,7 +34,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		who = str.substr(i, str.length() - i);
 	}
 	else {
-		std::cerr << "No arg after +/-l" << std::endl;
+		::sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
 	if (members.find(who) != members.end()) {
@@ -42,7 +42,6 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		return ;
 	}
 	if (members[c.getNick()] == "~") {
-		std::cout << members[who] << std::endl; 
 		if (members[who] != "~") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
