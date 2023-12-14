@@ -4,7 +4,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		::sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
 		return ;
 	}
 	size_t	i = 0;
@@ -25,7 +25,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 	}
 	i += 2;
 	if (str[i] != ' ') {
-		std::cerr << "Need to separate +l et args" << std::endl;
+		::sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
 	i++;
@@ -67,7 +67,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		::sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
 		return ;
 	}
 	size_t	i = 0;
