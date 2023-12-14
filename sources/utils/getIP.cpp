@@ -18,6 +18,6 @@ std::string	getIP()
 
 	struct hostent *host = gethostbyname(szBuffer);
 	if (!host)
-		return ("");
+		return ("localhost");
 	return (host->h_name);
 }
