@@ -21,7 +21,7 @@ Channel::Channel()
 
 Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic(""), _userLimit(-1), _nbUsers(1)
 {
-	_members[founder] = "@";
+	_members[founder] = "~";
 	std::cout << "Channel -" << _name << "- was created" << std::endl;
 }
 
@@ -61,6 +61,11 @@ int	Channel::getNbUsers() const
 void	Channel::setUserLimit( int lim )
 {
 	_userLimit = lim;
+}
+
+void	Channel::setPrivilege( std::string who, std::string privilege )
+{
+	_members[who] = privilege;
 }
 
 
