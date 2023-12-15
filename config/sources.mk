@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/12/13 12:19:51 by twang            ###   ########.fr        #
+#    Updated: 2023/12/15 10:40:04 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/sendToClient.cpp								\
 				sources/cmds/mode_a.cpp										\
 				sources/cmds/mode_t.cpp										\
+				sources/cmds/invite.cpp										\
 				sources/cmds/join.cpp										\
 				sources/cmds/nick.cpp										\
 				sources/cmds/pass.cpp										\

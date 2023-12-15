@@ -2,7 +2,7 @@
 *.d
 *.vscode
 *.DS_Store
-*.idea
+.idea
 
 # Compiled Object files
 *.slo

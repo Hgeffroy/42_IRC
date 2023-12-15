@@ -33,12 +33,15 @@
 # include <unistd.h>
 # include <signal.h>
 # include <netdb.h>
+# include <sstream>
+# include <cctype> // Pas inclus dans cstdlib ?
+# include <cstdio>
+# include <ios>
+
+/*---- includes --------------------------------------------------------------*/
 
 # include "defines.h"
 # include "enum.h"
-
-# include <cctype> // Pas inclus dans cstdlib ?
-# include <cstdio>
 
 /*---- colors ----------------------------------------------------------------*/
 

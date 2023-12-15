@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 09:04:31 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 10:17:17 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ enum	e_cmd
 	PRIVMSG,
 	JOIN,
 	MODE,
-	WHO
+	WHO,
+	INVITE
 };
 
 enum	e_mode

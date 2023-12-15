@@ -6,9 +6,13 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2023/12/15 09:26:50 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 10:28:29 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
+void	invite( Server& s, Client& c, std::string& params )
+{
+	std::cout << params << std::endl;
+}
