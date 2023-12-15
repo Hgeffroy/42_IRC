@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 08:54:50 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:13:37 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 	std::map<std::string, Client*>	clients = s.getClients();
 	std::cout << c.getNick() << " tries to send a msg to client " << dest << std::endl;
 
-	std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg;
+	std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg + ENDLINE;
 	::sendToClient(clients[dest]->getFd(), fullMsg);
 	if (clients[dest]->getAway())
 		::sendToClient(c.getFd(), RPL_AWAY(c.getNick(), clients[dest]->getNick())); // Le RPL away ne permet pour l'instant pas de set le message away
@@ -35,8 +35,11 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 		std::map<std::string, std::string>	members = (channels[dest])->getMembers();
 		for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
 		{
-			std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg; // Ce msg est pas bon
-			::sendToClient(s.getClientFd(it2->first), fullMsg);
+			if (it2->first != c.getNick())
+			{
+				std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " " + msg + ENDLINE; // Ce msg est pas bon
+				::sendToClient(s.getClientFd(it2->first), fullMsg);
+			}
 		}
 		return ;
 	}
@@ -49,7 +52,7 @@ void	sendBroadcast(Server& s, Client& c, std::string& msg)
 	std::cout << c.getNick() << " tries to send a msg in broadcast" << std::endl;
 	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
 	{
-		std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + it->first+ " :" + msg;
+		std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + it->first+ " :" + msg + ENDLINE;
 		::sendToClient(it->second->getFd(), msg);
 	}
 }
