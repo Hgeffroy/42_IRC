@@ -1,45 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   enum.h                                             :+:      :+:    :+:   */
+/*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
+/*   Created: 2023/12/15 09:52:42 by hgeffroy          #+#    #+#             */
 /*   Updated: 2023/12/15 09:58:41 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENUM_H
-# define ENUM_H
+#include "irc.hpp"
 
-enum	e_type
+void	quit(Server& s, Client& c, std::string& str)
 {
-	FD_SERV,		// Client pas encore accepte
-	FD_CLIENT,		// Client accepte
-	FD_CHANNEL
-};
 
-enum	e_cmd
-{
-	PASS,
-	NICK,
-	USER,
-	PRIVMSG,
-	JOIN,
-	MODE,
-	WHO,
-	PART,
-	QUIT
-};
-
-enum	e_mode
-{
-	i = 'i',
-	t = 't',
-	k = 'k',
-	o = 'o',
-	l = 'l'
-};
-
-#endif
+}
