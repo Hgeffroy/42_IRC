@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 13:29:03 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 09:38:53 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static bool			checkOption_I( Client& c, std::map<std::string, Channel*> channels
 																std::string channelName );
 static bool			checkOption_K( Client& c, std::map<std::string, Channel*> channels, \
 										std::string channelName, std::string channelPass );
-static bool			checkOption_L( Client& c, std::map<std::string, Channel*> channels, \
+static bool			checkOption_L( Client& c, std::map<std::string, Channel*>& channels, \
 																std::string channelName );
 
 void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string username, std::string channel, std::string topic, std::string symbol)
@@ -65,9 +65,12 @@ void	join(Server& s, Client& c, std::string& str)
 		if ( !checkOption_L( c, channels, channelName ) )
 			return ;
 	}
-	Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
-	s.addChannel(newChannel);
-	sendChannelRPL(c.getFd(), newChannel, c.getNick(), c.getUser(), channelName, newChannel->getTopic(), "=");
+	else
+	{
+		Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
+		s.addChannel(newChannel);
+		sendChannelRPL(c.getFd(), newChannel, c.getNick(), c.getUser(), channelName, newChannel->getTopic(), "=");
+	}
 }
 
 static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, std::string channelName, std::string channelPass )
@@ -109,7 +112,7 @@ static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, 
 	return ( true );
 }
 
-static bool	checkOption_L( Client& c, std::map<std::string, Channel*> channels, std::string channelName )
+static bool	checkOption_L( Client& c, std::map<std::string, Channel*>& channels, std::string channelName ) // Bizarre d'adduser dans un checkoption...
 {
 	if (channels[channelName]->getUserLimit() == -1 || channels[channelName]->getNbUsers() < channels[channelName]->getUserLimit())
 	{

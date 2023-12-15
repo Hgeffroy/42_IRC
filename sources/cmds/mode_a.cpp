@@ -121,7 +121,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 		std::cerr << "IMPOSSIBLE TOO MANY USER INSIDE ALREADY" << std::endl;
 }
 
-void	mode(Server& s, Client& c, std::string& str)
+void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for HexChat
 {
 	std::string	target;
 
