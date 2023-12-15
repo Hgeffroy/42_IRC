@@ -14,7 +14,7 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
+Client::Client(int socket) : _fd(socket), _connected(false), _invited(false), _passwordOk(false), _away(false), _nickname(""), _username("")
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
@@ -52,6 +52,11 @@ std::string Client::getUser() const
 bool	Client::getConnected() const
 {
 	return (_connected);
+}
+
+bool	Client::getInvited() const
+{
+	return (_invited);
 }
 
 bool	Client::getAway() const

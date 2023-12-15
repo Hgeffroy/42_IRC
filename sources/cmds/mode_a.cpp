@@ -123,7 +123,8 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 
 void	mode(Server& s, Client& c, std::string& str)
 {
-	std::string target;
+	std::string	target;
+
 	int start = str.find(' ');
 	int end = str.find(' ', start + 1);
 	if (end == -1)
@@ -146,13 +147,13 @@ void	mode(Server& s, Client& c, std::string& str)
 	switch (modeOption)
 	{
 	case i:
-		/* code */
+		i_opt(c, chan[target], modeStr);
 		break;
 	case t:
 		/* code */
 		break;
 	case k:
-		/* code */
+		k_opt(c, chan[target], modeStr);
 		break;
 	case o:
 		opPrivilege(c, *(chan[target]), modeStr);

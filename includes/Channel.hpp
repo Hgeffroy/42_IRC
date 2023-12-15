@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/10 09:42:12 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/14 10:10:21 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ private:
 	int									_userLimit;
 	int									_nbUsers;
 
+	bool								_inviteOnly;
+	bool								_keyProtect;
+	std::string							_password;
+
 	Channel();
 
 public:
@@ -44,7 +48,15 @@ public:
 	void								setPrivilege( std::string who, std::string privilege );
 
 
-	void	addUser(Client& newClient);
+	bool								getInviteStatus() const;
+	bool								getKeyStatus() const;
+	std::string							getPassword() const;
+
+	void								setInviteStatus(bool status);
+	void								setKeyStatus(bool status);
+	void								setPassword(std::string password);
+
+	void								addUser(Client& newClient);
 
 };
 
