@@ -6,11 +6,12 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 13:29:03 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 09:27:02 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
+
 
 static std::string	getChannelName(std::string& str);
 static std::string	getChannelPass(std::string& str);

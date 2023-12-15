@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/13 16:17:11 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 09:42:13 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ Channel::Channel()
 
 }
 
-Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic(""), _userLimit(-1), _nbUsers(1)
+Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic(""), \
+																		_userLimit(-1), _nbUsers(1), \
+																		_inviteOnly(false), _keyProtect(false)
 {
 	_members[founder] = "~";
 	std::cout << "Channel -" << _name << "- was created" << std::endl;

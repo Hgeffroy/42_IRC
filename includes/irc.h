@@ -40,7 +40,8 @@
 # include <cctype> // Pas inclus dans cstdlib ?
 # include <cstdio>
 
-// Colors
+/*---- colors ----------------------------------------------------------------*/
+
 # define BLUE		"\001\033[1;34m\002"
 # define RED		"\001\033[1;31m\002"
 # define YELLOW		"\001\033[1;33m\002"

@@ -6,11 +6,13 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/14 10:29:01 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 09:45:23 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
+
+/*---- static defines --------------------------------------------------------*/
 
 static void			add_IOpt(Channel *channel);
 static void			remove_IOpt(Channel *channel);
@@ -20,16 +22,16 @@ static bool			isOperator(Client &c, Channel *channel);
 static bool			checkOption(std::string params);
 static std::string	getPassword( std::string param );
 
+/*----------------------------------------------------------------------------*/
+
 //i: Set/remove Invite-only channel
 void	i_opt(Client &c, Channel *channel, std::string params)
 {
-//check option +k et rien derriere
 	if ( !checkOption( params ) )
 	{
 		std::cerr << RED << "BAD OPTION" << END << std::endl;
 		return ;
 	}
-//check if client is operator
 	if ( !isOperator( c, channel ) )
 	{
 		std::cerr << RED << "NO OPERATOR PRIVILEGE" << END << std::endl;
@@ -48,13 +50,11 @@ void	i_opt(Client &c, Channel *channel, std::string params)
 //k: Set/remove the channel key (password)
 void	k_opt(Client &c, Channel *channel, std::string params)
 {
-//check option +k et rien derriere
 	if ( !checkOption( params ) )
 	{
 		std::cerr << RED << "BAD OPTION" << END << std::endl;
 		return ;
 	}
-//check if client is operator
 	if ( !isOperator( c, channel ) )
 	{
 		std::cerr << RED << "NO OPERATOR PRIVILEGE" << END << std::endl;
@@ -68,6 +68,8 @@ void	k_opt(Client &c, Channel *channel, std::string params)
 			remove_KOpt( channel );
 	}
 }
+
+/*----------------------------------------------------------------------------*/
 
 static void	add_IOpt(Channel *channel)
 {
@@ -90,6 +92,8 @@ static void	remove_IOpt(Channel *channel)
 	channel->setInviteStatus( false );
 	std::cout << GREEN << "-i option on channel : " << channel->getName() << " is unset successfully."  << END << std::endl;
 }
+
+/*----------------------------------------------------------------------------*/
 
 static void	add_KOpt(Channel *channel, std::string param)
 {
@@ -121,6 +125,8 @@ static void	remove_KOpt(Channel *channel)
 	channel->setKeyStatus( false );
 	std::cout << GREEN << "-k option on channel : " << channel->getName() << " is unset successfully." << END << std::endl;
 }
+
+/*----------------------------------------------------------------------------*/
 
 static bool	isOperator(Client &c, Channel *channel)
 {
