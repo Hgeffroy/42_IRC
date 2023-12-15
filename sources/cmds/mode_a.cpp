@@ -4,7 +4,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		::sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
 		return ;
 	}
 	size_t	i = 0;
@@ -25,7 +25,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 	}
 	i += 2;
 	if (str[i] != ' ') {
-		::sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
+		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
 	i++;
@@ -34,11 +34,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		who = str.substr(i, str.length() - i);
 	}
 	else {
-		::sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
+		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
 	if (members.find(who) != members.end()) {
-		::sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), who, ch.getName()));
+		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), who, ch.getName()));
 		return ;
 	}
 	if (members[c.getNick()] == "~") {
@@ -67,7 +67,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		::sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
 		return ;
 	}
 	size_t	i = 0;
@@ -132,7 +132,7 @@ void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for He
 	target = str.substr(start + 1, end - start - 1);
 	std::map<std::string, Channel*>	chan = s.getChannels();
 	if (!chan[target]) {
-		::sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
+		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
 	std::string modeStr = str.substr(end, str.size() - end);
@@ -165,7 +165,7 @@ void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for He
 		char errMode[2];
 		errMode[0] = modeOption;
 		errMode[1] = '\0';
-		::sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
+		sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
 		break;
 	}
 }

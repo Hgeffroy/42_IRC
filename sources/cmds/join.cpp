@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 09:38:53 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 10:39:39 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
+
 
 static std::string	getChannelName(std::string& str);
 static std::string	getChannelPass(std::string& str);
@@ -26,20 +27,20 @@ void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string usern
 	std::map<std::string, std::string>::iterator	it;
 	std::map<std::string, std::string>				members = chan->getMembers();
 
-	::sendToClient(fd, JOIN_MSG(client, username, getIP(), channel));
+	sendToClient(fd, JOIN_MSG(client, username, getIP(), channel));
 
 	if (!chan->getTopic().empty())
-		::sendToClient(fd, RPL_TOPIC(client, channel, topic)); // Seulement s'il y a un topic !
+		sendToClient(fd, RPL_TOPIC(client, channel, topic)); // Seulement s'il y a un topic !
 
 	for (it = members.begin(); it != members.end(); ++it)
 	{
 		std::string prefix = it->second;
 		if (it->second == "~")
 			prefix = "@";
-		::sendToClient(fd, RPL_NAMREPLY(client, symbol, channel, prefix + it->first)); // A changer !!
+		sendToClient(fd, RPL_NAMREPLY(client, symbol, channel, prefix + it->first)); // A changer !!
 	}
 
-	::sendToClient(fd, RPL_ENDOFNAMES(channel));
+	sendToClient(fd, RPL_ENDOFNAMES(channel));
 }
 
 
@@ -94,20 +95,11 @@ static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, 
 
 static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, std::string channelName )
 {
+	( void )c;
+	std::cout << GREEN << std::boolalpha << channels[channelName]->getInviteStatus() << std::endl;
 	if ( channels[channelName]->getInviteStatus() )
 	{
-		std::cout << channels[channelName]->getInviteStatus() << std::endl;
-		std::cout << c.getInvited() << std::endl;
-		if ( c.getInvited() )
-		{
-			std::cout << BLUE << "This client was invited. NOICE" << END << std::endl;
-			return ( true );
-		}
-		else
-		{
-			std::cout << RED << "This client was not invited. CONNASSE" << END << std::endl;
-			return ( false );
-		}
+		std::cout << "iterate in the vector _guestList and compare c.getNick with" << std::endl;
 	}
 	return ( true );
 }
@@ -121,7 +113,7 @@ static bool	checkOption_L( Client& c, std::map<std::string, Channel*>& channels,
 		return ( true );
 	}
 	else {
-		::sendToClient(c.getFd(), ERR_CHANNELISFULL(c.getNick(), channelName));
+		sendToClient(c.getFd(), ERR_CHANNELISFULL(c.getNick(), channelName));
 		return ( false );
 	}
 }
