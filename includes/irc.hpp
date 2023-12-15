@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 10:11:41 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 09:58:41 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	pass(Server& s, Client& c, std::string& str);
 void	sendMsg(Server& s, Client& c, std::string& str);
 void	user(Server& s, Client& c, std::string& str);
 void	mode(Server& s, Client& c, std::string& str);
+void	quit(Server& s, Client& c, std::string& str);
+void	part(Server& s, Client& c, std::string& str);
 
 void	i_opt(Client &c, Channel *channel, std::string params);
 void	k_opt(Client &c, Channel *channel, std::string params);
