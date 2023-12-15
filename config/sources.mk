@@ -22,8 +22,10 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/cmds/invite.cpp										\
 				sources/cmds/join.cpp										\
 				sources/cmds/nick.cpp										\
+				sources/cmds/part.cpp										\
 				sources/cmds/pass.cpp										\
 				sources/cmds/privmsg.cpp									\
 				sources/cmds/user.cpp										\
 				sources/cmds/who.cpp										\
+				sources/cmds/quit.cpp										\
 				sources/main.cpp
