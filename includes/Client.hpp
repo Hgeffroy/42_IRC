@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 10:29:12 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 16:25:11 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ class	Client
 		std::string		getUser() const;
 		bool			getConnected() const;
 		bool			getAway() const;
+
 		void			setPassOk();
 		void			setUser(std::string& str);
 		void			setNick(std::string& str);
