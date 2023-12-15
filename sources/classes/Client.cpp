@@ -195,8 +195,8 @@ void	Client::execCmd(Server &s, std::string& str)
 			case MODE:
 				::mode(s, *this, str);
 				break;
-			//case WHO:
-			//	::who(s, *this, str);
+			case WHO:
+				::who(s, *this, str);
 				break;
 			default:
 				break;
