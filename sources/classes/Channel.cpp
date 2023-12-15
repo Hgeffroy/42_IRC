@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 09:42:13 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 12:59:20 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,20 @@ void	Channel::setPrivilege( std::string who, std::string privilege )
 
 /**  Public member functions  *****************************************************************************************/
 
-void	Channel::addUser(Client& newClient)
+void	Channel::addUserToChan(Client& newClient)
 {
 	_members[newClient.getNick()] = "";
 	std::cout << newClient.getNick() << " joined channel " << _name << std::endl;
 	_nbUsers++;
+}
+
+void	Channel::removeUserFromChan(Client& client)
+{
+	std::map<std::string, std::string>::iterator	it = _members.find(client.getNick());
+
+	if (it != _members.end())
+	{
+		_members.erase(it->first);
+		_nbUsers--;
+	}
 }

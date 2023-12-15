@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 11:03:52 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 12:59:20 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ class	Channel
 		void								setKeyStatus ( bool status );
 		void								setPassword( std::string password );
 
-		void								addUser(Client& newClient);
+		void								addUserToChan(Client& newClient);
+		void								removeUserFromChan(Client& client);
 
 };
 
