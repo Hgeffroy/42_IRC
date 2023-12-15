@@ -119,7 +119,10 @@ int	Client::setInfos(Server& s, std::string& str)
 			::user(s, *this, str);
 			break ;
 		default:
-			; // Faire une gestion d'erreur
+			int end = static_cast<int>(str.find(' '));
+			std::string cmdStr = str.substr(0, end);
+			::sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
+			break;
 	}
 
 	if (_passwordOk && !_username.empty() && !_nickname.empty()) // Faire ca dans la classe Server !!
@@ -204,6 +207,9 @@ void	Client::execCmd(Server &s, std::string& str)
 			//	::who(s, *this, str);
 				break;
 			default:
+				int end = static_cast<int>(str.find(' '));
+				std::string cmdStr = str.substr(0, end);
+				::sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
 				break;
 		}
 	}
