@@ -4,7 +4,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		::sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
 		return ;
 	}
 	size_t	i = 0;
@@ -25,7 +25,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 	}
 	i += 2;
 	if (str[i] != ' ') {
-		std::cerr << "Need to separate +l et args" << std::endl;
+		::sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
 	i++;
@@ -34,7 +34,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		who = str.substr(i, str.length() - i);
 	}
 	else {
-		std::cerr << "No arg after +/-l" << std::endl;
+		::sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
 	if (members.find(who) != members.end()) {
@@ -42,7 +42,6 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		return ;
 	}
 	if (members[c.getNick()] == "~") {
-		std::cout << members[who] << std::endl; 
 		if (members[who] != "~") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
@@ -68,7 +67,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		std::cerr << "NO OPERATOR PRIVILEGE" << std::endl;
+		::sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
 		return ;
 	}
 	size_t	i = 0;
@@ -124,7 +123,8 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 
 void	mode(Server& s, Client& c, std::string& str)
 {
-	std::string target;
+	std::string	target;
+
 	int start = str.find(' ');
 	int end = str.find(' ', start + 1);
 	if (end == -1)
@@ -147,13 +147,13 @@ void	mode(Server& s, Client& c, std::string& str)
 	switch (modeOption)
 	{
 	case i:
-		/* code */
+		i_opt(c, chan[target], modeStr);
 		break;
 	case t:
 		/* code */
 		break;
 	case k:
-		/* code */
+		k_opt(c, chan[target], modeStr);
 		break;
 	case o:
 		opPrivilege(c, *(chan[target]), modeStr);

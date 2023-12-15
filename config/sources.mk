@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    sources.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/12/06 12:24:36 by hgeffroy         ###   ########.fr        #
+#    Updated: 2023/12/13 12:19:51 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/printMap.cpp									\
 				sources/utils/sendToClient.cpp								\
 				sources/cmds/mode_a.cpp										\
+				sources/cmds/mode_t.cpp										\
 				sources/cmds/join.cpp										\
 				sources/cmds/nick.cpp										\
 				sources/cmds/pass.cpp										\

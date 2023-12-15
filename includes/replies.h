@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   replies.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
 /*   Updated: 2023/12/14 13:30:44 by hgeffroy         ###   ########.fr       */
