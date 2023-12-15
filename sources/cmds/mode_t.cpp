@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/15 09:45:23 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 17:09:14 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void	i_opt(Client &c, Channel *channel, std::string params)
 {
 	if ( !checkOption( params ) )
 	{
-		std::cerr << RED << "BAD OPTION" << END << std::endl;
+		std::cerr << PURPLE << "BAD OPTION" << END << std::endl;
 		return ;
 	}
 	if ( !isOperator( c, channel ) )
 	{
-		std::cerr << RED << "NO OPERATOR PRIVILEGE" << END << std::endl;
+		std::cerr << PURPLE << "NO OPERATOR PRIVILEGE" << END << std::endl;
 		return ;
 	}
 
@@ -52,12 +52,12 @@ void	k_opt(Client &c, Channel *channel, std::string params)
 {
 	if ( !checkOption( params ) )
 	{
-		std::cerr << RED << "BAD OPTION" << END << std::endl;
+		std::cerr << PURPLE << "BAD OPTION" << END << std::endl;
 		return ;
 	}
 	if ( !isOperator( c, channel ) )
 	{
-		std::cerr << RED << "NO OPERATOR PRIVILEGE" << END << std::endl;
+		std::cerr << PURPLE << "NO OPERATOR PRIVILEGE" << END << std::endl;
 		return ;
 	}
 	for( std::size_t i = 0; i < params.size(); i++ )
@@ -75,22 +75,22 @@ static void	add_IOpt(Channel *channel)
 {
 	if ( channel->getInviteStatus( ) )
 	{
-		std::cerr << RED << "+i option already set." << END << std::endl;
+		std::cerr << PURPLE << "+i option already set." << END << std::endl;
 		return ;
 	}
 	channel->setInviteStatus( true );
-	std::cout << BLUE << "+i option on channel : " << channel->getName() << " is set." << END << std::endl;
+	std::cout << YELLOW << "+i option on channel : " << channel->getName() << " is set." << END << std::endl;
 }
 
 static void	remove_IOpt(Channel *channel)
 {
 	if ( !channel->getInviteStatus( ) )
 	{
-		std::cerr << RED << "+i option was not on." << END << std::endl;
+		std::cerr << PURPLE << "+i option was not on." << END << std::endl;
 		return ;
 	}
 	channel->setInviteStatus( false );
-	std::cout << GREEN << "-i option on channel : " << channel->getName() << " is unset successfully."  << END << std::endl;
+	std::cout << YELLOW << "-i option on channel : " << channel->getName() << " is unset successfully."  << END << std::endl;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -106,7 +106,7 @@ static void	add_KOpt(Channel *channel, std::string param)
 
 	if ( channel->getKeyStatus( ) )
 	{
-		std::cerr << RED << "+k option already set." << END << std::endl;
+		std::cerr << PURPLE << "+k option already set." << END << std::endl;
 		return ;
 	}
 	channel->setKeyStatus( true );
@@ -119,11 +119,11 @@ static void	remove_KOpt(Channel *channel)
 {
 	if ( !channel->getKeyStatus( ) )
 	{
-		std::cerr << RED << "+k option was not on." << END << std::endl;
+		std::cerr << PURPLE << "+k option was not on." << END << std::endl;
 		return ;
 	}
 	channel->setKeyStatus( false );
-	std::cout << GREEN << "-k option on channel : " << channel->getName() << " is unset successfully." << END << std::endl;
+	std::cout << YELLOW << "-k option on channel : " << channel->getName() << " is unset successfully." << END << std::endl;
 }
 
 /*----------------------------------------------------------------------------*/

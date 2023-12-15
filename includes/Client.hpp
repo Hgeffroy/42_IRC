@@ -51,6 +51,7 @@ class	Client
 		std::string		getUser() const;
 		bool			getConnected() const;
 		bool			getAway() const;
+
 		void			setPassOk();
 		void			setUser(std::string& str);
 		void			setNick(std::string& str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 14:09:51 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 10:39:39 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static bool			checkOption_K( Client& c, std::map<std::string, Channel*> channels
 static bool			checkOption_L( Client& c, std::map<std::string, Channel*> channels, \
 																std::string channelName );
 
-void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string username, std::string channel, std::string topic, std::string symbol)
+void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string username, \
+								std::string channel, std::string topic, std::string symbol)
 {
 	std::map<std::string, std::string>::iterator	it;
 	std::map<std::string, std::string>				members = chan->getMembers();
@@ -52,7 +53,7 @@ void	join(Server& s, Client& c, std::string& str)
 
 	if ( channelName.empty() )
 	{
-		std::cerr << RED << "Invalid Channel" << END << std::endl;
+		std::cerr << PURPLE << "Invalid Channel" << END << std::endl;
 		return ;
 	}
 
@@ -81,12 +82,12 @@ static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, 
 	{
 		if ( channelPass.empty() )
 		{
-			std::cerr << RED << "No Input for Password" << END << std::endl;
+			std::cerr << PURPLE << "No Input for Password" << END << std::endl;
 			return ( false );
 		}
 		if ( channelPass != channels[channelName]->getPassword() )
 		{
-			std::cerr << RED << "Wrong Password" << END << std::endl;
+			std::cerr << PURPLE << "Wrong Password" << END << std::endl;
 			return ( false );
 		}
 	}
@@ -95,13 +96,21 @@ static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, 
 
 static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, std::string channelName )
 {
-	( void )c;
-	std::cout << GREEN << std::boolalpha << channels[channelName]->getInviteStatus() << std::endl;
+	std::vector< std::string >	guestList = channels[channelName]->getGuest();
+
 	if ( channels[channelName]->getInviteStatus() )
 	{
-		std::cout << "iterate in the vector _guestList and compare c.getNick with" << std::endl;
+		for ( std::vector<std::string>::iterator it = guestList.begin(); it != guestList.end(); it++ )
+		{
+			if ( *it == c.getNick() )
+			{
+				std::cout << "VOUS ETES BIEN INVITE YOLO" << std::endl;
+				return ( true );
+			}
+		}
 	}
-	return ( true );
+	std::cout << PURPLE << "mode +i is not set " << END << std::endl;
+	return ( false );
 }
 
 static bool	checkOption_L( Client& c, std::map<std::string, Channel*> channels, std::string channelName ) // Bizarre d'addUserToChan dans un checkoption...

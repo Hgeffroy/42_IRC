@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 12:59:20 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 09:42:13 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,31 @@ std::string	Channel::getPassword() const
 	return (_password);
 }
 
+std::vector< std::string >	Channel::getGuest() const
+{
+	return ( _guestList );
+}
+
+int	Channel::getUserLimit() const
+{
+	return (_userLimit);
+}
+
+int	Channel::getNbUsers() const
+{
+	return (_nbUsers);
+}
+
+void	Channel::setUserLimit( int lim )
+{
+	_userLimit = lim;
+}
+
+void	Channel::setPrivilege( std::string who, std::string privilege )
+{
+	_members[who] = privilege;
+}
+
 void	Channel::setInviteStatus(bool status)
 {
 	_inviteOnly = status;
@@ -79,27 +104,10 @@ void	Channel::setPassword(std::string password)
 	_password = password;
 }
 
-int	Channel::getUserLimit() const
+void	Channel::setGuest( std::string guest )
 {
-	return (_userLimit);
+	_guestList.push_back( guest );
 }
-
-int	Channel::getNbUsers() const
-{
-	return (_nbUsers);
-}
-
-
-void	Channel::setUserLimit( int lim )
-{
-	_userLimit = lim;
-}
-
-void	Channel::setPrivilege( std::string who, std::string privilege )
-{
-	_members[who] = privilege;
-}
-
 
 /**  Public member functions  *****************************************************************************************/
 
