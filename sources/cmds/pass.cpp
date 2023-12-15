@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:47:13 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 08:50:37 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	pass(Server& s, Client& c, std::string& str)
 {
 	if (c.getConnected())
 	{
-		::sendToClient(c.getFd(), ERR_ALREADYREGISTERED(c.getNick()));
+		sendToClient(c.getFd(), ERR_ALREADYREGISTERED(c.getNick()));
 		return ;
 	}
 
@@ -31,7 +31,7 @@ void	pass(Server& s, Client& c, std::string& str)
 
 	if (pass.empty())
 	{
-		::sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "PASS"));
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "PASS"));
 		return ;
 	}
 
@@ -41,5 +41,5 @@ void	pass(Server& s, Client& c, std::string& str)
 //		std::cout << "Correct password" << std::endl;
 	}
 	else
-		::sendToClient(c.getFd(), ERR_PASSWDMISMATCH(c.getNick())); // May close connection
+		sendToClient(c.getFd(), ERR_PASSWDMISMATCH(c.getNick())); // May close connection
 }

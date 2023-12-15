@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 09:58:41 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:17:02 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client(int socket) : _fd(socket), _connected(false), _invited(true), _passwordOk(false), _away(false), _nickname(""), _username("")
+Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
 {
 	std::memset( _bufRead, 0, BUFFER_SIZE);
 	std::memset( _bufWrite, 0, BUFFER_SIZE);
@@ -54,11 +54,6 @@ bool	Client::getConnected() const
 	return (_connected);
 }
 
-bool	Client::getInvited() const
-{
-	return (_invited);
-}
-
 bool	Client::getAway() const
 {
 	return (_away);
@@ -84,8 +79,8 @@ void	Client::setNick(std::string& str)
 
 int Client::getCmd(std::string& buffer)
 {
-	const int			nbcmd = 9;
-	const std::string 	cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT"};
+	const int			nbcmd = 10;
+	const std::string 	cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT", "INVITE"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -110,18 +105,18 @@ int	Client::setInfos(Server& s, std::string& str)
 	switch(cmd)
 	{
 		case PASS:
-			::pass(s, *this, str);
+			pass(s, *this, str);
 			break ;
 		case NICK:
-			::nick(s, *this, str);
+			nick(s, *this, str);
 			break ;
 		case USER:
-			::user(s, *this, str);
+			user(s, *this, str);
 			break ;
 		default:
 			int end = static_cast<int>(str.find(' '));
 			std::string cmdStr = str.substr(0, end);
-			::sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
+			sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
 			break;
 	}
 
@@ -132,11 +127,11 @@ int	Client::setInfos(Server& s, std::string& str)
 		clients[_nickname] = this; // ou &(*this) ?
 		// Delete de newClients.
 		_connected = true;
-		::sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
-		::sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
-		::sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
-		::sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
-		::sendToClient(_fd, RPL_ISUPPORT(_nickname, "10", "50")); // A changer avec le define
+		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
+		sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
+		sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
+		sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
+		sendToClient(_fd, RPL_ISUPPORT(_nickname, "10", "50")); // A changer avec le define
 	}
 	return (0);
 }
@@ -195,26 +190,29 @@ void	Client::execCmd(Server &s, std::string& str)
 		switch (cmd)
 		{
 			case PRIVMSG:
-				::sendMsg(s, *this, str);
+				sendMsg(s, *this, str);
 				break;
 			case JOIN:
-				::join(s, *this, str);
+				join(s, *this, str);
 				break;
 			case MODE:
-				::mode(s, *this, str);
+				mode(s, *this, str);
 				break;
 			case WHO:
-				::who(s, *this, str);
+				who(s, *this, str);
 				break;
 			case PART:
-				::part(s, *this, str);
+				part(s, *this, str);
 			case QUIT:
-				::quit(s, *this, str);
+				quit(s, *this, str);
+				break;
+			case INVITE:
+				invite(s, *this, str);
 				break;
 			default:
-				int end = static_cast<int>(str.find(' '));
+				std::size_t end = str.find(' ');
 				std::string cmdStr = str.substr(0, end);
-				::sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
+				sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
 				break;
 		}
 	}

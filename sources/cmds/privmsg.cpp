@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 14:13:37 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 	std::cout << c.getNick() << " tries to send a msg to client " << dest << std::endl;
 
 	std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg + ENDLINE;
-	::sendToClient(clients[dest]->getFd(), fullMsg);
+	sendToClient(clients[dest]->getFd(), fullMsg);
 	if (clients[dest]->getAway())
-		::sendToClient(c.getFd(), RPL_AWAY(c.getNick(), clients[dest]->getNick())); // Le RPL away ne permet pour l'instant pas de set le message away
+		sendToClient(c.getFd(), RPL_AWAY(c.getNick(), clients[dest]->getNick())); // Le RPL away ne permet pour l'instant pas de set le message away
 
-	// ::sendToClient(c.getFd(), ERR_NOSUCHNICK(c.getNick(), dest));
+	// sendToClient(c.getFd(), ERR_NOSUCHNICK(c.getNick(), dest));
 }
 
 void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
@@ -38,12 +38,12 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 			if (it2->first != c.getNick())
 			{
 				std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " " + msg + ENDLINE; // Ce msg est pas bon
-				::sendToClient(s.getClientFd(it2->first), fullMsg);
+				sendToClient(s.getClientFd(it2->first), fullMsg);
 			}
 		}
 		return ;
 	}
-	::sendToClient(c.getFd(), ERR_CANNOTSENDTOCHAN(c.getNick(), dest));
+	sendToClient(c.getFd(), ERR_CANNOTSENDTOCHAN(c.getNick(), dest));
 }
 
 void	sendBroadcast(Server& s, Client& c, std::string& msg)
@@ -53,7 +53,7 @@ void	sendBroadcast(Server& s, Client& c, std::string& msg)
 	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
 	{
 		std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + it->first+ " :" + msg + ENDLINE;
-		::sendToClient(it->second->getFd(), msg);
+		sendToClient(it->second->getFd(), msg);
 	}
 }
 
@@ -69,7 +69,7 @@ void	sendMsg(Server& s, Client& c, std::string& str)
 
 	if (msg.empty())
 	{
-		::sendToClient(c.getFd(), ERR_NOTEXTTOSEND(c.getNick()));
+		sendToClient(c.getFd(), ERR_NOTEXTTOSEND(c.getNick()));
 		return ;
 	}
 

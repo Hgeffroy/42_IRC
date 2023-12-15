@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 09:26:12 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ void	user(Server& s, Client& c, std::string& str) // Doublon ?
 	{
 		if (it->second->getUser() == usr)
 		{
-			::sendToClient(c.getFd(), ERR_ALREADYREGISTERED(c.getNick()));
+			sendToClient(c.getFd(), ERR_ALREADYREGISTERED(c.getNick()));
 			return ;
 		}
 	}
 
 	if (usr.empty())
 	{
-		::sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
 		return ;
 	}
 
