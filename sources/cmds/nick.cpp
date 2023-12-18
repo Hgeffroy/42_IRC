@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:44:16 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 09:03:39 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 	{
 		if (it->second->getNick() == nick)
 		{
-			::sendToClient(c.getFd(), ERR_NICKNAMEINUSE(c.getNick(), nick));
+			sendToClient(c.getFd(), ERR_NICKNAMEINUSE(c.getNick(), nick));
 			return ;
 		}
 	}
 
 	if (nick.empty())
 	{
-		::sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
+		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
 

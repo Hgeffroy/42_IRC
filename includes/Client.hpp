@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/12 09:03:39 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 10:29:12 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
+
+/*---- includes --------------------------------------------------------------*/
 
 # include "irc.h"
 # include "Server.hpp"
@@ -21,39 +23,40 @@ class Server;
 class	Client
 {
 
-private:
+	private:
 
-	int 						_fd;
-	bool						_connected;
-	bool						_passwordOk;
-	bool						_away;
-	std::string 				_nickname; // Imposer de commencer par un alpha !
-	std::string					_username; // Imposer de commencer par un alpha !
-	char 						_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
-	char 						_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
+		int							_fd;
+		bool						_connected;
+		bool						_passwordOk;
+		bool						_away;
+		std::string 				_nickname; // Imposer de commencer par un alpha !
+		std::string					_username; // Imposer de commencer par un alpha !
+		char						_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
+		char						_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
 
-	int 						getCmd(std::string& buffer);
-	void						execCmd(Server &s, std::string& str);
-	std::vector<std::string>	splitBuf();
+		int							getCmd(std::string& buffer);
+		void						execCmd(Server &s, std::string& str);
+		std::vector<std::string>	splitBuf();
 
-	int		setInfos(Server& s, std::string& str);
+		int							setInfos(Server& s, std::string& str);
 
-public:
+	public:
 
-	Client(int socket);
-	~Client();
+		Client(int socket);
+		~Client();
 
-	int 			getFd() const;
-	const char*		getBufWrite() const;
-	std::string 	getNick() const;
-	std::string 	getUser() const;
-	bool			getConnected() const;
-	bool			getAway() const;
-	void			setPassOk();
-	void			setUser(std::string& str);
-	void			setNick(std::string& str);
+		int				getFd() const;
+		const char*		getBufWrite() const;
+		std::string		getNick() const;
+		std::string		getUser() const;
+		bool			getConnected() const;
+		bool			getAway() const;
 
-	void	read(Server& s);
+		void			setPassOk();
+		void			setUser(std::string& str);
+		void			setNick(std::string& str);
+
+		void			read(Server& s);
 
 };
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enum.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/13 08:59:37 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:02:36 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,19 @@ enum	e_cmd
 	PRIVMSG,
 	JOIN,
 	MODE,
-	WHO
+	WHO,
+	PART,
+	QUIT,
+	INVITE
 };
 
 enum	e_mode
 {
-	i = 105,
-	t = 116,
-	k = 107,
-	o = 111,
-	l = 108
+	i = 'i',
+	t = 't',
+	k = 'k',
+	o = 'o',
+	l = 'l'
 };
 
 #endif

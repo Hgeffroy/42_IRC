@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 09:25:07 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 13:47:12 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,17 @@ public:
 	~Server();
 	Server(std::string port, std::string password);
 
-	std::map<std::string, Client*>&		getClients();
-	std::map<std::string, Channel*>&	getChannels();
-	std::vector<Client*>				getNewClients() const;
-	std::string							getPass() const;
-	std::string 						getName() const;
-	time_t* 							getCreationTime();
+	std::map<std::string, Client*>	getClients() const;
+	std::map<std::string, Channel*>	getChannels() const;
+	std::vector<Client*>			getNewClients() const;
+	std::string						getPass() const;
+	std::string 					getName() const;
+	time_t* 						getCreationTime();
 
 	int 	getClientFd(std::string nickname);
-	void	delClient(int _fd);
+
+	void	addClient(Client* client);
+	void	removeClient(int _fd);
 	void	addChannel(Channel* newChannel);
 
 	void	initFd();

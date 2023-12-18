@@ -62,10 +62,12 @@ PART #general
 
 ## Resources
 
+- [Modern IRC Client Protocol](https://modern.ircdocs.horse/)
 - [Building a simple server with C++](https://ncona.com/2019/04/building-a-simple-server-with-cpp/)
 - [Client Documentation](https://hexchat.readthedocs.io/en/latest/)
 - [User Commands](https://docs.oracle.com/cd/E86824_01/html/E54763/netcat-1.html)
 - [Understanding sockets concepts](https://www.ibm.com/docs/en/zos/2.2.0?topic=concepts-understanding-sockets)
+- [List of all IRC's commands](https://www.techbull.com/techbull/guide/internet/irccommande.html)
 
 ## Authors
 
