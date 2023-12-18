@@ -42,11 +42,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -54,11 +54,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~" && members[who] != "@") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -110,8 +110,6 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 	int	lim;
 	int	len = str.size() - i;
 	std::string digitStr = str.substr(i, len);
-	std::cout << "i =" << i << " len =" << len << " str.size()=" << str.size() << std::endl;
-	std::cout << "debug : =" << digitStr << "=" << std::endl;
 	std::istringstream	ss(digitStr);
 
 	ss >> lim;
@@ -128,7 +126,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 	}
 }
 
-void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for HexChat
+void	mode(Server& s, Client& c, std::string& str)
 {
 	std::string	target;
 
