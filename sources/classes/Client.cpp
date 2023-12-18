@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:50:48 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:53:30 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void Client::setNick(std::string &str)
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 12;
+	const int nbcmd = 13;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD"};
+									 "INVITE", "TOPIC", "MOTD", "PING"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -223,6 +223,9 @@ void Client::execCmd(Server &s, std::string &str)
 				break;
 			case MOTD:
 				motd(s, *this);
+				break;
+			case PONG:
+				pong(s, *this, str);
 				break;
 			default:
 				std::size_t end = str.find(' ');

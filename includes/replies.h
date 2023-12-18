@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:27:39 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 15:15:48 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define JOIN_MSG(client, username, IP, channel)						std::string(":") + client + "!" + username + "@" + IP + " JOIN " + channel + ENDLINE
 # define SWITCH_NICK(prev, new)											std::string(":") + prev + " NICK " + new + ENDLINE
+# define PONG_MSG(token)												std::string (":server " ) + std::string("PONG ") + token + ENDLINE
 
 // 001
 # define RPL_WELCOME(client, nickname, username, IP)					std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@" + IP + ENDLINE

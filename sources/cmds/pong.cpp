@@ -1,49 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   enum.h                                             :+:      :+:    :+:   */
+/*   pong.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:49:25 by hgeffroy         ###   ########.fr       */
+/*   Created: 2023/12/18 15:00:29 by hgeffroy          #+#    #+#             */
+/*   Updated: 2023/12/18 15:12:43 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENUM_H
-# define ENUM_H
+#include "irc.hpp"
 
-enum	e_type
+void	pong(Server& s, Client& c, std::string str)
 {
-	FD_SERV,		// Client pas encore accepte
-	FD_CLIENT,		// Client accepte
-	FD_CHANNEL
-};
+	(void)s;
+	std::string	token;
+	size_t	space = str.find(' ');
 
-enum	e_cmd
-{
-	PASS,
-	NICK,
-	USER,
-	PRIVMSG,
-	JOIN,
-	MODE,
-	WHO,
-	PART,
-	QUIT,
-	INVITE,
-	TOPIC,
-	MOTD,
-	PONG
-};
-
-enum	e_mode
-{
-	i = 'i',
-	t = 't',
-	k = 'k',
-	o = 'o',
-	l = 'l'
-};
-
-#endif
+	token = str.substr(space + 1);
+	sendToClient(c.getFd(), PONG_MSG(token));
+}
