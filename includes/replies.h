@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 11:13:27 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:45:35 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@
 
 // 315
 # define RPL_ENDOFWHO(client, mask)										std::string(":server ") + "315 " + client + " " + mask + " :End of /WHO list" + ENDLINE
+
+// 324
+# define RPL_CHANNELMODEIS(client, channel, modes, arguments)			std::string(":server ") + "324 " + client + " " + channel + " " + modes + " " + arguments + ENDLINE
+
 // 332 (:channel ?)
 # define RPL_TOPIC(client, channel, topic)								std::string(":server ") + "332 " + client + " " + channel + " :" + topic + ENDLINE
 
