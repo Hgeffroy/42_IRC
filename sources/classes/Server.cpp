@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 13:33:56 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 10:57:22 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,14 @@ int Server::getClientFd(std::string nickname)
 void	Server::addClient(Client *client)
 {
 	_clients[client->getNick()] = client;
+
+	std::vector<Client*>::iterator	it;
+	for (it = _newClients.begin(); it != _newClients.end(); ++it)
+		if (*it == client)
+		{
+			_newClients.erase(it);
+			return ;
+		}
 	// Retirer le client de _newClient !!
 }
 
