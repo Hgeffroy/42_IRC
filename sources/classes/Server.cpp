@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:04:01 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:36:56 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ Server::~Server()
 	std::cout << "Salut, je suis le destructeur de server" << std::endl;
 }
 
-Server::Server(std::string portstr, std::string password) : _creationTime(time(0)), _name("MyIrcServ")
+Server::Server(std::string portstr, std::string password) : _creationTime(time(0)), _name("MyIrcServ"), _motd("I like Mr Freeze")
 {
 	struct sockaddr_in	sin;
 	int					port;
@@ -86,6 +86,11 @@ std::string	Server::getPass() const
 std::string	Server::getName() const
 {
 	return (_name);
+}
+
+std::string Server::getMotd() const
+{
+	return (_motd);
 }
 
 time_t* 	Server::getCreationTime()

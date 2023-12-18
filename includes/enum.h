@@ -32,7 +32,8 @@ enum	e_cmd
 	PART,
 	QUIT,
 	INVITE,
-	TOPIC
+	TOPIC,
+	MOTD
 };
 
 enum	e_mode

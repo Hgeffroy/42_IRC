@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replies.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 11:13:27 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:27:39 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,14 @@
 // 366 (:channel ?)
 # define RPL_ENDOFNAMES(channel)										std::string(":server ") + "366 " + channel + " :End of /NAMES list" + ENDLINE
 
+// 372
+# define RPL_MOTD(client, motd)											std::string(":server ") + "372 " + client + " :" + motd + ENDLINE
+// 375
+# define RPL_MOTDSTART(client, server)									std::string(":server ") + "375 " + client + " :- " + server + " Message of the day - " + ENDLINE
+// 376
+# define RPL_ENDOFMOTD(client)											std::string(":server ") + "376 " + client + " :End of /MOTD command" + ENDLINE
+
 // 381
-# define RPL_YOUREOPER(client)															std::string(":server ") + "381 " + client + " :You are now an IRC operator" + ENDLINE
+# define RPL_YOUREOPER(client)											std::string(":server ") + "381 " + client + " :You are now an IRC operator" + ENDLINE
 
 #endif

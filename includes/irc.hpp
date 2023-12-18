@@ -43,6 +43,8 @@ void	quit(Server& s, Client& c, std::string& str);
 void	part(Server& s, Client& c, std::string& str);
 void	invite( Server& s, Client& c, std::string& name );
 void	topic(Server& s, Client& c, std::string& str);
+void	motd(Server& s, Client& c);
+
 
 
 // Modes

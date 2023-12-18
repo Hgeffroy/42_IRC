@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 12:14:06 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:32:12 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ private:
 	time_t 							_creationTime;
 	std::string						_name;
 	std::string						_password;
+	std::string						_motd;
 	std::vector<Client*>			_newClients;
 	std::map<std::string, Client*> 	_clients;
 	std::map<std::string, Channel*>	_channels;
@@ -53,6 +54,7 @@ public:
 	std::vector<Client*>			getNewClients() const;
 	std::string						getPass() const;
 	std::string 					getName() const;
+	std::string						getMotd() const;
 	time_t* 						getCreationTime();
 
 	int 	getClientFd(std::string nickname);
