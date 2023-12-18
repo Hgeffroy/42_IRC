@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/12/18 12:23:20 by twang            ###   ########.fr        #
+#    Updated: 2023/12/18 13:34:36 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ OBJ_DIR			=		.objs/
 
 #--flags-----------------------------------------------------------------------#
 
-CFLAGS			=		-Wall -Wextra  -std=c++98 -I $(INC_DIR) -MMD -MP #-Werror
+CFLAGS			=		-Wall -Wextra -g3 -std=c++98 -I $(INC_DIR) -MMD -MP #-Werror
 CPP				=		c++
 
 #--debug flags-----------------------------------------------------------------#
@@ -88,7 +88,7 @@ debug:
 leaks:
 		clear
 		$(MAKE) -j VALGRIND=yes
-		$(LEAKS) ./ircserv 2000 popopo
+		$(LEAKS) ./ircserv 1234 lalala
 
 #--print header----------------------------------------------------------------#
 
