@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 12:52:25 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 13:19:59 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,9 @@ std::vector<std::string> Client::splitBuf()
 	size_t prev = 0;
 	size_t sep = std::min(sep1, sep2);
 	std::string tempStr = buffer.substr(prev, sep - prev);
+
+	if (tempStr.length() < 1)
+		return (res);
 	res.push_back(tempStr);
 
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;

@@ -6,7 +6,7 @@
 #    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/11/29 10:27:19 by hgeffroy         ###   ########.fr        #
+#    Updated: 2023/12/18 13:05:12 by hgeffroy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ OBJ_DIR			=		.objs/
 
 #--flags-----------------------------------------------------------------------#
 
-CFLAGS			=		-Wall -Wextra  -std=c++98 -I $(INC_DIR) -MMD -MP #-Werror
+CFLAGS			=		-Wall -Wextra -g3 -std=c++98 -I $(INC_DIR) -MMD -MP #-Werror
 CPP				=		c++
 
 #--debug flags-----------------------------------------------------------------#
@@ -88,7 +88,7 @@ debug:
 leaks:
 		clear
 		$(MAKE) -j VALGRIND=yes
-		$(LEAKS) ./Span
+		$(LEAKS) ./ircserv 1234 lalala
 
 #--print header----------------------------------------------------------------#
 
