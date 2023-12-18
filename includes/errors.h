@@ -52,7 +52,12 @@
 // 471
 # define ERR_CHANNELISFULL(client, channel)				std::string(":server ") + "471 " + client + " " + channel + " :Cannot join channel (+l)" + ENDLINE
 // 472
-# define ERR_UNKNOWNMODE(client, modechar)				std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
+# define ERR_UNKNOWNMODE(client, modechar)		std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
+// 501
+# define ERR_UMODEUNKNOWNFLAG(client)			std::string(":server ") + "501 " + client + " :Unknown MODE flag" + ENDLINE
+
+// 696
+# define ERR_INVALIDMODEPARAM(client, target, errMode, param, desc)	std::string(":server ") + "696 " + client + " " + target + " " + errMode + " " + param + " :" + desc + ENDLINE
 
 // 482
 # define ERR_CHANOPRIVSNEEDED (client, channel)			std::string(":server ") + "482 " + client + " " + channel + " :You're not channel operator" + ENDLINE

@@ -1,4 +1,5 @@
 #include "irc.hpp"
+#include <stdlib.h>
 
 void	opPrivilege(Client &c, Channel &ch, std::string str)
 {
@@ -17,10 +18,6 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		}
 		else if (str[i] == '+') {
 			break;
-		}
-		else if (str[i] != ' ') {
-			std::cerr << "NO SIGN +/- ERROR" << std::endl;
-			return ;
 		}
 	}
 	i += 2;
@@ -45,9 +42,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
+				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
+				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -55,9 +54,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~" && members[who] != "@") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
+				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
+				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -79,46 +80,52 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 			}
 			return;
 		}
-		if (str[i] == '+') {
+		else if (str[i] == '+') {
 			break;
 		}
 	}
-	i++;
-	size_t keep = i + 1;
-	int spaced = 0;
-	int valid = 0;
-	for (i = keep; i < str.size(); i++)
-	{
-		if (str[i] != ' ' && !isdigit(str[i])) {
-			std::cerr << "WRONG CHAR ICI:" << str[i] << "." << std::endl;
+	i += 2;
+	std::cout << str[i] << std::endl;
+	size_t keep = i;
+	for (i = keep; i < str.size(); i++) {
+		if (str[i] == ' ')
+			continue;
+		else if (isdigit(str[i]) && i != keep)
+			break;
+		else {
+			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "not a digit or a space char..."));
 			return ;
 		}
-		if (str[i] == ' ') {
-			spaced = 1;
-		}
-		if (spaced == 1 && isdigit(str[i])) {
-			valid = 1;
-			break;
+	}
+	keep = i;
+	for (i = keep; i < str.size(); i++)
+	{
+		if (!isdigit(str[i])) {
+			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "there is a non digit char inside the parameter"));
+			return ;
 		}
 	}
-	if (valid == 0) {
-		std::cerr << "STOIEF ERR" << std::endl;
-		return ;
-	}
+	i--;
+	std::cout << str[i] << std::endl;
 	int	lim;
-	std::string digitStr = str.substr(i, str.size() - 1);
+	int	len = str.size() - i;
+	std::string digitStr = str.substr(i, len);
+	std::cout << "i =" << i << " len =" << len << " str.size()=" << str.size() << std::endl;
+	std::cout << "debug : =" << digitStr << "=" << std::endl;
 	std::istringstream	ss(digitStr);
 
 	ss >> lim;
 	if (!ss.eof() || ss.fail()) {
-		std::cerr << "ERROR NOT A INT" << std::endl;
+		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), "", "l", digitStr, "is not a int."));
 		return ;
 	}
 	if (ch.getNbUsers() <= lim) {
 		ch.setUserLimit(lim);
 	}
-	else
-		std::cerr << "IMPOSSIBLE TOO MANY USER INSIDE ALREADY" << std::endl;
+	else {
+		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), "", "l", digitStr, "number of members is higher than the member limit"));
+		return ;
+	}
 }
 
 void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for HexChat
@@ -135,13 +142,20 @@ void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for He
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
-	std::string modeStr = str.substr(end, str.size() - end);
+	std::string modeStr = str.substr(end, str.size() - (end));
 	int modeOption = 0;
 	for ( std::size_t i = 0; i <= modeStr.length(); i++ )
 	{
 		if ( modeStr[i] == '-' || modeStr[i] == '+' ) {
 			modeOption = modeStr[i + 1];
 			break;
+		}
+		else if ( modeStr[i] != ' ' ) {
+			char errMode[2];
+			errMode[0] = modeOption;
+			errMode[1] = '\0';
+			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), target, errMode, "", "not a minus (-) or plus (+) before mode option"));
+			return ;
 		}
 	}
 	switch (modeOption)
