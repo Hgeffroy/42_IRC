@@ -37,6 +37,7 @@ class	Channel
 		int									_nbUsers;
 		bool								_inviteOnly;
 		bool								_keyProtect;
+		bool								_topicProtect;
 
 		Channel();
 
@@ -50,12 +51,14 @@ class	Channel
 		std::map<std::string, std::string>	getMembers() const;
 		int									getNbUsers() const;
 		int									getUserLimit() const;
+		bool								getTopicProtect() const;
 		bool								getInviteStatus() const;
 		bool								getKeyStatus() const;
 		std::string							getPassword() const;
 		std::vector< std::string >			getGuest() const;
 
 		void								setUserLimit( int lim );
+		void								setTopicProtect( bool b );
 		void								setPrivilege( std::string who, std::string privilege );
 		void								setInviteStatus( bool status );
 		void								setKeyStatus ( bool status );

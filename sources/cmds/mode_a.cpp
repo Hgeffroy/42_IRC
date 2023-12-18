@@ -114,15 +114,46 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 
 	ss >> lim;
 	if (!ss.eof() || ss.fail()) {
-		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), "", "l", digitStr, "is not a int."));
+		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "is not a int."));
 		return ;
 	}
 	if (ch.getNbUsers() <= lim) {
 		ch.setUserLimit(lim);
 	}
 	else {
-		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), "", "l", digitStr, "number of members is higher than the member limit"));
+		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "number of members is higher than the member limit"));
 		return ;
+	}
+}
+
+void	setTopicProtection(Client &c, Channel &ch, std::string str)
+{
+	std::map<std::string, std::string> members = ch.getMembers();
+	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
+		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		return ;
+	}
+	size_t	i = 0;
+	for (i = 0; i < str.length(); i++)
+	{
+		if (str[i] == '-') {
+			if (str[i + 2] == '\0') {
+				ch.setTopicProtect(false);
+			}
+			else {
+				::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+			}
+			return;
+		}
+		else if (str[i] == '+') {
+			if (str[i + 2] == '\0') {
+				ch.setTopicProtect(true);
+			}
+			else {
+				::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+			}
+			return;
+		}
 	}
 }
 
@@ -162,7 +193,7 @@ void	mode(Server& s, Client& c, std::string& str)
 		i_opt(c, chan[target], modeStr);
 		break;
 	case t:
-		/* code */
+		setTopicProtection(c, *(chan[target]), modeStr);
 		break;
 	case k:
 		k_opt(c, chan[target], modeStr);
