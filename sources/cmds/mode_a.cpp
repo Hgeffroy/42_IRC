@@ -34,7 +34,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
-	if (members.find(who) != members.end()) {
+	if (members.find(who) == members.end()) {
 		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), who, ch.getName()));
 		return ;
 	}
@@ -42,11 +42,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -54,11 +54,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~" && members[who] != "@") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -110,25 +110,54 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 	int	lim;
 	int	len = str.size() - i;
 	std::string digitStr = str.substr(i, len);
-	std::cout << "i =" << i << " len =" << len << " str.size()=" << str.size() << std::endl;
-	std::cout << "debug : =" << digitStr << "=" << std::endl;
 	std::istringstream	ss(digitStr);
 
 	ss >> lim;
 	if (!ss.eof() || ss.fail()) {
-		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), "", "l", digitStr, "is not a int."));
+		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "is not a int."));
 		return ;
 	}
 	if (ch.getNbUsers() <= lim) {
 		ch.setUserLimit(lim);
 	}
 	else {
-		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), "", "l", digitStr, "number of members is higher than the member limit"));
+		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "number of members is higher than the member limit"));
 		return ;
 	}
 }
 
-void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for HexChat
+void	setTopicProtection(Client &c, Channel &ch, std::string str)
+{
+	std::map<std::string, std::string> members = ch.getMembers();
+	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
+		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		return ;
+	}
+	size_t	i = 0;
+	for (i = 0; i < str.length(); i++)
+	{
+		if (str[i] == '-') {
+			if (str[i + 2] == '\0') {
+				ch.setTopicProtect(false);
+			}
+			else {
+				::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+			}
+			return;
+		}
+		else if (str[i] == '+') {
+			if (str[i + 2] == '\0') {
+				ch.setTopicProtect(true);
+			}
+			else {
+				::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+			}
+			return;
+		}
+	}
+}
+
+void	mode(Server& s, Client& c, std::string& str)
 {
 	std::string	target;
 
@@ -164,7 +193,7 @@ void	mode(Server& s, Client& c, std::string& str) // Parsing doesn't work for He
 		i_opt(c, chan[target], modeStr);
 		break;
 	case t:
-		/* code */
+		setTopicProtection(c, *(chan[target]), modeStr);
 		break;
 	case k:
 		k_opt(c, chan[target], modeStr);
