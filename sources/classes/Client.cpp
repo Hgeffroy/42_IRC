@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 13:19:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 13:20:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,12 +225,15 @@ void Client::execCmd(Server &s, std::string &str)
 
 /**  Public member functions  *****************************************************************************************/
 
-void Client::read(Server &s) // Le serveur lit ce que lui envoit le client
+int Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 {
 	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
 
 	if (r <= 0)
+	{
 		s.removeClient(*this);
+		return (1);
+	}
 
 	std::cout << RED << "From " << _fd << ": " << _bufRead << END << std::endl;
 
@@ -244,4 +247,6 @@ void Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		execCmd(s, *it);
 
 	std::memset(_bufRead, 0, BUFFER_SIZE); // On vide le buffer !
+
+	return (0);
 }

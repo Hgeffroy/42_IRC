@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 12:14:06 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:04:01 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ void	Server::checkFd()
 {
 	std::vector<Client*>::iterator				it;
 	std::map<std::string, Client*>::iterator	it2;
-	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, NULL, NULL, NULL); // Faire une fonction pour le premier argument.
+	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, NULL, NULL, NULL);
 
 	if (FD_ISSET(_listener, &_fdRead))
 	{
@@ -246,7 +246,8 @@ void	Server::checkFd()
 	{
 		if (FD_ISSET((*it)->getFd(), &_fdRead))
 		{
-			(*it)->read(*this); // Continue si le read a fait sortir le client !!
+			if ((*it)->read(*this) == 1)
+				break;// Iterateur casse si qqn se barre
 			i--;
 		}
 	}
@@ -255,7 +256,8 @@ void	Server::checkFd()
 	{
 		if (FD_ISSET(it2->second->getFd(), &_fdRead))
 		{
-			it2->second->read(*this); // Continue si le read a fait sortir le client !!
+			if (it2->second->read(*this) == 1)
+				break; // Iterateur casse si qqn se barre
 			i--;
 		}
 	}
