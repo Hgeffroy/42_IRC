@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 13:33:56 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 12:14:06 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,20 @@ int	Server::higherFd() const
 	return (max);
 }
 
+void	Server::removeClientFromServers(Client& c)
+{
+	std::map<std::string, Channel*>::iterator	it;
+
+	for (it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		std::map<std::string, std::string>				members = it->second->getMembers();
+		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
+
+		if (find != members.end())
+			it->second->removeUserFromChan(find->first);
+	}
+}
+
 /**  Public member functions  *****************************************************************************************/
 
 int Server::getClientFd(std::string nickname)
@@ -157,18 +171,26 @@ int Server::getClientFd(std::string nickname)
 void	Server::addClient(Client *client)
 {
 	_clients[client->getNick()] = client;
-	// Retirer le client de _newClient !!
+
+	std::vector<Client*>::iterator	it;
+	for (it = _newClients.begin(); it != _newClients.end(); ++it)
+		if (*it == client)
+		{
+			_newClients.erase(it);
+			return ;
+		}
 }
 
-void	Server::removeClient(int fd) // Attention a bien del dans les chan aussi ? Normalement ok si je passe bien les refs ? Ou pas ?
+void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi !
 {
-	close(fd);
-	std::cout << "Client on socket " << fd << " gone" << std::endl;
-	
+	close(c.getFd());
+	std::cout << "Client on socket " << c.getFd() << " gone" << std::endl;
+
 	for (std::vector<Client*>::iterator it = _newClients.begin(); it != _newClients.end(); ++it)
 	{
-		if ((*it)->getFd() == fd)
+		if (*it== &c)
 		{
+//			delete *it;
 			it = _newClients.erase(it); // Verifier qu'on a bien delete, pas de leaks.
 			break;
 		}
@@ -176,13 +198,15 @@ void	Server::removeClient(int fd) // Attention a bien del dans les chan aussi ? 
 
 	for (std::map<std::string, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
-		if (it->second->getFd() == fd)
+		if (it->second == &c)
 		{
-			//delete it->second;
+//			delete it->second;
 			_clients.erase(it->first);
 			break;
 		}
 	}
+
+	removeClientFromServers(c);
 }
 
 void	Server::addChannel(Channel* newChannel)
@@ -196,30 +220,21 @@ void	Server::initFd()
 	std::map<std::string, Client*>::iterator	it2;
 
 	FD_ZERO(&_fdRead);
-	FD_ZERO(&_fdWrite);
-	
+
 	FD_SET(_listener, &_fdRead);
 	
 	for (it = _newClients.begin(); it != _newClients.end(); ++it)
-	{
 		FD_SET((*it)->getFd(), &_fdRead);
-		if (std::strlen((*it)->getBufWrite()))
-			FD_SET((*it)->getFd(), &_fdWrite);
-	}
 
 	for (it2 = _clients.begin(); it2 != _clients.end(); ++it2)
-	{
 		FD_SET(it2->second->getFd(), &_fdRead);
-		if (std::strlen(it2->second->getBufWrite()))
-			FD_SET(it2->second->getFd(), &_fdWrite);
-	}
 }
 
 void	Server::checkFd()
 {
 	std::vector<Client*>::iterator				it;
 	std::map<std::string, Client*>::iterator	it2;
-	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, &_fdWrite, NULL, NULL); // Faire une fonction pour le premier argument.
+	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, NULL, NULL, NULL); // Faire une fonction pour le premier argument.
 
 	if (FD_ISSET(_listener, &_fdRead))
 	{
@@ -234,11 +249,6 @@ void	Server::checkFd()
 			(*it)->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
 		}
-		if (FD_ISSET((*it)->getFd(), &_fdWrite))
-		{
-			i--;
-//			it->write();
-		}
 	}
 
 	for (it2 = _clients.begin(); it2 != _clients.end() && i > 0; ++it2)
@@ -247,11 +257,6 @@ void	Server::checkFd()
 		{
 			it2->second->read(*this); // Continue si le read a fait sortir le client !!
 			i--;
-		}
-		if (FD_ISSET(it2->second->getFd(), &_fdWrite))
-		{
-			i--;
-//			it2->write();
 		}
 	}
 }

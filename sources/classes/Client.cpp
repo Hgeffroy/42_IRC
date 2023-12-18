@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 13:00:48 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 12:52:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 /**  Constructors and destructors  ************************************************************************************/
 
-Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""), _username("")
+Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""),
+							 _username("")
 {
-	std::memset( _bufRead, 0, BUFFER_SIZE);
-	std::memset( _bufWrite, 0, BUFFER_SIZE);
+	std::memset(_bufRead, 0, BUFFER_SIZE);
+	std::memset(_bufWrite, 0, BUFFER_SIZE);
 	std::cout << "Salut je suis le constructeur de Client" << std::endl;
 }
 
@@ -29,7 +30,7 @@ Client::~Client()
 
 /**  Setters and getters  *********************************************************************************************/
 
-const char*	Client::getBufWrite() const
+const char *Client::getBufWrite() const
 {
 	return (_bufWrite);
 }
@@ -49,38 +50,39 @@ std::string Client::getUser() const
 	return (_username);
 }
 
-bool	Client::getConnected() const
+bool Client::getConnected() const
 {
 	return (_connected);
 }
 
-bool	Client::getAway() const
+bool Client::getAway() const
 {
 	return (_away);
 }
 
-void	Client::setPassOk()
+void Client::setPassOk()
 {
 	_passwordOk = true;
 }
 
-void	Client::setUser(std::string& str)
+void Client::setUser(std::string &str)
 {
-		_username = str;
+	_username = str;
 }
 
-void	Client::setNick(std::string& str)
+void Client::setNick(std::string &str)
 {
-		_nickname = str;
+	_nickname = str;
 }
 
 
 /**  Private member functions  ****************************************************************************************/
 
-int Client::getCmd(std::string& buffer)
+int Client::getCmd(std::string &buffer)
 {
-	const int			nbcmd = 10;
-	const std::string 	cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT", "INVITE"};
+	const int nbcmd = 10;
+	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
+									 "INVITE"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -97,22 +99,22 @@ int Client::getCmd(std::string& buffer)
 	return (i);
 }
 
-int	Client::setInfos(Server& s, std::string& str)
+int Client::setInfos(Server &s, std::string &str)
 {
 	int cmd = getCmd(str);
 	// if (cmd < 0)
 
-	switch(cmd)
+	switch (cmd)
 	{
 		case PASS:
 			pass(s, *this, str);
-			break ;
+			break;
 		case NICK:
 			nick(s, *this, str);
-			break ;
+			break;
 		case USER:
 			user(s, *this, str);
-			break ;
+			break;
 		default:
 			int end = static_cast<int>(str.find(' '));
 			std::string cmdStr = str.substr(0, end);
@@ -134,34 +136,36 @@ int	Client::setInfos(Server& s, std::string& str)
 	return (0);
 }
 
-std::vector<std::string>	Client::splitBuf()
+std::vector<std::string> Client::splitBuf()
 {
-	std::string 				buffer = _bufRead;
-	std::vector<std::string>	res;
+	std::string buffer = _bufRead;
+	std::vector<std::string> res;
 
-	int	sep1 = static_cast<int>(buffer.find('\n'));
-	int	sep2 = static_cast<int>(buffer.find("\r\n"));
-	int	prev = 0;
-	int sep = std::min(sep1, sep2);
-	std::string tempStr = buffer.substr(prev, sep);
-	if (tempStr[tempStr.length() - 1] == '\n')
-		tempStr.erase(tempStr.length() - 1, 1);
+	size_t sep1 = buffer.find('\n');
+	size_t sep2 = buffer.find("\r\n");
+	size_t prev = 0;
+	size_t sep = std::min(sep1, sep2);
+	std::string tempStr = buffer.substr(prev, sep - prev);
 	res.push_back(tempStr);
 
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;
 
-	int i = 1; // Securite a enlever quand ca marchera.
-
-	while (sep != static_cast<int>(std::string::npos) && i < 10)
+	int i = 1;
+	while (sep != std::string::npos && i < 10)
 	{
-		prev = sep1;
-		sep1 = static_cast<int>(buffer.find('\n', sep1 + 1));
-		sep2 = static_cast<int>(buffer.find("\r\n", sep1 + 1));
+		while (buffer[sep] == '\r' || buffer[sep] == '\n')
+			sep++;
+
+		prev = sep;
+
+		sep1 = buffer.find('\n', sep);
+		sep2 = buffer.find("\r\n", sep);
 		sep = std::min(sep1, sep2);
 
-		tempStr = buffer.substr(prev + 1, sep - prev - 1);
-		if (tempStr[tempStr.length() - 1] == '\n')
-			tempStr.erase(tempStr.length() - 1, 1);
+		tempStr = buffer.substr(prev, sep - prev);
+		if (tempStr.length() < 1)
+			break;
+
 		res.push_back(tempStr);
 		std::cout << "res[" << i << "] =" << res[i] << "=" << std::endl;
 		i++;
@@ -170,7 +174,7 @@ std::vector<std::string>	Client::splitBuf()
 	return (res);
 }
 
-void	Client::execCmd(Server &s, std::string& str)
+void Client::execCmd(Server &s, std::string &str)
 {
 	std::cout << "Executing cmd" << std::endl;
 
@@ -218,16 +222,16 @@ void	Client::execCmd(Server &s, std::string& str)
 
 /**  Public member functions  *****************************************************************************************/
 
-void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
+void Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 {
 	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
 
 	if (r <= 0)
-		s.removeClient(_fd);
+		s.removeClient(*this);
 
 	std::cout << RED << "From " << _fd << ": " << _bufRead << END << std::endl;
 
-	std::vector<std::string>	cmds = splitBuf();
+	std::vector<std::string> cmds = splitBuf();
 
 //	std::cout << "After split: " << std::endl;
 //	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it)
@@ -236,5 +240,5 @@ void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it)
 		execCmd(s, *it);
 
-	std::memset( _bufRead, 0, BUFFER_SIZE); // On vide le buffer !
+	std::memset(_bufRead, 0, BUFFER_SIZE); // On vide le buffer !
 }

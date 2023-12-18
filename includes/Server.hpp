@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 13:47:12 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 12:14:06 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ private:
 	std::vector<Client*>			_newClients;
 	std::map<std::string, Client*> 	_clients;
 	std::map<std::string, Channel*>	_channels;
-	fd_set							_fdWrite; // Ceux a qui le serveur va ecrire
 	fd_set							_fdRead; // Ceux que le serveur doit lire
 
 	Server();
@@ -42,6 +41,7 @@ private:
 
 	void				accept();
 	int 				higherFd() const;
+	void				removeClientFromServers(Client& c);
 
 public:
 
@@ -58,7 +58,7 @@ public:
 	int 	getClientFd(std::string nickname);
 
 	void	addClient(Client* client);
-	void	removeClient(int _fd);
+	void	removeClient(Client& c);
 	void	addChannel(Channel* newChannel);
 
 	void	initFd();
