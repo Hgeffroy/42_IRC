@@ -14,6 +14,7 @@
 # define REPLIES_H
 
 # define JOIN_MSG(client, username, IP, channel)						std::string(":") + client + "!" + username + "@" + IP + " JOIN " + channel + ENDLINE
+# define SWITCH_NICK(prev, new)											std::string(":") + prev + " NICK " + new + ENDLINE
 
 // 001
 # define RPL_WELCOME(client, nickname, username, IP)					std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@" + IP + ENDLINE

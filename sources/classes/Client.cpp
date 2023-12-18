@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 13:20:25 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:07:47 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,9 @@ void Client::execCmd(Server &s, std::string &str)
 
 		switch (cmd)
 		{
+			case NICK:
+				nick(s, *this, str);
+				break;
 			case PRIVMSG:
 				sendMsg(s, *this, str);
 				break;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:44:16 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:25:50 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,20 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 		return ;
 	}
 
+	std::string	prev;
+	if (!c.getNick().empty())
+	{
+		std::cout << "ici" << std::endl;
+		prev = c.getNick();
+	}
+
 	c.setNick(nick); // Whitespaces ?
+
+	if (!prev.empty())
+	{
+		std::cout << "la" << std::endl;
+		sendToClient(c.getFd(), SWITCH_NICK(prev, nick));
+	}
+
 //	std::cout << "Nickname set to: " << c.getNick() << std::endl;
 }
