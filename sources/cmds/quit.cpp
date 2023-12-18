@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:52:42 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 12:39:00 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 09:32:33 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,4 @@
  * Enlever le client du server */
 void	quit(Server& s, Client& c, std::string& str)
 {
-
 }
