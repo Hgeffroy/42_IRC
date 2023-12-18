@@ -120,6 +120,12 @@ void	Channel::setGuest( std::string guest )
 	_guestList.push_back( guest );
 }
 
+void	Channel::setTopic( std::string topic )
+{
+	_topic = topic;
+}
+
+
 /**  Public member functions  *****************************************************************************************/
 
 void	Channel::addUserToChan(Client& newClient)
