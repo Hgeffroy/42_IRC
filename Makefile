@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/11/29 10:27:19 by hgeffroy         ###   ########.fr        #
+#    Updated: 2023/12/18 12:23:20 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,7 @@ debug:
 leaks:
 		clear
 		$(MAKE) -j VALGRIND=yes
-		$(LEAKS) ./Span
+		$(LEAKS) ./ircserv 2000 popopo
 
 #--print header----------------------------------------------------------------#
 

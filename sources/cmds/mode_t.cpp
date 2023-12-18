@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/18 10:52:58 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:12:30 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void	i_opt(Client &c, Channel *channel, std::string params)
 {
 	if ( !checkOption( params ) )
 	{
-		std::cerr << PURPLE << "BAD OPTION" << END << std::endl;
+		sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG(c.getNick()));
 		return ;
 	}
 	if ( !isOperator( c, channel ) )
 	{
-		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel.getName()));
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel->getName()));
 		return ;
 	}
 
@@ -52,12 +52,12 @@ void	k_opt(Client &c, Channel *channel, std::string params)
 {
 	if ( !checkOption( params ) )
 	{
-		std::cerr << PURPLE << "BAD OPTION" << END << std::endl;
+		sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG(c.getNick()));
 		return ;
 	}
 	if ( !isOperator( c, channel ) )
 	{
-		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel.getName()));
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel->getName()));
 		return ;
 	}
 	for( std::size_t i = 0; i < params.size(); i++ )

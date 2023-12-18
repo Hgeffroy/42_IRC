@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 10:03:07 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:13:27 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,15 @@
 # define RPL_ENDOFWHO(client, mask)										std::string(":server ") + "315 " + client + " " + mask + " :End of /WHO list" + ENDLINE
 // 332 (:channel ?)
 # define RPL_TOPIC(client, channel, topic)								std::string(":server ") + "332 " + client + " " + channel + " :" + topic + ENDLINE
+
 // 341
 # define RPL_INVITING(client, nick, channel)							std::string(":server ") + "341 " + client + " " + nick + " " + channel + ENDLINE
+
 // 352
 # define RPL_WHOREPLY(client, channel, username, host, nick, realname)	std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " " + host + " server " + " :" + realname + ENDLINE
 // 353 (:channel ?)
 # define RPL_NAMREPLY(client, symbol, channel, nickPrefixed)			std::string(":server ") + "353 " + client + " " + symbol + " " + channel + " :" + nickPrefixed + ENDLINE
+
 // 366 (:channel ?)
 # define RPL_ENDOFNAMES(channel)										std::string(":server ") + "366 " + channel + " :End of /NAMES list" + ENDLINE
 
