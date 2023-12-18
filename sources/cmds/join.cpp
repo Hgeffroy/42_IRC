@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 08:48:13 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 13:23:52 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,12 @@ void	join(Server& s, Client& c, std::string& str)
 
 	if ( channelName.empty() )
 	{
-		std::cerr << PURPLE << "Invalid Channel" << END << std::endl;
+		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 		return ;
 	}
 
 	if (channels[channelName])
 	{
-		//faire un show channel stats -> Channel Name : +k -l +i 
 		if ( !checkOption_I( c, channels, channelName ) )
 			return ;
 		if ( !checkOption_K( c, channels, channelName, channelPass ) )
@@ -103,15 +102,11 @@ static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, 
 		for ( std::vector<std::string>::iterator it = guestList.begin(); it != guestList.end(); it++ )
 		{
 			if ( *it == c.getNick() )
-			{
-				std::cout << "VOUS ETES BIEN INVITE YOLO" << std::endl;
 				return ( true );
-			}
-			else
-				return ( false );
 		}
+		sendToClient(c.getFd(), ERR_INVITEONLYCHAN(c.getNick(), channelName));
+		return ( false );
 	}
-	std::cout << PURPLE << "mode +i is not set " << END << std::endl;
 	return ( true );
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 12:44:00 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 11:07:09 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 11:23:31 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,61 @@
 # define ERRORS_H
 
 // 401
-# define ERR_NOSUCHNICK(client, nickname)				std::string(":server ") + "401 " + client + " " + nickname + " :No such nick/channel" + ENDLINE
+# define ERR_NOSUCHNICK(client, nickname)							std::string(":server ") + "401 " + client + " " + nickname + " :No such nick/channel" + ENDLINE
 // 402
-# define ERR_NOSUCHSERVER(client, servname)				std::string(":server ") + "402 " + client + " " + servname + " :No such server" + ENDLINE
+# define ERR_NOSUCHSERVER(client, servname)							std::string(":server ") + "402 " + client + " " + servname + " :No such server" + ENDLINE
 // 403
-# define ERR_NOSUCHCHANNEL(client, channel)				std::string(":server ") + "403 " + client + " " + channel + " :No such channel" + ENDLINE
+# define ERR_NOSUCHCHANNEL(client, channel)							std::string(":server ") + "403 " + client + " " + channel + " :No such channel" + ENDLINE
 // 404
-# define ERR_CANNOTSENDTOCHAN(client, channel)			std::string(":server ") + "404 " + client + " " + channel + " :Cannot send to channel" + ENDLINE
+# define ERR_CANNOTSENDTOCHAN(client, channel)						std::string(":server ") + "404 " + client + " " + channel + " :Cannot send to channel" + ENDLINE
 // 405
-# define ERR_TOOMANYCHANNELS(client, channel)			std::string(":server ") + "405 " + client + " " + channel + " :You have joined too many channels" + ENDLINE
+# define ERR_TOOMANYCHANNELS(client, channel)						std::string(":server ") + "405 " + client + " " + channel + " :You have joined too many channels" + ENDLINE
 // 412
-# define ERR_NOTEXTTOSEND(client)						std::string(":server ") + "412 " + client + " " + " :No text to send" + ENDLINE
+# define ERR_NOTEXTTOSEND(client)									std::string(":server ") + "412 " + client + " " + " :No text to send" + ENDLINE
 
 // 421
-# define ERR_UNKNOWNCOMMAND(client, command)			std::string(":server ") + "421 " + client + " " + command + " :Unknown command" + ENDLINE
+# define ERR_UNKNOWNCOMMAND(client, command)						std::string(":server ") + "421 " + client + " " + command + " :Unknown command" + ENDLINE
 
 // 431
-# define ERR_NONICKNAMEGIVEN(client)					std::string(":server ") + "431 " + client + " " + " :No nickanme given" + ENDLINE
+# define ERR_NONICKNAMEGIVEN(client)								std::string(":server ") + "431 " + client + " " + " :No nickanme given" + ENDLINE
 // 432
-# define ERR_ERRONEUSNICKNAME(client, nick)				std::string(":server ") + "432 " + client + " " + nick + " :Erroneus nickname" + ENDLINE
+# define ERR_ERRONEUSNICKNAME(client, nick)							std::string(":server ") + "432 " + client + " " + nick + " :Erroneus nickname" + ENDLINE
 // 433
-# define ERR_NICKNAMEINUSE(client, nick)				std::string(":server ") + "433 " + client + " " + nick + " :Nickname is already in use" + ENDLINE
+# define ERR_NICKNAMEINUSE(client, nick)							std::string(":server ") + "433 " + client + " " + nick + " :Nickname is already in use" + ENDLINE
 
 // 441
-# define ERR_USERNOTINCHANNEL(client, nick, channel)	std::string(":server ") + "441 " + client + " " + nick + " " + channel + " :They aren't on that channel" + ENDLINE
+# define ERR_USERNOTINCHANNEL(client, nick, channel)				std::string(":server ") + "441 " + client + " " + nick + " " + channel + " :They aren't on that channel" + ENDLINE
 // 442
-# define ERR_NOTONCHANNEL(client, channel)				std::string(":server ") + "442 " + client + " " + channel + " :You're not on that channel" + ENDLINE
+# define ERR_NOTONCHANNEL(client, channel)							std::string(":server ") + "442 " + client + " " + channel + " :You're not on that channel" + ENDLINE
+// 443
+# define ERR_USERONCHANNEL(client, nick, channel)					std::string(":server ") + "443 " + client + " " + nick + " " + channel + " :is already on channel" + ENDLINE
 
 // 461
-# define ERR_NEEDMOREPARAMS(client, command)			std::string(":server ") + "461 " + client + " " + command + " :Not enough parameters" + ENDLINE
+# define ERR_NEEDMOREPARAMS(client, command)						std::string(":server ") + "461 " + client + " " + command + " :Not enough parameters" + ENDLINE
 // 462
-# define ERR_ALREADYREGISTERED(client)					std::string(":server ") + "462 " + client + " :You may not register" + ENDLINE
+# define ERR_ALREADYREGISTERED(client)								std::string(":server ") + "462 " + client + " :You may not register" + ENDLINE
+
 // 464
-# define ERR_PASSWDMISMATCH(client)						std::string(":server ") + "464 " + client + " :Password incorrect" + ENDLINE
+# define ERR_PASSWDMISMATCH(client)									std::string(":server ") + "464 " + client + " :Password incorrect" + ENDLINE
+
 // 471
-# define ERR_CHANNELISFULL(client, channel)				std::string(":server ") + "471 " + client + " " + channel + " :Cannot join channel (+l)" + ENDLINE
+# define ERR_CHANNELISFULL(client, channel)							std::string(":server ") + "471 " + client + " " + channel + " :Cannot join channel (+l)" + ENDLINE
 // 472
-# define ERR_UNKNOWNMODE(client, modechar)		std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
+# define ERR_UNKNOWNMODE(client, modechar)							std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
+// 473
+# define ERR_INVITEONLYCHAN(client, channel)						std::string(":server ") + "473 " + client + " " + channel + " :Cannot join channel (+i)" + ENDLINE
+
+// 482
+# define ERR_CHANOPRIVSNEEDED(client, channel)						std::string(":server ") + "482 " + client + " " + channel + " :You're not channel operator" + ENDLINE
+
 // 501
-# define ERR_UMODEUNKNOWNFLAG(client)			std::string(":server ") + "501 " + client + " :Unknown MODE flag" + ENDLINE
+# define ERR_UMODEUNKNOWNFLAG(client)								std::string(":server ") + "501 " + client + " :Unknown MODE flag" + ENDLINE
 
 // 696
 # define ERR_INVALIDMODEPARAM(client, target, errMode, param, desc)	std::string(":server ") + "696 " + client + " " + target + " " + errMode + " " + param + " :" + desc + ENDLINE
 
+
 // 723
-# define ERR_NOPRIVS(client)							std::string(":server ") + "723 " + client + " :Insufficient oper privileges." + ENDLINE
+# define ERR_NOPRIVS(client)										std::string(":server ") + "723 " + client + " :Insufficient oper privileges." + ENDLINE
+
 #endif
