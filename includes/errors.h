@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 12:44:00 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 11:07:09 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 10:55:54 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 # define ERR_USERNOTINCHANNEL(client, nick, channel)	std::string(":server ") + "441 " + client + " " + nick + " " + channel + " :They aren't on that channel" + ENDLINE
 // 442
 # define ERR_NOTONCHANNEL(client, channel)				std::string(":server ") + "442 " + client + " " + channel + " :You're not on that channel" + ENDLINE
+// 443
+# define ERR_USERONCHANNEL(client, nick, channel)		std::string(":server ") + "443 " + client + " " + nick + " " + channel + " :is already on channel" + ENDLINE
 
 // 461
 # define ERR_NEEDMOREPARAMS(client, command)			std::string(":server ") + "461 " + client + " " + command + " :Not enough parameters" + ENDLINE
@@ -52,6 +54,10 @@
 // 472
 # define ERR_UNKNOWNMODE(client, modechar)				std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
 
+// 482
+# define ERR_CHANOPRIVSNEEDED (client, channel)			std::string(":server ") + "482 " + client + " " + channel + " :You're not channel operator" + ENDLINE
+
 // 723
 # define ERR_NOPRIVS(client)							std::string(":server ") + "723 " + client + " :Insufficient oper privileges." + ENDLINE
+
 #endif

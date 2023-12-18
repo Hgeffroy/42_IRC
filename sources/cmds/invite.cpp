@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2023/12/15 11:14:50 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 10:37:38 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	invite( Server& s, Client& c, std::string& params )
 		/*Servers MAY allow the INVITE with no parameter,
 		and reply with a list of channels the sender is invited to as 
 		RPL_INVITELIST (336) numerics, ending with a RPL_ENDOFINVITELIST (337) numeric.*/
-		std::cerr << PURPLE << "(461) ERR_NEEDMOREPARAMS" << END << std::endl;
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "INVITE"));
+		// std::cerr << PURPLE << "(461) ERR_NEEDMOREPARAMS" << END << std::endl;
 		return ;
 	}
 	std::map<std::string, std::string> 		members = channels[channel]->getMembers();
@@ -41,27 +42,34 @@ void	invite( Server& s, Client& c, std::string& params )
 		std::map<std::string, std::string>::iterator it = members.find(nickname);
 		if ( it != members.end() )
 		{
-			std::cerr << PURPLE << "( 443 ) ERR_USERONCHANNEL" << END << std::endl;
-				return ;
+			sendToClient(c.getFd(), ERR_USERONCHANNEL(c.getNick(), nickname, channel));
+			// std::cerr << PURPLE << "( 443 ) ERR_USERONCHANNEL" << END << std::endl;
+			return ;
 		}
 		std::map<std::string, std::string>::iterator ite = members.find( c.getNick() );
 		if ( ite != members.end() )
 		{
-			std::cerr << PURPLE << "( jesaispascombienc ) ERR_NOTONCHANNEL" << END << std::endl;
-				return ;
+			// std::cerr << PURPLE << "( jesaispascombienc ) ERR_NOTONCHANNEL" << END << std::endl;
+			sendToClient(c.getFd(), ERR_NOTONCHANNEL(c.getNick(), channel));
+			return ;
 		}
 		if ( members[c.getNick()] != "~" && members[c.getNick()] != "@" )
 		{
-			std::cerr << PURPLE << "( 482 ) ERR_CHANOPRIVSNEEDED" << END << std::endl;
-				return ;
+			// std::cerr << PURPLE << "( 482 ) ERR_CHANOPRIVSNEEDED" << END << std::endl;
+			sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel));
+			return ;
 		}
-		std::cout << PURPLE << c.getNick() << " has invited " << nickname << END << std::endl;
+		// std::cout << PURPLE << c.getNick() << " has invited " << nickname << END << std::endl;
 		channels[channel]->setGuest( nickname );
 		/*Only members of the channel are allowed to invite other users.
 		Otherwise, the server MUST reject the command with the ERR_NOTONCHANNEL numeric.*/
 	}
 	else
-		std::cerr << "( 403 ) ERR_NOSUCHCHANNEL" << std::endl;
+	{
+		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channel));
+		return ;
+	}
+	// std::cerr << "( 403 ) ERR_NOSUCHCHANNEL" << std::endl;
 
 }
 

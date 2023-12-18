@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/15 17:09:14 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 10:52:58 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	i_opt(Client &c, Channel *channel, std::string params)
 	}
 	if ( !isOperator( c, channel ) )
 	{
-		std::cerr << PURPLE << "NO OPERATOR PRIVILEGE" << END << std::endl;
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel.getName()));
 		return ;
 	}
 
@@ -57,7 +57,7 @@ void	k_opt(Client &c, Channel *channel, std::string params)
 	}
 	if ( !isOperator( c, channel ) )
 	{
-		std::cerr << PURPLE << "NO OPERATOR PRIVILEGE" << END << std::endl;
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel.getName()));
 		return ;
 	}
 	for( std::size_t i = 0; i < params.size(); i++ )
