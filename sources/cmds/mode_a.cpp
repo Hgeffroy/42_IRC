@@ -34,7 +34,7 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
-	if (members.find(who) != members.end()) {
+	if (members.find(who) == members.end()) {
 		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), who, ch.getName()));
 		return ;
 	}
