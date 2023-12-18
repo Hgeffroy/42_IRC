@@ -43,7 +43,7 @@ int	main(int ac, char** av)
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << "Couldn't create the server because ";
+		std::cerr << "Server closed because: ";
 		std::cerr << e.what() << std::endl;
 		// Liberer le port !!
 		return (-1);

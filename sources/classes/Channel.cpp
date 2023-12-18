@@ -118,9 +118,9 @@ void	Channel::addUserToChan(Client& newClient)
 	_nbUsers++;
 }
 
-void	Channel::removeUserFromChan(Client& client)
+void	Channel::removeUserFromChan(std::string const& name)
 {
-	std::map<std::string, std::string>::iterator	it = _members.find(client.getNick());
+	std::map<std::string, std::string>::iterator	it = _members.find(name);
 
 	if (it != _members.end())
 	{

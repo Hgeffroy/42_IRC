@@ -63,7 +63,7 @@ class	Channel
 		void								setGuest( std::string guest );
 
 		void								addUserToChan(Client& newClient);
-		void								removeUserFromChan(Client& client);
+		void								removeUserFromChan(std::string const& name);
 
 };
 
