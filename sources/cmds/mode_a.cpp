@@ -88,9 +88,11 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 	std::cout << str[i] << std::endl;
 	size_t keep = i;
 	for (i = keep; i < str.size(); i++) {
-		if (isdigit(str[i]))
+		if (str[i] == ' ')
+			continue;
+		else if (isdigit(str[i]) && i != keep)
 			break;
-		else if (str[i] != ' ') {
+		else {
 			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "not a digit or a space char..."));
 			return ;
 		}
@@ -102,10 +104,14 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "there is a non digit char inside the parameter"));
 			return ;
 		}
-		std::cout << str[i] << std::endl;
 	}
+	i--;
+	std::cout << str[i] << std::endl;
 	int	lim;
-	std::string digitStr = str.substr(i, str.size() - 1);
+	int	len = str.size() - i;
+	std::string digitStr = str.substr(i, len);
+	std::cout << "i =" << i << " len =" << len << " str.size()=" << str.size() << std::endl;
+	std::cout << "debug : =" << digitStr << "=" << std::endl;
 	std::istringstream	ss(digitStr);
 
 	ss >> lim;
