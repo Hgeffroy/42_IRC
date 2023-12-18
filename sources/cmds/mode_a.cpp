@@ -179,7 +179,8 @@ void	mode(Server& s, Client& c, std::string& str)
 			modeOption = modeStr[i + 1];
 			break;
 		}
-		else if ( modeStr[i] != ' ' ) {
+		else if ( modeStr[i] != ' ' )
+		{
 			char errMode[2];
 			errMode[0] = modeOption;
 			errMode[1] = '\0';
@@ -189,26 +190,26 @@ void	mode(Server& s, Client& c, std::string& str)
 	}
 	switch (modeOption)
 	{
-	case i:
-		i_opt(c, chan[target], modeStr);
-		break;
-	case t:
-		setTopicProtection(c, *(chan[target]), modeStr);
-		break;
-	case k:
-		k_opt(c, chan[target], modeStr);
-		break;
-	case o:
-		opPrivilege(c, *(chan[target]), modeStr);
-		break;
-	case l:
-		setUserLimit(c, *(chan[target]), modeStr);
-		break;
-	default:
-		char errMode[2];
-		errMode[0] = modeOption;
-		errMode[1] = '\0';
-		sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
-		break;
+		case i:
+			i_opt(c, chan[target], modeStr);
+			break;
+		case t:
+			setTopicProtection(c, *(chan[target]), modeStr);
+			break;
+		case k:
+			k_opt(c, chan[target], modeStr);
+			break;
+		case o:
+			opPrivilege(c, *(chan[target]), modeStr);
+			break;
+		case l:
+			setUserLimit(c, *(chan[target]), modeStr);
+			break;
+		default:
+			char errMode[2];
+			errMode[0] = modeOption;
+			errMode[1] = '\0';
+			sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
+			break;
 	}
 }
