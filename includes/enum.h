@@ -31,7 +31,8 @@ enum	e_cmd
 	WHO,
 	PART,
 	QUIT,
-	INVITE
+	INVITE,
+	TOPIC
 };
 
 enum	e_mode
