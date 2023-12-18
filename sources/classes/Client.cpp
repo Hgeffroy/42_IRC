@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 11:24:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 12:52:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,29 +141,31 @@ std::vector<std::string> Client::splitBuf()
 	std::string buffer = _bufRead;
 	std::vector<std::string> res;
 
-	int sep1 = static_cast<int>(buffer.find('\n'));
-	int sep2 = static_cast<int>(buffer.find("\r\n"));
-	int prev = 0;
-	int sep = std::min(sep1, sep2);
-	std::string tempStr = buffer.substr(prev, sep);
-	if (tempStr[tempStr.length() - 1] == '\n')
-		tempStr.erase(tempStr.length() - 1, 1);
+	size_t sep1 = buffer.find('\n');
+	size_t sep2 = buffer.find("\r\n");
+	size_t prev = 0;
+	size_t sep = std::min(sep1, sep2);
+	std::string tempStr = buffer.substr(prev, sep - prev);
 	res.push_back(tempStr);
 
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;
 
-	int i = 1; // Securite a enlever quand ca marchera.
-
-	while (sep != static_cast<int>(std::string::npos) && i < 10)
+	int i = 1;
+	while (sep != std::string::npos && i < 10)
 	{
-		prev = sep1;
-		sep1 = static_cast<int>(buffer.find('\n', sep1 + 1));
-		sep2 = static_cast<int>(buffer.find("\r\n", sep1 + 1));
+		while (buffer[sep] == '\r' || buffer[sep] == '\n')
+			sep++;
+
+		prev = sep;
+
+		sep1 = buffer.find('\n', sep);
+		sep2 = buffer.find("\r\n", sep);
 		sep = std::min(sep1, sep2);
 
-		tempStr = buffer.substr(prev + 1, sep - prev - 1);
-		if (tempStr[tempStr.length() - 1] == '\n')
-			tempStr.erase(tempStr.length() - 1, 1);
+		tempStr = buffer.substr(prev, sep - prev);
+		if (tempStr.length() < 1)
+			break;
+
 		res.push_back(tempStr);
 		std::cout << "res[" << i << "] =" << res[i] << "=" << std::endl;
 		i++;
