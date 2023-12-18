@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
 /*   Updated: 2023/12/15 13:47:12 by twang            ###   ########.fr       */
@@ -25,42 +25,44 @@ class	Server
 
 private:
 
-		int								_listener;
-		time_t 							_creationTime;
-		std::string						_name;
-		std::string						_password;
-		std::vector<Client*>			_newClients;
-		std::map<std::string, Client*> 	_clients;
-		std::map<std::string, Channel*>	_channels;
-		fd_set							_fdWrite; // Ceux a qui le serveur va ecrire
-		fd_set							_fdRead; // Ceux que le serveur doit lire
+	int								_listener;
+	time_t 							_creationTime;
+	std::string						_name;
+	std::string						_password;
+	std::vector<Client*>			_newClients;
+	std::map<std::string, Client*> 	_clients;
+	std::map<std::string, Channel*>	_channels;
+	fd_set							_fdWrite; // Ceux a qui le serveur va ecrire
+	fd_set							_fdRead; // Ceux que le serveur doit lire
 
-		Server();
+	Server();
 
-		static int			setPort(std::string& portstr);
-		static std::string	setPassword(std::string& pass);
+	static int			setPort(std::string& portstr);
+	static std::string	setPassword(std::string& pass);
 
-		void				accept();
-		int 				higherFd() const;
+	void				accept();
+	int 				higherFd() const;
 
-	public:
+public:
 
-		~Server();
-		Server(std::string port, std::string password);
+	~Server();
+	Server(std::string port, std::string password);
 
-		std::map<std::string, Client*>&		getClients();
-		std::map<std::string, Channel*>&	getChannels();
-		std::vector<Client*>				getNewClients() const;
-		std::string							getPass() const;
-		std::string 						getName() const;
-		time_t* 							getCreationTime();
+	std::map<std::string, Client*>	getClients() const;
+	std::map<std::string, Channel*>	getChannels() const;
+	std::vector<Client*>			getNewClients() const;
+	std::string						getPass() const;
+	std::string 					getName() const;
+	time_t* 						getCreationTime();
 
-		int 	getClientFd(std::string nickname);
-		void	delClient(int _fd);
-		void	addChannel(Channel* newChannel);
+	int 	getClientFd(std::string nickname);
 
-		void	initFd();
-		void	checkFd();
+	void	addClient(Client* client);
+	void	removeClient(int _fd);
+	void	addChannel(Channel* newChannel);
+
+	void	initFd();
+	void	checkFd();
 
 };
 

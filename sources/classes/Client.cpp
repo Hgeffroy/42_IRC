@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 11:17:02 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/15 13:00:48 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,8 @@ int	Client::setInfos(Server& s, std::string& str)
 
 	if (_passwordOk && !_username.empty() && !_nickname.empty()) // Faire ca dans la classe Server !!
 	{
-		std::map<std::string, Client*>& clients = s.getClients();
+		s.addClient(this);
 
-		clients[_nickname] = this; // ou &(*this) ?
-		// Delete de newClients.
 		_connected = true;
 		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
 		sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
@@ -225,7 +223,7 @@ void	Client::read(Server& s) // Le serveur lit ce que lui envoit le client
 	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
 
 	if (r <= 0)
-		s.delClient(_fd);
+		s.removeClient(_fd);
 
 	std::cout << RED << "From " << _fd << ": " << _bufRead << END << std::endl;
 

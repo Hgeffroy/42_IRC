@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 17:08:01 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 08:48:13 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static bool			checkOption_I( Client& c, std::map<std::string, Channel*> channels
 																std::string channelName );
 static bool			checkOption_K( Client& c, std::map<std::string, Channel*> channels, \
 										std::string channelName, std::string channelPass );
-static bool			checkOption_L( Client& c, std::map<std::string, Channel*>& channels, \
+static bool			checkOption_L( Client& c, std::map<std::string, Channel*> channels, \
 																std::string channelName );
 
 void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string username, \
@@ -107,17 +107,19 @@ static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, 
 				std::cout << "VOUS ETES BIEN INVITE YOLO" << std::endl;
 				return ( true );
 			}
+			else
+				return ( false );
 		}
 	}
 	std::cout << PURPLE << "mode +i is not set " << END << std::endl;
-	return ( false );
+	return ( true );
 }
 
-static bool	checkOption_L( Client& c, std::map<std::string, Channel*>& channels, std::string channelName ) // Bizarre d'adduser dans un checkoption...
+static bool	checkOption_L( Client& c, std::map<std::string, Channel*> channels, std::string channelName ) // Bizarre d'addUserToChan dans un checkoption...
 {
 	if (channels[channelName]->getUserLimit() == -1 || channels[channelName]->getNbUsers() < channels[channelName]->getUserLimit())
 	{
-		channels[channelName]->addUser(c);
+		channels[channelName]->addUserToChan(c);
 		sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), c.getUser(), channelName, (channels[channelName])->getTopic(), "=");
 		return ( true );
 	}

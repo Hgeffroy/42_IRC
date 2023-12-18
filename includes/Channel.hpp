@@ -62,7 +62,8 @@ class	Channel
 		void								setPassword( std::string password );
 		void								setGuest( std::string guest );
 
-		void								addUser(Client& newClient);
+		void								addUserToChan(Client& newClient);
+		void								removeUserFromChan(Client& client);
 
 };
 

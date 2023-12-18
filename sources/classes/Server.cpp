@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 11:12:45 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/15 13:33:56 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 
 /**  Setters and Getters  *********************************************************************************************/
 
-std::map<std::string, Client*>&	Server::getClients()
+std::map<std::string, Client*>	Server::getClients() const
 {
 	return (_clients);
 }
 
-std::map<std::string, Channel*>&	Server::getChannels()
+std::map<std::string, Channel*>	Server::getChannels() const
 {
 	return (_channels);
 }
@@ -154,7 +154,13 @@ int Server::getClientFd(std::string nickname)
 	return (_clients[nickname]->getFd());
 }
 
-void	Server::delClient(int fd) // Attention a bien del dans les chan aussi ? Normalement ok si je passe bien les refs ? Ou pas ?
+void	Server::addClient(Client *client)
+{
+	_clients[client->getNick()] = client;
+	// Retirer le client de _newClient !!
+}
+
+void	Server::removeClient(int fd) // Attention a bien del dans les chan aussi ? Normalement ok si je passe bien les refs ? Ou pas ?
 {
 	close(fd);
 	std::cout << "Client on socket " << fd << " gone" << std::endl;
