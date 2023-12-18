@@ -1,5 +1,4 @@
 #include "irc.hpp"
-#include <stdlib.h>
 
 void	opPrivilege(Client &c, Channel &ch, std::string str)
 {
@@ -171,7 +170,7 @@ void	mode(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
-	std::string modeStr = str.substr(end, str.size() - (end));
+	std::string modeStr = str.substr(end + 1, str.size() - (end + 1));
 	int modeOption = 0;
 	for ( std::size_t i = 0; i <= modeStr.length(); i++ )
 	{

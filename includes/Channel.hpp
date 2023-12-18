@@ -64,6 +64,7 @@ class	Channel
 		void								setKeyStatus ( bool status );
 		void								setPassword( std::string password );
 		void								setGuest( std::string guest );
+		void								setTopic( std::string topic );
 
 		void								addUserToChan(Client& newClient);
 		void								removeUserFromChan(std::string const& name);
