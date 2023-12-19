@@ -27,6 +27,7 @@
 // Utils
 std::string	getIP();
 std::string getTime(Server& s);
+std::string	intostr(int a);
 void		sendToClient(int fd, std::string str);
 void		printClients(std::map<std::string, Client*> map);
 

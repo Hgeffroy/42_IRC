@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 12:22:04 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:55:51 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,7 @@ int Client::setInfos(Server &s, std::string &str)
 			user(s, *this, str);
 			break;
 		default:
-			int end = static_cast<int>(str.find(' '));
-			std::string cmdStr = str.substr(0, end);
-			sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
+			sendToClient(this->getFd(), ERR_NOTREGISTERED(this->getNick()));
 			break;
 	}
 
@@ -127,12 +125,12 @@ int Client::setInfos(Server &s, std::string &str)
 		s.addClient(this);
 
 		_connected = true;
+		motd(s, *this);
 		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
 		sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
 		sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
 		sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
 		sendToClient(_fd, RPL_ISUPPORT(_nickname, "10", "50")); // A changer avec le define
-		motd(s, *this);
 	}
 	return (0);
 }
@@ -157,7 +155,7 @@ std::vector<std::string> Client::splitBuf()
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;
 
 	int i = 1;
-	while (sep != std::string::npos && i < 10)
+	while (sep != std::string::npos)
 	{
 		while (buffer[sep] == '\r' || buffer[sep] == '\n')
 			sep++;
@@ -199,6 +197,10 @@ void Client::execCmd(Server &s, std::string &str)
 
 		switch (cmd)
 		{
+			case USER:
+			case PASS:
+				sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
+				break;
 			case NICK:
 				nick(s, *this, str);
 				break;
