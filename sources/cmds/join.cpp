@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 13:38:48 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/19 16:00:20 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 static std::string	getChannelName(std::string& str);
 static std::string	getChannelPass(std::string& str);
 static bool			checkOption_I( Client& c, Channel* channel, std::string channelName );
-static bool			checkOption_K( Client& c, Channel* channel, std::string channelName, std::string channelPass );
+static bool			checkOption_K( Client& c, Channel* channel, std::string channelPass );
 static bool			checkOption_L( Client& c, Channel* channel, std::string channelName );
 
 void	sendChannelRPL(Server& s, Client& c, Channel* chan)
@@ -72,7 +72,7 @@ void	join(Server& s, Client& c, std::string& str)
 		Channel* channel = channels[channelName];
 		if ( !checkOption_I( c, channel, channelName ) )
 			return ;
-		if ( !checkOption_K( c, channel, channelName, channelPass ) )
+		if ( !checkOption_K( c, channel, channelPass ) )
 			return ;
 		if ( !checkOption_L( c, channel, channelName ) )
 			return ;
@@ -94,7 +94,7 @@ void	join(Server& s, Client& c, std::string& str)
 	}
 }
 
-static bool	checkOption_K( Client& c, Channel* channel, std::string channelName, std::string channelPass )
+static bool	checkOption_K( Client& c, Channel* channel, std::string channelPass )
 {
 	( void )c;
 	if ( channel->getKeyStatus() )
