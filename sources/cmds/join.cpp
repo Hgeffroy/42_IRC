@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 13:23:52 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:57:33 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,32 @@ static bool			checkOption_K( Client& c, std::map<std::string, Channel*> channels
 static bool			checkOption_L( Client& c, std::map<std::string, Channel*> channels, \
 																std::string channelName );
 
-void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string username, \
-								std::string channel, std::string topic, std::string symbol)
+void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 {
-	std::map<std::string, std::string>::iterator	it;
-	std::map<std::string, std::string>				members = chan->getMembers();
+	std::map<std::string, std::string>	members = chan->getMembers();
+	std::map<std::string, Client*>		clientList = s.getClients();
 
-	sendToClient(fd, JOIN_MSG(client, username, getIP(), channel));
+	sendToClient(c.getFd(), JOIN_MSG(c.getNick(), c.getUser(), getIP(), chan->getName()));
 
 	if (!chan->getTopic().empty())
-		sendToClient(fd, RPL_TOPIC(client, channel, topic)); // Seulement s'il y a un topic !
+		sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), chan->getName(), chan->getTopic())); // Seulement s'il y a un topic !
 
+
+	// Partie a envoyer a tous les clients du chan
+	std::map<std::string, std::string>::iterator	it;
 	for (it = members.begin(); it != members.end(); ++it)
 	{
-		std::string prefix = it->second;
-		if (it->second == "~")
-			prefix = "@";
-		sendToClient(fd, RPL_NAMREPLY(client, symbol, channel, prefix + it->first)); // A changer !!
+		Client* client = clientList[it->first];
+		std::map<std::string, std::string>::iterator	it2;
+		for (it2 = members.begin(); it2 != members.end(); ++it2)
+		{
+			std::string prefix = it2->second;
+			if (it2->second == "~")
+				prefix = "@";
+			sendToClient(client->getFd(), RPL_NAMREPLY(client->getNick(), "=", chan->getName(), prefix + it2->first)); // A changer !!
+		}
+		sendToClient(client->getFd(), RPL_ENDOFNAMES(chan->getName()));
 	}
-
-	sendToClient(fd, RPL_ENDOFNAMES(channel));
 }
 
 
@@ -65,12 +71,14 @@ void	join(Server& s, Client& c, std::string& str)
 			return ;
 		if ( !checkOption_L( c, channels, channelName ) )
 			return ;
+		channels[channelName]->addUserToChan(c);
+		sendChannelRPL(s, c, channels[channelName]);
 	}
 	else
 	{
 		Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
 		s.addChannel(newChannel);
-		sendChannelRPL(c.getFd(), newChannel, c.getNick(), c.getUser(), channelName, newChannel->getTopic(), "=");
+		sendChannelRPL(s, c, newChannel);
 	}
 }
 
@@ -110,12 +118,12 @@ static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, 
 	return ( true );
 }
 
-static bool	checkOption_L( Client& c, std::map<std::string, Channel*> channels, std::string channelName ) // Bizarre d'addUserToChan dans un checkoption...
+static bool	checkOption_L( Client& c, std::map<std::string, Channel*> channels, std::string channelName )
 {
 	if (channels[channelName]->getUserLimit() == -1 || channels[channelName]->getNbUsers() < channels[channelName]->getUserLimit())
 	{
-		channels[channelName]->addUserToChan(c);
-		sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), c.getUser(), channelName, (channels[channelName])->getTopic(), "=");
+//		channels[channelName]->addUserToChan(c);
+//		sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), c.getUser(), channelName, (channels[channelName])->getTopic(), "=");
 		return ( true );
 	}
 	else {
