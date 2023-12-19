@@ -84,7 +84,6 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 		}
 	}
 	i += 2;
-	std::cout << str[i] << std::endl;
 	size_t keep = i;
 	for (i = keep; i < str.size(); i++) {
 		if (str[i] == ' ')
@@ -163,8 +162,10 @@ void	mode(Server& s, Client& c, std::string& str)
 	int start = str.find(' ');
 	int end = str.find(' ', start + 1);
 	if (end == -1)
-		end = str.size() - 1;
-	target = str.substr(start + 1, end - start - 1);
+		end = str.length() - 1;
+	else
+		end--;
+	target = str.substr(start + 1, end - (start));
 	std::map<std::string, Channel*>	chan = s.getChannels();
 	if (!chan[target]) {
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
