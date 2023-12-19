@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:45:35 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 10:08:45 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define REPLIES_H
 
 # define JOIN_MSG(client, username, IP, channel)						std::string(":") + client + "!" + username + "@" + IP + " JOIN " + channel + ENDLINE
+# define SWITCH_NICK(prev, new)											std::string(":") + prev + " NICK " + new + ENDLINE
+# define PONG_MSG(token)												std::string (":server " ) + std::string("PONG ") + token + ENDLINE
 
 // 001
 # define RPL_WELCOME(client, nickname, username, IP)					std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@" + IP + ENDLINE
@@ -35,6 +37,8 @@
 // 324
 # define RPL_CHANNELMODEIS(client, channel, modes, arguments)			std::string(":server ") + "324 " + client + " " + channel + " " + modes + " " + arguments + ENDLINE
 
+// 331
+# define RPL_NOTOPIC(client, channel)									std::string(":server ") + "331 " + client + " " + channel + " :No topic is set" + ENDLINE
 // 332 (:channel ?)
 # define RPL_TOPIC(client, channel, topic)								std::string(":server ") + "332 " + client + " " + channel + " :" + topic + ENDLINE
 
@@ -49,7 +53,14 @@
 // 366 (:channel ?)
 # define RPL_ENDOFNAMES(channel)										std::string(":server ") + "366 " + channel + " :End of /NAMES list" + ENDLINE
 
+// 372
+# define RPL_MOTD(client, motd)											std::string(":server ") + "372 " + client + " :" + motd + ENDLINE
+// 375
+# define RPL_MOTDSTART(client, server)									std::string(":server ") + "375 " + client + " :- " + server + " Message of the day - " + ENDLINE
+// 376
+# define RPL_ENDOFMOTD(client)											std::string(":server ") + "376 " + client + " :End of /MOTD command" + ENDLINE
+
 // 381
-# define RPL_YOUREOPER(client)															std::string(":server ") + "381 " + client + " :You are now an IRC operator" + ENDLINE
+# define RPL_YOUREOPER(client)											std::string(":server ") + "381 " + client + " :You are now an IRC operator" + ENDLINE
 
 #endif

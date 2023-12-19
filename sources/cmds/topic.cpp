@@ -14,8 +14,18 @@ void	topic(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
+	std::map<std::string, std::string> members = (*chan[target]).getMembers();
 	if (str.size() - end == 0) {
-		sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), target, chan[target]->getTopic()));
+		if (members.find(c.getNick()) == members.end()) {
+			sendToClient(c.getFd(), ERR_NOTONCHANNEL(c.getNick(), (*chan[target]).getName()));
+			return;
+		}
+		if (chan[target]->getTopic().empty()) {
+			sendToClient(c.getFd(), RPL_NOTOPIC(c.getNick(), target));
+		}
+		else {
+			sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), target, chan[target]->getTopic()));
+		}
 		return;
 	}
 	size_t i;
@@ -28,7 +38,11 @@ void	topic(Server& s, Client& c, std::string& str)
 	}
 	end = i;
 	std::string modeStr = str.substr(end, str.size() - (end));
-	std::cout << "=" << modeStr << "=" << std::endl;
-	if (chan[target]->getTopicProtect() == true)
+	if (chan[target]->getTopicProtect() == true) {
+		if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
+			sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), (*chan[target]).getName())); // RPL_TOPICWHOTIME 333 ???????????????????????????????????????
+			return ;
+		}
+	}
 	chan[target]->setTopic(modeStr);
 }

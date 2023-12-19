@@ -26,6 +26,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/cmds/nick.cpp										\
 				sources/cmds/part.cpp										\
 				sources/cmds/pass.cpp										\
+				sources/cmds/pong.cpp										\
 				sources/cmds/privmsg.cpp									\
 				sources/cmds/user.cpp										\
 				sources/cmds/who.cpp										\

@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 13:19:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:53:30 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void Client::setNick(std::string &str)
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 11;
+	const int nbcmd = 13;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC"};
+									 "INVITE", "TOPIC", "MOTD", "PING"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -132,6 +132,7 @@ int Client::setInfos(Server &s, std::string &str)
 		sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
 		sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
 		sendToClient(_fd, RPL_ISUPPORT(_nickname, "10", "50")); // A changer avec le define
+		motd(s, *this);
 	}
 	return (0);
 }
@@ -194,6 +195,9 @@ void Client::execCmd(Server &s, std::string &str)
 
 		switch (cmd)
 		{
+			case NICK:
+				nick(s, *this, str);
+				break;
 			case PRIVMSG:
 				sendMsg(s, *this, str);
 				break;
@@ -217,6 +221,12 @@ void Client::execCmd(Server &s, std::string &str)
 			case TOPIC:
 				topic(s, *this, str);
 				break;
+			case MOTD:
+				motd(s, *this);
+				break;
+			case PONG:
+				pong(s, *this, str);
+				break;
 			default:
 				std::size_t end = str.find(' ');
 				std::string cmdStr = str.substr(0, end);
@@ -228,12 +238,15 @@ void Client::execCmd(Server &s, std::string &str)
 
 /**  Public member functions  *****************************************************************************************/
 
-void Client::read(Server &s) // Le serveur lit ce que lui envoit le client
+int Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 {
 	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
 
 	if (r <= 0)
+	{
 		s.removeClient(*this);
+		return (1);
+	}
 
 	std::cout << RED << "From " << _fd << ": " << _bufRead << END << std::endl;
 
@@ -247,4 +260,6 @@ void Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		execCmd(s, *it);
 
 	std::memset(_bufRead, 0, BUFFER_SIZE); // On vide le buffer !
+
+	return (0);
 }

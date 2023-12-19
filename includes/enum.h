@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enum.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 11:02:36 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:49:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ enum	e_cmd
 	PART,
 	QUIT,
 	INVITE,
-	TOPIC
+	TOPIC,
+	MOTD,
+	PONG
 };
 
 enum	e_mode

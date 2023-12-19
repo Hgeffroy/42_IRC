@@ -56,7 +56,7 @@ class	Client
 		void			setUser(std::string& str);
 		void			setNick(std::string& str);
 
-		void			read(Server& s);
+		int 			read(Server& s);
 
 };
 

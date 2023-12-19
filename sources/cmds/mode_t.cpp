@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/18 11:12:30 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 10:07:53 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	i_opt(Client &c, Channel *channel, std::string params)
 //k: Set/remove the channel key (password)
 void	k_opt(Client &c, Channel *channel, std::string params)
 {
+	std::cout << YELLOW << "=" << params << "=" << END << std::endl;
 	if ( !checkOption( params ) )
 	{
 		sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG(c.getNick()));

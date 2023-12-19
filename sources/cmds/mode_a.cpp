@@ -176,10 +176,11 @@ void	mode(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), RPL_CHANNELMODEIS(c.getNick(), chan[target]->getName(), chan[target]->getModes(), "*parameters"));
 		return ;
 	}
-	int modeOption = 0;
+	char modeOption = 0;
 	for ( std::size_t i = 0; i <= modeStr.length(); i++ )
 	{
-		if ( modeStr[i] == '-' || modeStr[i] == '+' ) {
+		if ( modeStr[i] == '-' || modeStr[i] == '+' )
+		{
 			modeOption = modeStr[i + 1];
 			break;
 		}

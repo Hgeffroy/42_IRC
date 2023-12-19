@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 11:04:29 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 15:00:17 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ void	quit(Server& s, Client& c, std::string& str);
 void	part(Server& s, Client& c, std::string& str);
 void	invite( Server& s, Client& c, std::string& name );
 void	topic(Server& s, Client& c, std::string& str);
+void	motd(Server& s, Client& c);
+void	pong(Server& s, Client& c, std::string str);
+
 
 
 // Modes
