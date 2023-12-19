@@ -6,13 +6,16 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 12:44:00 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 15:10:32 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 16:06:31 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef ERRORS_H
 # define ERRORS_H
 
+// 400
+# define ERR_UNKNOWNERROR(client, command, info)					std::string(":server ") + "400 " + client + " " + command + " :" + info + ENDLINE
 // 401
 # define ERR_NOSUCHNICK(client, nickname)							std::string(":server ") + "401 " + client + " " + nickname + " :No such nick/channel" + ENDLINE
 // 402
@@ -43,10 +46,12 @@
 // 443
 # define ERR_USERONCHANNEL(client, nick, channel)					std::string(":server ") + "443 " + client + " " + nick + " " + channel + " :is already on channel" + ENDLINE
 
+// 451
+# define ERR_NOTREGISTERED(client)									std::string(":server ") + "451 " + client + " :You have not registered" + ENDLINE
 // 461
 # define ERR_NEEDMOREPARAMS(client, command)						std::string(":server ") + "461 " + client + " " + command + " :Not enough parameters" + ENDLINE
 // 462
-# define ERR_ALREADYREGISTERED(client)								std::string(":server ") + "462 " + client + " :You may not register" + ENDLINE
+# define ERR_ALREADYREGISTERED(client)								std::string(":server ") + "462 " + client + " :You may not reregister" + ENDLINE
 
 // 464
 # define ERR_PASSWDMISMATCH(client)									std::string(":server ") + "464 " + client + " :Password incorrect" + ENDLINE

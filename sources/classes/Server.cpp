@@ -45,6 +45,7 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 	int 				s;
 	int 				optval = 1;
 
+
 	close(STDIN_FILENO);
 	port = setPort(portstr);
 	_password = setPassword(password);

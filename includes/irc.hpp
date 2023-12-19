@@ -27,6 +27,7 @@
 // Utils
 std::string	getIP();
 std::string getTime(Server& s);
+std::string	intostr(int a);
 void		sendToClient(int fd, std::string str);
 void		printClients(std::map<std::string, Client*> map);
 
@@ -43,6 +44,7 @@ void	quit(Server& s, Client& c, std::string& str);
 void	part(Server& s, Client& c, std::string& str);
 void	invite( Server& s, Client& c, std::string& name );
 void	topic(Server& s, Client& c, std::string& str);
+void	kick(Server& s, Client& c, std::string& str);
 void	motd(Server& s, Client& c);
 void	pong(Server& s, Client& c, std::string str);
 void	list(Server& s, Client& c, std::string str);
