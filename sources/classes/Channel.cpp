@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 09:42:13 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 13:54:37 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,33 @@ int	Channel::getNbUsers() const
 bool	Channel::getTopicProtect() const
 {
 	return (_topicProtect);
+}
+
+std::string	Channel::getModes() const
+{
+	std::string	modes;
+
+	if( _inviteOnly )
+		modes += "+i ";
+	else
+		modes += "-i ";
+
+	if( _keyProtect )
+		modes += "+k ";
+	else
+		modes += "-k ";
+
+	if( _topicProtect )
+		modes += "+t ";
+	else
+		modes += "-t ";
+
+	if ( _userLimit > 0 )
+		modes += "+l ";
+	else
+		modes += "-l ";
+
+	return ( modes );
 }
 
 void	Channel::setUserLimit( int lim )

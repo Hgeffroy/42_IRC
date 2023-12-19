@@ -6,12 +6,13 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 13:23:52 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 09:45:48 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
+/*---- static defines --------------------------------------------------------*/
 
 static std::string	getChannelName(std::string& str);
 static std::string	getChannelPass(std::string& str);
@@ -21,6 +22,8 @@ static bool			checkOption_K( Client& c, std::map<std::string, Channel*> channels
 										std::string channelName, std::string channelPass );
 static bool			checkOption_L( Client& c, std::map<std::string, Channel*> channels, \
 																std::string channelName );
+
+/*----------------------------------------------------------------------------*/
 
 void	sendChannelRPL(int fd, Channel* chan, std::string client, std::string username, \
 								std::string channel, std::string topic, std::string symbol)
@@ -51,13 +54,19 @@ void	join(Server& s, Client& c, std::string& str)
 	std::string								channelName = getChannelName(str);
 	std::string								channelPass = getChannelPass(str);
 
+	std::cout << YELLOW << "=" << channelName << "=" << std::endl;
 	if ( channelName.empty() )
+	{
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
+		return ;
+	}
+	if ( channelName[0] != '#' )
 	{
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 		return ;
 	}
 
-	if (channels[channelName])
+	if ( channels[channelName] )
 	{
 		if ( !checkOption_I( c, channels, channelName ) )
 			return ;
@@ -76,12 +85,11 @@ void	join(Server& s, Client& c, std::string& str)
 
 static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, std::string channelName, std::string channelPass )
 {
-	( void )c;
 	if ( channels[channelName]->getKeyStatus() )
 	{
 		if ( channelPass.empty() )
 		{
-			std::cerr << PURPLE << "No Input for Password" << END << std::endl;
+			sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
 			return ( false );
 		}
 		if ( channelPass != channels[channelName]->getPassword() )
@@ -128,9 +136,9 @@ static std::string	getChannelName(std::string& str)
 {
 	std::string	channelName;
 
-	int sep1 = static_cast<int>(str.find(' '));
-	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
-	if (sep2 == -1)
+	std::size_t	sep1 = str.find(' ');
+	std::size_t	sep2 = str.find(' ', sep1 + 1);
+	if ( sep2 == std::string::npos )
 	{
 		if (str[sep2] == '\n')
 			sep2 = str.size() - 1;
@@ -139,8 +147,6 @@ static std::string	getChannelName(std::string& str)
 	}
 	// Mettre des protections !!
 	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
-	if (channelName[0] != '#')
-		return ( "" ); // Send une erreur ici
 	return ( channelName );
 }
 

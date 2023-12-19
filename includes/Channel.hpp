@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 16:55:23 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:48:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class	Channel
 		bool								getKeyStatus() const;
 		std::string							getPassword() const;
 		std::vector< std::string >			getGuest() const;
+		std::string							getModes() const;
 
 		void								setUserLimit( int lim );
 		void								setTopicProtect( bool b );

@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2023/12/18 13:30:42 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/18 13:40:54 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 /*---- static defines --------------------------------------------------------*/
 
-static std::string	getNickName( Client& c, std::string params );
-static std::string	getChannelName( Client& c, std::string params );
+static std::string	getNickName( std::string params );
+static std::string	getChannelName( std::string params );
 
 /*----------------------------------------------------------------------------*/
 
 void	invite( Server& s, Client& c, std::string& params )
 {
 	std::map<std::string, Channel*>			channels = s.getChannels();
-	std::string								channel = getChannelName( c, params );
-	std::string								nickname = getNickName( c, params );
+	std::string								channel = getChannelName( params );
+	std::string								nickname = getNickName( params );
 
 	if ( channel.empty() || nickname.empty() )
 	{
@@ -71,7 +71,7 @@ void	invite( Server& s, Client& c, std::string& params )
 	}
 }
 
-static std::string	getNickName( Client& c, std::string params )
+static std::string	getNickName( std::string params )
 {
 	std::string	nickname;
 	std::size_t	first_space = params.find( ' ' );
@@ -88,7 +88,7 @@ static std::string	getNickName( Client& c, std::string params )
 	return ( nickname );
 }
 
-static std::string	getChannelName( Client& c, std::string params )
+static std::string	getChannelName( std::string params )
 {
 	std::string	channelname;
 
