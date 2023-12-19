@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:36:56 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:47:50 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 	int 				s;
 	int 				optval = 1;
 
+	close(STDIN_FILENO);
 	port = setPort(portstr);
 	_password = setPassword(password);
 	s = socket(PF_INET, SOCK_STREAM, 0); // Check le 0 (Check si SOCK_STREAM n'a qu'un seul protocole), a recup !!

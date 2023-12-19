@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:53:30 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/19 12:22:04 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void Client::setNick(std::string &str)
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 13;
+	const int nbcmd = 14;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD", "PING"};
+									 "INVITE", "TOPIC", "MOTD", "PING", "LIST"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -150,6 +150,8 @@ std::vector<std::string> Client::splitBuf()
 
 	if (tempStr.length() < 1)
 		return (res);
+	if (tempStr[tempStr.length() - 1] == ' ')
+		tempStr = tempStr.substr(0, tempStr.length() - 1);
 	res.push_back(tempStr);
 
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;
@@ -169,8 +171,10 @@ std::vector<std::string> Client::splitBuf()
 		tempStr = buffer.substr(prev, sep - prev);
 		if (tempStr.length() < 1)
 			break;
-
+		if (tempStr[tempStr.length() - 1] == ' ')
+			tempStr = tempStr.substr(0, tempStr.length() - 1);
 		res.push_back(tempStr);
+
 		std::cout << "res[" << i << "] =" << res[i] << "=" << std::endl;
 		i++;
 	}
@@ -226,6 +230,9 @@ void Client::execCmd(Server &s, std::string &str)
 				break;
 			case PONG:
 				pong(s, *this, str);
+				break;
+			case LIST:
+				list(s, *this, str);
 				break;
 			default:
 				std::size_t end = str.find(' ');
