@@ -80,9 +80,9 @@ void Client::setNick(std::string &str)
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 14;
+	const int nbcmd = 15;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD", "PING", "LIST"};
+									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -233,6 +233,9 @@ void Client::execCmd(Server &s, std::string &str)
 				break;
 			case LIST:
 				list(s, *this, str);
+				break;
+			case KICK:
+				kick(s, *this, str);
 				break;
 			default:
 				std::size_t end = str.find(' ');

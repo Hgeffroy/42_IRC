@@ -11,7 +11,6 @@ void	topic(Server& s, Client& c, std::string& str)
 	target = str.substr(start + 1, end - start - 1);
 	std::map<std::string, Channel*>	chan = s.getChannels();
 	if (!chan[target]) {
-		std::cout << "ICI : =" << target << "=" << std::endl;
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
