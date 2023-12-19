@@ -155,7 +155,7 @@ std::vector<std::string> Client::splitBuf()
 	std::cout << "res[0] =" << res[0] << "=" << std::endl;
 
 	int i = 1;
-	while (sep != std::string::npos && i < 10)
+	while (sep != std::string::npos)
 	{
 		while (buffer[sep] == '\r' || buffer[sep] == '\n')
 			sep++;

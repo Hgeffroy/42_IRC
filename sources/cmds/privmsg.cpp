@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 15:30:34 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@ void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 	std::map<std::string, Client*>	clients = s.getClients();
 	std::cout << c.getNick() << " tries to send a msg to client " << dest << std::endl;
 
+	if (clients.find(dest) == clients.end())
+	{
+		sendToClient(c.getFd(), ERR_NOSUCHNICK(c.getNick(), dest));
+		return ; // Err a send
+	}
+
 	std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg + ENDLINE;
 	sendToClient(clients[dest]->getFd(), fullMsg);
 	if (clients[dest]->getAway())
 		sendToClient(c.getFd(), RPL_AWAY(c.getNick(), clients[dest]->getNick())); // Le RPL away ne permet pour l'instant pas de set le message away
-
-	// sendToClient(c.getFd(), ERR_NOSUCHNICK(c.getNick(), dest));
 }
 
 void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
@@ -30,20 +34,21 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 	std::map<std::string, Channel*>	channels = s.getChannels();
 	std::cout << c.getNick() << " tries to send a msg to channel " << dest << std::endl;
 
-	if ((channels[dest])->getName() == dest)
+	if (channels.find(dest) == channels.end())
 	{
-		std::map<std::string, std::string>	members = (channels[dest])->getMembers();
-		for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
-		{
-			if (it2->first != c.getNick())
-			{
-				std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " " + msg + ENDLINE; // Ce msg est pas bon
-				sendToClient(s.getClientFd(it2->first), fullMsg);
-			}
-		}
-		return ;
+		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), dest));
+		return ; // Err a send
 	}
-	sendToClient(c.getFd(), ERR_CANNOTSENDTOCHAN(c.getNick(), dest));
+
+	std::map<std::string, std::string>	members = channels[dest]->getMembers();
+	for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
+	{
+		if (it2->first != c.getNick())
+		{
+			std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " " + msg + ENDLINE; // Ce msg est pas bon
+			sendToClient(s.getClientFd(it2->first), fullMsg);
+		}
+	}
 }
 
 void	sendBroadcast(Server& s, Client& c, std::string& msg)
