@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:53:53 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 13:54:37 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,20 +93,22 @@ std::string	Channel::getModes() const
 		modes += "+i ";
 	else
 		modes += "-i ";
+
 	if( _keyProtect )
 		modes += "+k ";
 	else
 		modes += "-k ";
+
 	if( _topicProtect )
 		modes += "+t ";
 	else
 		modes += "-t ";
+
 	if ( _userLimit > 0 )
 		modes += "+l ";
 	else
 		modes += "-l ";
 
-	std::cout << modes << std::endl;
 	return ( modes );
 }
 
