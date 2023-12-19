@@ -6,21 +6,19 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 12:57:33 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:38:48 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
+// join avec des trucs derriere
 
 static std::string	getChannelName(std::string& str);
 static std::string	getChannelPass(std::string& str);
-static bool			checkOption_I( Client& c, std::map<std::string, Channel*> channels, \
-																std::string channelName );
-static bool			checkOption_K( Client& c, std::map<std::string, Channel*> channels, \
-										std::string channelName, std::string channelPass );
-static bool			checkOption_L( Client& c, std::map<std::string, Channel*> channels, \
-																std::string channelName );
+static bool			checkOption_I( Client& c, Channel* channel, std::string channelName );
+static bool			checkOption_K( Client& c, Channel* channel, std::string channelName, std::string channelPass );
+static bool			checkOption_L( Client& c, Channel* channel, std::string channelName );
 
 void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 {
@@ -63,16 +61,24 @@ void	join(Server& s, Client& c, std::string& str)
 		return ;
 	}
 
-	if (channels[channelName])
+	if (channels.find(channelName) != channels.end())
 	{
-		if ( !checkOption_I( c, channels, channelName ) )
+		Channel* channel = channels[channelName];
+		if ( !checkOption_I( c, channel, channelName ) )
 			return ;
-		if ( !checkOption_K( c, channels, channelName, channelPass ) )
+		if ( !checkOption_K( c, channel, channelName, channelPass ) )
 			return ;
-		if ( !checkOption_L( c, channels, channelName ) )
+		if ( !checkOption_L( c, channel, channelName ) )
 			return ;
-		channels[channelName]->addUserToChan(c);
-		sendChannelRPL(s, c, channels[channelName]);
+
+		std::map<std::string, std::string> members = channel->getMembers();
+		if (members.find(c.getNick()) == members.end())
+		{
+			channel->addUserToChan(c);
+			sendChannelRPL(s, c, channel);
+		}
+		else
+			sendToClient(c.getFd(), ERR_USERONCHANNEL(c.getNick(), c.getNick(), channelName));
 	}
 	else
 	{
@@ -82,17 +88,17 @@ void	join(Server& s, Client& c, std::string& str)
 	}
 }
 
-static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, std::string channelName, std::string channelPass )
+static bool	checkOption_K( Client& c, Channel* channel, std::string channelName, std::string channelPass )
 {
 	( void )c;
-	if ( channels[channelName]->getKeyStatus() )
+	if ( channel->getKeyStatus() )
 	{
 		if ( channelPass.empty() )
 		{
 			std::cerr << PURPLE << "No Input for Password" << END << std::endl;
 			return ( false );
 		}
-		if ( channelPass != channels[channelName]->getPassword() )
+		if ( channelPass != channel->getPassword() )
 		{
 			std::cerr << PURPLE << "Wrong Password" << END << std::endl;
 			return ( false );
@@ -101,11 +107,11 @@ static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, 
 	return ( true );
 }
 
-static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, std::string channelName )
+static bool	checkOption_I( Client& c, Channel* channel, std::string channelName )
 {
-	std::vector< std::string >	guestList = channels[channelName]->getGuest();
+	std::vector< std::string >	guestList = channel->getGuest();
 
-	if ( channels[channelName]->getInviteStatus() )
+	if ( channel->getInviteStatus() )
 	{
 		for ( std::vector<std::string>::iterator it = guestList.begin(); it != guestList.end(); it++ )
 		{
@@ -118,14 +124,10 @@ static bool	checkOption_I( Client& c, std::map<std::string, Channel*> channels, 
 	return ( true );
 }
 
-static bool	checkOption_L( Client& c, std::map<std::string, Channel*> channels, std::string channelName )
+static bool	checkOption_L( Client& c, Channel* channel, std::string channelName )
 {
-	if (channels[channelName]->getUserLimit() == -1 || channels[channelName]->getNbUsers() < channels[channelName]->getUserLimit())
-	{
-//		channels[channelName]->addUserToChan(c);
-//		sendChannelRPL(c.getFd(), channels[channelName], c.getNick(), c.getUser(), channelName, (channels[channelName])->getTopic(), "=");
+	if (channel->getUserLimit() == -1 || channel->getNbUsers() < channel->getUserLimit())
 		return ( true );
-	}
 	else {
 		sendToClient(c.getFd(), ERR_CHANNELISFULL(c.getNick(), channelName));
 		return ( false );
@@ -136,9 +138,9 @@ static std::string	getChannelName(std::string& str)
 {
 	std::string	channelName;
 
-	int sep1 = static_cast<int>(str.find(' '));
-	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
-	if (sep2 == -1)
+	size_t sep1 = str.find(' ');
+	size_t sep2 = str.find(' ', sep1 + 1);
+	if (sep2 == std::string::npos)
 	{
 		if (str[sep2] == '\n')
 			sep2 = str.size() - 1;

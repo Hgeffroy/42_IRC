@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 12:23:21 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:55:51 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,7 @@ int Client::setInfos(Server &s, std::string &str)
 			user(s, *this, str);
 			break;
 		default:
-			int end = static_cast<int>(str.find(' '));
-			std::string cmdStr = str.substr(0, end);
-			sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
+			sendToClient(this->getFd(), ERR_NOTREGISTERED(this->getNick()));
 			break;
 	}
 
@@ -199,6 +197,10 @@ void Client::execCmd(Server &s, std::string &str)
 
 		switch (cmd)
 		{
+			case USER:
+			case PASS:
+				sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
+				break;
 			case NICK:
 				nick(s, *this, str);
 				break;

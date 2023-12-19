@@ -14,7 +14,6 @@
 
 void	test(int sig)
 {
-	std::cout << "Alloooooo" << std::endl;
 	if (sig == SIGINT)
 		throw	std::exception();
 }
@@ -45,7 +44,6 @@ int	main(int ac, char** av)
 	{
 		std::cerr << "Server closed because: ";
 		std::cerr << e.what() << std::endl;
-		// Liberer le port !!
 		return (-1);
 	}
 
