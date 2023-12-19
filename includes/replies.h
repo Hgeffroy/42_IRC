@@ -15,7 +15,8 @@
 
 # define JOIN_MSG(client, username, IP, channel)						std::string(":") + client + "!" + username + "@" + IP + " JOIN " + channel + ENDLINE
 # define SWITCH_NICK(prev, new)											std::string(":") + prev + " NICK " + new + ENDLINE
-# define PONG_MSG(token)												std::string (":server " ) + std::string("PONG ") + token + ENDLINE
+# define PONG_MSG(token)												std::string(":server ") + "PONG " + token + ENDLINE
+# define KICK_MSG(channel, usr, comment)								std::string(":server ") + "KICK " + channel + " " + usr + comment + ENDLINE
 
 // 001
 # define RPL_WELCOME(client, nickname, username, IP)					std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@" + IP + ENDLINE

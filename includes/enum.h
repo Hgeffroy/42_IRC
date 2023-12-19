@@ -35,7 +35,8 @@ enum	e_cmd
 	TOPIC,
 	MOTD,
 	PONG,
-	LIST
+	LIST,
+	KICK
 };
 
 enum	e_mode

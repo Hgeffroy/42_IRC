@@ -18,6 +18,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/printMap.cpp									\
 				sources/utils/sendToClient.cpp								\
 				sources/cmds/topic.cpp										\
+				sources/cmds/kick.cpp										\
 				sources/cmds/mode_a.cpp										\
 				sources/cmds/mode_t.cpp										\
 				sources/cmds/motd.cpp										\

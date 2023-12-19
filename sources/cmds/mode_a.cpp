@@ -67,7 +67,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), ch.getName()));
 		return ;
 	}
 	size_t	i = 0;
@@ -128,7 +128,7 @@ void	setTopicProtection(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), ch.getName()));
 		return ;
 	}
 	size_t	i = 0;
