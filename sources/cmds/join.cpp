@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 16:06:46 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 16:11:41 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	join(Server& s, Client& c, std::string& str)
 
 static bool	checkOption_K( Client& c, Channel* channel, std::string channelPass )
 {
-	( void )c;
 	if ( channel->getKeyStatus() )
 	{
 		if ( channelPass.empty() )
@@ -106,7 +105,7 @@ static bool	checkOption_K( Client& c, Channel* channel, std::string channelPass 
 		}
 		if ( channelPass != channel->getPassword() )
 		{
-			sendToClient(c.getFd(), ERR_BADCHANNELKEY(c.getNick(), channelName));
+			sendToClient(c.getFd(), ERR_BADCHANNELKEY(c.getNick(), channel->getName()));
 			return ( false );
 		}
 	}

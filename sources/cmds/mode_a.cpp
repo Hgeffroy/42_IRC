@@ -154,6 +154,7 @@ void	setTopicProtection(Client &c, Channel &ch, std::string str)
 		}
 	}
 }
+
 static std::string	getTarget( Client &c, std::string str )
 {
 	std::string	target;
@@ -170,8 +171,13 @@ static std::string	getTarget( Client &c, std::string str )
 		}
 		return ( target );
 	}
-	sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE <channel> <+ | -><mode> [*parameters]" ) );
-	return ( "" );
+	target = str.substr( first_space + 1 );
+	if ( target.empty() )
+	{
+		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE <channel> <+ | -><mode> [*parameters]" ) );
+		return ( "" );
+	}
+	return ( target );
 }
 
 static std::string	getMode( Client &c, Channel *channel, std::string str )
@@ -218,52 +224,26 @@ void	mode(Server& s, Client& c, std::string& str)
 	if ( mode.empty() )
 		return ;
 
-	// std::string modeStr = str.substr(end + 1, str.size() - (end + 1));
-	// std::cout << PURPLE << "=" << modeStr << "=" << END << std::endl;
-	// if ( modeStr.empty() )
-	// {
-		// sendToClient(c.getFd(), RPL_CHANNELMODEIS(c.getNick(), chan[target]->getName(), chan[target]->getModes(), "*parameters"));
-	// 	return ;
-	// }
-	// char modeOption = 0;
-	// for ( std::size_t i = 0; i <= modeStr.length(); i++ )
-	// {
-	// 	if ( modeStr[i] == '-' || modeStr[i] == '+' )
-	// 	{
-	// 		modeOption = modeStr[i + 1];
-	// 		break;
-	// 	}
-	// 	else if ( modeStr[i] != ' ' )
-	// 	{
-	// 		char errMode[2];
-	// 		errMode[0] = modeOption;
-	// 		errMode[1] = '\0';
-	// 		sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), target, errMode, "", "not a minus (-) or plus (+) before mode option"));
-	// 		return ;
-	// 	}
-	// }
-	// switch (modeOption)
-	// {
-	// 	case i:
-	// 		i_opt(c, chan[target], modeStr);
-	// 		break;
-	// 	case t:
-	// 		setTopicProtection(c, *(chan[target]), modeStr);
-	// 		break;
-	// 	case k:
-	// 		k_opt(c, chan[target], modeStr);
-	// 		break;
-	// 	case o:
-	// 		opPrivilege(c, *(chan[target]), modeStr);
-	// 		break;
-	// 	case l:
-	// 		setUserLimit(c, *(chan[target]), modeStr);
-	// 		break;
-	// 	default:
-	// 		char errMode[2];
-	// 		errMode[0] = modeOption;
-	// 		errMode[1] = '\0';
-	// 		sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
-	// 		break;
-	// }
+	char option = mode[1];
+	switch ( option )
+	{
+		case i:
+			i_opt(c, chan[target], mode);
+			break;
+		case t:
+			setTopicProtection(c, *(chan[target]), mode);
+			break;
+		case k:
+			k_opt(c, chan[target], mode);
+			break;
+		case o:
+			opPrivilege(c, *(chan[target]), mode);
+			break;
+		case l:
+			setUserLimit(c, *(chan[target]), mode);
+			break;
+		default:
+			sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), option));
+			break;
+	}
 }
