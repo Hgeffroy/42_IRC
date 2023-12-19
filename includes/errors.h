@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 12:44:00 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 13:45:09 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:55:51 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 // 461
 # define ERR_NEEDMOREPARAMS(client, command)						std::string(":server ") + "461 " + client + " " + command + " :Not enough parameters" + ENDLINE
 // 462
-# define ERR_ALREADYREGISTERED(client)								std::string(":server ") + "462 " + client + " :You may not register" + ENDLINE
+# define ERR_ALREADYREGISTERED(client)								std::string(":server ") + "462 " + client + " :You may not reregister" + ENDLINE
 
 // 464
 # define ERR_PASSWDMISMATCH(client)									std::string(":server ") + "464 " + client + " :Password incorrect" + ENDLINE

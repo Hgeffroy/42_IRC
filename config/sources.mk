@@ -15,6 +15,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/classes/Server.cpp									\
 				sources/utils/getIP.cpp										\
 				sources/utils/getTime.cpp									\
+				sources/utils/intostr.cpp									\
 				sources/utils/printMap.cpp									\
 				sources/utils/sendToClient.cpp								\
 				sources/cmds/topic.cpp										\
