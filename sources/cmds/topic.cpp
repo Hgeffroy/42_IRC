@@ -40,9 +40,15 @@ void	topic(Server& s, Client& c, std::string& str)
 	std::string modeStr = str.substr(end, str.size() - (end));
 	if (chan[target]->getTopicProtect() == true) {
 		if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-			sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), (*chan[target]).getName())); // RPL_TOPICWHOTIME 333 ???????????????????????????????????????
+			sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), (*chan[target]).getName()));
 			return ;
 		}
 	}
 	chan[target]->setTopic(modeStr);
+	std::map<std::string, Client*>	clients = s.getClients();
+	for (std::map<std::string, std::string>::iterator it = members.begin(); it != members.end(); ++it)
+	{
+		sendToClient(clients[it->first]->getFd(), RPL_TOPIC(it->first, target, chan[target]->getTopic()));
+	}
+	
 }

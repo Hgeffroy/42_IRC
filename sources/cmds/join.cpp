@@ -55,7 +55,13 @@ void	join(Server& s, Client& c, std::string& str)
 	std::string								channelName = getChannelName(str);
 	std::string								channelPass = getChannelPass(str);
 
+	std::cout << YELLOW << "=" << channelName << "=" << std::endl;
 	if ( channelName.empty() )
+	{
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
+		return ;
+	}
+	if ( channelName[0] != '#' )
 	{
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 		return ;
@@ -95,7 +101,7 @@ static bool	checkOption_K( Client& c, Channel* channel, std::string channelName,
 	{
 		if ( channelPass.empty() )
 		{
-			std::cerr << PURPLE << "No Input for Password" << END << std::endl;
+			sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
 			return ( false );
 		}
 		if ( channelPass != channel->getPassword() )

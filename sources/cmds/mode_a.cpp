@@ -41,11 +41,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -53,11 +53,11 @@ void	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~" && members[who] != "@") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				//::sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
+				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
 			}
 		}
 	}
@@ -67,7 +67,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), ch.getName()));
 		return ;
 	}
 	size_t	i = 0;
@@ -84,7 +84,6 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 		}
 	}
 	i += 2;
-	std::cout << str[i] << std::endl;
 	size_t keep = i;
 	for (i = keep; i < str.size(); i++) {
 		if (str[i] == ' ')
@@ -92,7 +91,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 		else if (isdigit(str[i]) && i != keep)
 			break;
 		else {
-			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "not a digit or a space char..."));
+			sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "not a digit or a space char..."));
 			return ;
 		}
 	}
@@ -100,7 +99,7 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 	for (i = keep; i < str.size(); i++)
 	{
 		if (!isdigit(str[i])) {
-			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "there is a non digit char inside the parameter"));
+			sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", str[i], "there is a non digit char inside the parameter"));
 			return ;
 		}
 	}
@@ -113,14 +112,14 @@ void	setUserLimit(Client &c, Channel &ch, std::string str)
 
 	ss >> lim;
 	if (!ss.eof() || ss.fail()) {
-		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "is not a int."));
+		sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "is not a int."));
 		return ;
 	}
 	if (ch.getNbUsers() <= lim) {
 		ch.setUserLimit(lim);
 	}
 	else {
-		::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "number of members is higher than the member limit"));
+		sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "number of members is higher than the member limit"));
 		return ;
 	}
 }
@@ -129,7 +128,7 @@ void	setTopicProtection(Client &c, Channel &ch, std::string str)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
-		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), ch.getName()));
 		return ;
 	}
 	size_t	i = 0;
@@ -140,7 +139,7 @@ void	setTopicProtection(Client &c, Channel &ch, std::string str)
 				ch.setTopicProtect(false);
 			}
 			else {
-				::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+				sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
 			}
 			return;
 		}
@@ -149,7 +148,7 @@ void	setTopicProtection(Client &c, Channel &ch, std::string str)
 				ch.setTopicProtect(true);
 			}
 			else {
-				::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+				sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
 			}
 			return;
 		}
@@ -163,51 +162,60 @@ void	mode(Server& s, Client& c, std::string& str)
 	int start = str.find(' ');
 	int end = str.find(' ', start + 1);
 	if (end == -1)
-		end = str.size() - 1;
-	target = str.substr(start + 1, end - start - 1);
+		end = str.length() - 1;
+	else
+		end--;
+	target = str.substr(start + 1, end - (start));
 	std::map<std::string, Channel*>	chan = s.getChannels();
 	if (!chan[target]) {
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
 	std::string modeStr = str.substr(end + 1, str.size() - (end + 1));
-	int modeOption = 0;
+	if ( modeStr.empty() )
+	{
+		sendToClient(c.getFd(), RPL_CHANNELMODEIS(c.getNick(), chan[target]->getName(), chan[target]->getModes(), "*parameters"));
+		return ;
+	}
+	char modeOption = 0;
 	for ( std::size_t i = 0; i <= modeStr.length(); i++ )
 	{
-		if ( modeStr[i] == '-' || modeStr[i] == '+' ) {
+		if ( modeStr[i] == '-' || modeStr[i] == '+' )
+		{
 			modeOption = modeStr[i + 1];
 			break;
 		}
-		else if ( modeStr[i] != ' ' ) {
+		else if ( modeStr[i] != ' ' )
+		{
 			char errMode[2];
 			errMode[0] = modeOption;
 			errMode[1] = '\0';
-			::sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), target, errMode, "", "not a minus (-) or plus (+) before mode option"));
+			sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), target, errMode, "", "not a minus (-) or plus (+) before mode option"));
 			return ;
 		}
 	}
 	switch (modeOption)
 	{
-	case i:
-		i_opt(c, chan[target], modeStr);
-		break;
-	case t:
-		setTopicProtection(c, *(chan[target]), modeStr);
-		break;
-	case k:
-		k_opt(c, chan[target], modeStr);
-		break;
-	case o:
-		opPrivilege(c, *(chan[target]), modeStr);
-		break;
-	case l:
-		setUserLimit(c, *(chan[target]), modeStr);
-		break;
-	default:
-		char errMode[2];
-		errMode[0] = modeOption;
-		errMode[1] = '\0';
-		sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
-		break;
+		case i:
+			i_opt(c, chan[target], modeStr);
+			break;
+		case t:
+			setTopicProtection(c, *(chan[target]), modeStr);
+			break;
+		case k:
+			k_opt(c, chan[target], modeStr);
+			break;
+		case o:
+			opPrivilege(c, *(chan[target]), modeStr);
+			break;
+		case l:
+			setUserLimit(c, *(chan[target]), modeStr);
+			break;
+		default:
+			char errMode[2];
+			errMode[0] = modeOption;
+			errMode[1] = '\0';
+			sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), errMode));
+			break;
 	}
 }

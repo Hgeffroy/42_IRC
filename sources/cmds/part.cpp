@@ -43,5 +43,5 @@ void	part(Server& s, Client& c, std::string& str) // Need more params
 		return ; // ERR_NOTONCHANNEL (442)
 	}
 
-	members.erase(itMembers->first);
+	itChan->second->removeUserFromChan(c.getNick());
 }

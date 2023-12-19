@@ -44,6 +44,7 @@ void	quit(Server& s, Client& c, std::string& str);
 void	part(Server& s, Client& c, std::string& str);
 void	invite( Server& s, Client& c, std::string& name );
 void	topic(Server& s, Client& c, std::string& str);
+void	kick(Server& s, Client& c, std::string& str);
 void	motd(Server& s, Client& c);
 void	pong(Server& s, Client& c, std::string str);
 void	list(Server& s, Client& c, std::string str);

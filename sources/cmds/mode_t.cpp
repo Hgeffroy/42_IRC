@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/18 11:12:30 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 14:16:35 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,151 +14,149 @@
 
 /*---- static defines --------------------------------------------------------*/
 
-static void			add_IOpt(Channel *channel);
-static void			remove_IOpt(Channel *channel);
-static void			add_KOpt(Channel *channel, std::string param);
-static void			remove_KOpt(Channel *channel);
-static bool			isOperator(Client &c, Channel *channel);
-static bool			checkOption(std::string params);
-static std::string	getPassword( std::string param );
+static bool			isOperator( Client &c, Channel *channel );
+static std::string	getOption( Client &c, char opt, std::string s );
+static std::string	getPassword( Client &c, std::string s );
 
 /*----------------------------------------------------------------------------*/
 
 //i: Set/remove Invite-only channel
-void	i_opt(Client &c, Channel *channel, std::string params)
+void	i_opt( Client &c, Channel *channel, std::string s )
 {
-	if ( !checkOption( params ) )
-	{
-		sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG(c.getNick()));
+	std::string	option = getOption( c, 'i', s );
+	if ( option.empty() )
 		return ;
-	}
-	if ( !isOperator( c, channel ) )
-	{
-		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel->getName()));
-		return ;
-	}
 
-	for( std::size_t i = 0; i < params.size(); i++ )
+	if ( !isOperator( c, channel ) )
+		return ;
+
+	if ( s[0] == '+' )
 	{
-		if ( params[i] == '+' )
-			add_IOpt( channel );
-		else if ( params[i] == '-' )
-			remove_IOpt( channel );
+		if ( channel->getInviteStatus( ) )
+		{
+			sendToClient( c.getFd(), RPL_CHANNELMODEIS( c.getNick(), channel->getName(), channel->getModes(), "*parameters" ) );
+			return ;
+		}
+		channel->setInviteStatus( true );
+		std::cout << YELLOW << "MODE " << channel->getName() << " +i";
+		std::cout << " : Setting the \"invite only\" mode on " << channel->getName() << END << std::endl;
+	}
+	else if ( s[0] == '-' )
+	{
+		if ( !channel->getInviteStatus( ) )
+		{
+			sendToClient( c.getFd(), RPL_CHANNELMODEIS( c.getNick(), channel->getName(), channel->getModes(), "*parameters" ) );
+			return ;
+		}
+		channel->setInviteStatus( false );
+		std::cout << PURPLE << "MODE " << channel->getName() << " -i";
+		std::cout << " : Unset the \"invite only\" mode on " << channel->getName() << END << std::endl;
 	}
 }
 
 //k: Set/remove the channel key (password)
-void	k_opt(Client &c, Channel *channel, std::string params)
+void	k_opt( Client &c, Channel *channel, std::string s )
 {
-	if ( !checkOption( params ) )
-	{
-		sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG(c.getNick()));
-		return ;
-	}
 	if ( !isOperator( c, channel ) )
-	{
-		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel->getName()));
 		return ;
-	}
-	for( std::size_t i = 0; i < params.size(); i++ )
+
+	std::string	option = getOption( c, 'k', s );
+	if ( option.empty( ) )
+		return ;
+
+	if ( s[0] == '+' )
 	{
-		if ( params[i] == '+' )
-			add_KOpt( channel, params );
-		else if ( params[i] == '-' )
-			remove_KOpt( channel );
+		std::string	password = getPassword( c, s );
+		if ( password.empty( ) )
+			return ;
+		if ( channel->getKeyStatus( ) )
+		{
+			sendToClient( c.getFd(), RPL_CHANNELMODEIS( c.getNick(), channel->getName(), channel->getModes(), "*parameters" ) );
+			return ;
+		}
+		channel->setKeyStatus( true );
+		channel->setPassword( password );
+		std::cout << YELLOW << "MODE " << channel->getName() << " +k";
+		std::cout << " : Setting the \"key protect\" mode on " << channel->getName();
+		std::cout << " with key : <" << channel->getPassword() << ">" << END << std::endl;
+	}
+	else if ( s[0] == '-' )
+	{
+		if ( !channel->getKeyStatus( ) )
+		{
+			sendToClient( c.getFd(), RPL_CHANNELMODEIS( c.getNick(), channel->getName(), channel->getModes(), "*parameters" ) );
+			return ;
+		}
+		channel->setKeyStatus( false );
+		std::cout << PURPLE << "MODE " << channel->getName() << " -k";
+		std::cout << " : Unset the \"key protect\" mode on " << channel->getName() << END << std::endl;
 	}
 }
 
-/*----------------------------------------------------------------------------*/
+/*---- utils ------------------------------------------------------------------*/
 
-static void	add_IOpt(Channel *channel)
-{
-	if ( channel->getInviteStatus( ) )
-	{
-		std::cerr << PURPLE << "+i option already set." << END << std::endl;
-		return ;
-	}
-	channel->setInviteStatus( true );
-	std::cout << YELLOW << "+i option on channel : " << channel->getName() << " is set." << END << std::endl;
-}
-
-static void	remove_IOpt(Channel *channel)
-{
-	if ( !channel->getInviteStatus( ) )
-	{
-		std::cerr << PURPLE << "+i option was not on." << END << std::endl;
-		return ;
-	}
-	channel->setInviteStatus( false );
-	std::cout << YELLOW << "-i option on channel : " << channel->getName() << " is unset successfully."  << END << std::endl;
-}
-
-/*----------------------------------------------------------------------------*/
-
-static void	add_KOpt(Channel *channel, std::string param)
-{
-	std::string	password = getPassword( param );
-	if ( password.empty( ) )
-	{
-		std::cerr << "Invalid password" << std::endl;
-		return ;
-	}
-
-	if ( channel->getKeyStatus( ) )
-	{
-		std::cerr << PURPLE << "+k option already set." << END << std::endl;
-		return ;
-	}
-	channel->setKeyStatus( true );
-	channel->setPassword( password );
-	std::cout << YELLOW << "+k option on channel : " << channel->getName() << " is set with password : -";
-	std::cout << channel->getPassword() << "-" << END << std::endl;
-}
-
-static void	remove_KOpt(Channel *channel)
-{
-	if ( !channel->getKeyStatus( ) )
-	{
-		std::cerr << PURPLE << "+k option was not on." << END << std::endl;
-		return ;
-	}
-	channel->setKeyStatus( false );
-	std::cout << YELLOW << "-k option on channel : " << channel->getName() << " is unset successfully." << END << std::endl;
-}
-
-/*----------------------------------------------------------------------------*/
-
-static bool	isOperator(Client &c, Channel *channel)
+static bool	isOperator( Client &c, Channel *channel )
 {
 	std::map< std::string, std::string >members = channel->getMembers();
 	if ( members[ c.getNick( ) ] != "@" && members[ c.getNick( ) ] != "~" )
+	{
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED( c.getNick(), channel->getName() ) );
 		return ( false );
+	}
 	return ( true );
 }
 
-static bool	checkOption(std::string params)
+static std::string	getOption( Client &c, char opt, std::string s )
 {
-	std::size_t first_space = params.find( ' ' );
-	std::size_t second_space = params.find( ' ', first_space + 1 );
-	std::string	option = params.substr( first_space + 1, second_space - 1 );
-	if ( option.size() > 2 )
-		return( false ) ;
-	return ( true );
+	if ( opt == 'i' )
+	{
+		std::string	option = s;
+		if ( option.size() != 2 )
+		{
+			sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG( c.getNick() ));
+			return ( "" );
+		}
+		return ( option );
+	}
+	if ( s[0] == '+' )
+	{
+		std::size_t	first_space = s.find( ' ' );
+		if ( first_space != std::string::npos )
+		{
+			std::string	option = s.substr( 0, first_space );
+			if ( option.size() != 2 )
+			{
+				sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG( c.getNick() ));
+				return ( "" );
+			}
+			return ( option );
+		}
+	}
+	else if ( s == "-k" )
+		return ( s );
+	sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE #lol +k <password>" ) );
+	return ( "" );
 }
 
-static std::string	getPassword( std::string param )
+static std::string	getPassword( Client &c, std::string s )
 {
 	std::string	password;
-	std::size_t	first_space = param.find( ' ' );
-	std::size_t	second_space = param.find( ' ', first_space + 1 );
+
+	std::size_t	first_space = s.find( ' ' );
+	std::size_t	second_space = s.find( ' ', first_space + 1 );
 	if ( second_space != std::string::npos )
 	{
-		password = param.substr( second_space + 1 );
-		if ( password.empty() )
-			return ( "" );
-	}
-	else
+		sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG( c.getNick() ));
 		return ( "" );
-
+	}
+	if ( first_space != std::string::npos )
+	{
+		password = s.substr( first_space + 1 );
+		if ( password.empty() )
+		{
+			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE #lol +k <password>" ) );
+			return ( "" );
+		}
+	}
 	return ( password );
 }
