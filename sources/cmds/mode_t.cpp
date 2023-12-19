@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/19 14:16:35 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 15:14:26 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ static bool	isOperator( Client &c, Channel *channel )
 
 static std::string	getOption( Client &c, char opt, std::string s )
 {
+	std::cout << YELLOW << "-" << s << "-" << END << std::endl;
 	if ( opt == 'i' )
 	{
 		std::string	option = s;

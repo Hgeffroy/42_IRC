@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 09:45:48 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/19 15:11:49 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static bool	checkOption_K( Client& c, std::map<std::string, Channel*> channels, 
 		}
 		if ( channelPass != channels[channelName]->getPassword() )
 		{
-			std::cerr << PURPLE << "Wrong Password" << END << std::endl;
+			sendToClient(c.getFd(), ERR_BADCHANNELKEY(c.getNick(), channelName));
 			return ( false );
 		}
 	}
