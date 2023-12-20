@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 15:09:07 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/20 09:53:43 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ void	list(Server& s, Client& c, std::string str);
 
 
 // Modes
-void	i_opt(Client &c, Channel *channel, std::string params);
-void	k_opt(Client &c, Channel *channel, std::string params);
-
+void	i_opt( Client &c, Channel *channel, std::string s );
+void	k_opt(Client &c, Channel *channel, std::string s);
+void	b_opt( Client &c, Channel *channel, std::string s );
 
 #endif
 

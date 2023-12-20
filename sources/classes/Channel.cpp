@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 13:54:37 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:38:06 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ std::vector< std::string >	Channel::getGuest() const
 	return ( _guestList );
 }
 
+std::vector< std::string >	Channel::getBannedGuest() const
+{
+	return ( _bannedList );
+}
+
 int	Channel::getUserLimit() const
 {
 	return (_userLimit);
@@ -108,6 +113,10 @@ std::string	Channel::getModes() const
 		modes += "+l ";
 	else
 		modes += "-l ";
+	if ( _bannedList.empty() )
+		modes += "-b";
+	else
+		modes += "+b";
 
 	return ( modes );
 }
@@ -147,6 +156,12 @@ void	Channel::setGuest( std::string guest )
 	_guestList.push_back( guest );
 }
 
+void	Channel::setBannedGuest( std::string banned )
+{
+	_bannedList.push_back( banned );
+}
+
+
 void	Channel::setTopic( std::string topic )
 {
 	_topic = topic;
@@ -170,5 +185,27 @@ void	Channel::removeUserFromChan(std::string const& name)
 	{
 		_members.erase(it->first);
 		_nbUsers--;
+	}
+}
+
+void	Channel::removeUserFromGuestList(std::string const& name)
+{
+	for ( std::vector< std::string >::iterator	it = _guestList.begin(); it != _guestList.end(); it++ )
+	{
+		std::cout << PURPLE << *it << END << std::endl;
+		if ( *it == name )
+			it = _guestList.erase( it );
+	}
+}
+
+void	Channel::removeUserFromBanList(std::string const& name)
+{
+	for ( std::vector< std::string >::iterator	it = _bannedList.begin(); it != _bannedList.end() ; it++ )
+	{
+		if ( *it == name )
+		{
+			it = _bannedList.erase( it );
+			return ;
+		}
 	}
 }
