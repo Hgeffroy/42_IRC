@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 16:11:41 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 17:06:39 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static std::string	getChannelPass(std::string& str);
 static bool			checkOption_I( Client& c, Channel* channel, std::string channelName );
 static bool			checkOption_K( Client& c, Channel* channel, std::string channelPass );
 static bool			checkOption_L( Client& c, Channel* channel, std::string channelName );
+static bool			checkOption_B( Client& c, Channel* channel, std::string channelName );
 
 void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 {
@@ -75,6 +76,8 @@ void	join(Server& s, Client& c, std::string& str)
 		if ( !checkOption_K( c, channel, channelPass ) )
 			return ;
 		if ( !checkOption_L( c, channel, channelName ) )
+			return ;
+		if ( !checkOption_B( c, channel, channelName ) )
 			return ;
 
 		std::map<std::string, std::string> members = channel->getMembers();
@@ -137,6 +140,20 @@ static bool	checkOption_L( Client& c, Channel* channel, std::string channelName 
 		sendToClient(c.getFd(), ERR_CHANNELISFULL(c.getNick(), channelName));
 		return ( false );
 	}
+}
+
+static bool	checkOption_B( Client& c, Channel* channel, std::string channelName )
+{
+	std::vector<std::string>	bannedList = channel->getBannedGuest();
+	for ( std::vector< std::string >::iterator	it = bannedList.begin(); it != bannedList.end() ; it++ )
+	{
+		if ( *it == c.getNick( ) )
+		{
+			sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channel->getName(), "join", c.getNick( ), " this client has been banned from this channel."));
+			return ( false );
+		}
+	}
+	return ( true );
 }
 
 static std::string	getChannelName(std::string& str)

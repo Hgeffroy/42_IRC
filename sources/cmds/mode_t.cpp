@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:39:11 by twang             #+#    #+#             */
-/*   Updated: 2023/12/19 15:14:26 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 14:28:54 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,22 @@
 /*---- static defines --------------------------------------------------------*/
 
 static bool			isOperator( Client &c, Channel *channel );
+static bool			isBanned( Channel *channel, std::string unbanned );
 static std::string	getOption( Client &c, char opt, std::string s );
-static std::string	getPassword( Client &c, std::string s );
+static std::string	getParam( Client &c, std::string s );
 
 /*----------------------------------------------------------------------------*/
+
+static void	showMap( std::map<std::string, std::string>&	map )
+{
+	for( std::map<std::string, std::string>::iterator it = map.begin(); it != map.end(); ++it )
+	{
+		std::string name = it->first;
+		std::cout << BLUE << name;
+		std::string status = it->second;
+		std::cout << RED << " " << status << std::endl;
+	}
+}
 
 //i: Set/remove Invite-only channel
 void	i_opt( Client &c, Channel *channel, std::string s )
@@ -66,7 +78,7 @@ void	k_opt( Client &c, Channel *channel, std::string s )
 
 	if ( s[0] == '+' )
 	{
-		std::string	password = getPassword( c, s );
+		std::string	password = getParam( c, s );
 		if ( password.empty( ) )
 			return ;
 		if ( channel->getKeyStatus( ) )
@@ -93,6 +105,74 @@ void	k_opt( Client &c, Channel *channel, std::string s )
 	}
 }
 
+
+//b: Ban/un-ban client from channel
+void	b_opt( Client &c, Channel *channel, std::string s )
+{
+	std::map< std::string, std::string >	members = channel->getMembers();
+	std::vector< std::string >				bannedList = channel->getBannedGuest();
+	std::string								option = getOption( c, 'b', s );
+	if ( option.empty() )
+		return ;
+
+	if ( !isOperator( c, channel ) )
+		return ;
+
+	if ( s[0] == '+' )
+	{
+		std::string	banned = getParam( c, s );
+		if ( banned.empty( ) )
+			return ;
+		std::map<std::string, std::string>::iterator ite = members.find( banned );
+		if ( ite != members.end() )
+		{
+			if ( members[ banned ] == "~" )
+			{
+				sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channel->getName(), "+b", banned, " cannot ban a founder from channel."));
+				return ;
+			}
+			if ( members[ banned ] == "@" )
+			{
+				if ( members[ c.getNick() ] != "~" )
+				{
+					sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channel->getName(), "+b", banned, " cannot ban an operator from channel."));
+					return ;
+				}
+			}
+			channel->setBannedGuest( banned );
+			channel->removeUserFromChan( banned );
+			channel->removeUserFromGuestList( banned );
+			std::cout << YELLOW << "MODE " << channel->getName() << " +b";
+			std::cout << " : Setting the \"ban\" mode for : <" << banned << ">" << END << std::endl;
+			return ;
+		}
+		for ( std::vector< std::string >::iterator	itb = bannedList.begin(); itb != bannedList.end(); itb++ )
+		{
+			if ( *itb == banned )
+			{
+				sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channel->getName(), "+b", banned, " already banned from this channel."));
+				return ;
+			}
+		}
+		sendToClient( c.getFd(), ERR_NOTONCHANNEL( banned, channel->getName() ) );
+		return ;
+	}
+	else if ( s[0] == '-' )
+	{
+		std::string	unbanned = getParam( c, s );
+		if ( unbanned.empty( ) )
+			return ;
+		if ( isBanned( channel, unbanned ) )
+		{
+			channel->removeUserFromBanList( unbanned );
+			std::cout << PURPLE << "MODE " << channel->getName() << " -b";
+			std::cout << " : Unsetting the \"ban\" mode for : <" << unbanned << ">" << END << std::endl;
+			return ;
+		}
+		sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channel->getName(), "-b", unbanned, " was not banned from this channel."));
+	}
+}
+
 /*---- utils ------------------------------------------------------------------*/
 
 static bool	isOperator( Client &c, Channel *channel )
@@ -106,9 +186,20 @@ static bool	isOperator( Client &c, Channel *channel )
 	return ( true );
 }
 
+static bool	isBanned( Channel *channel, std::string unbanned )
+{
+	std::vector< std::string >	bannedList = channel->getBannedGuest();
+
+	for ( std::vector< std::string >::iterator	it = bannedList.begin(); it != bannedList.end(); it++ )
+	{
+		if ( *it == unbanned )
+			return ( true );
+	}
+	return ( false );
+}
+
 static std::string	getOption( Client &c, char opt, std::string s )
 {
-	std::cout << YELLOW << "-" << s << "-" << END << std::endl;
 	if ( opt == 'i' )
 	{
 		std::string	option = s;
@@ -133,15 +224,32 @@ static std::string	getOption( Client &c, char opt, std::string s )
 			return ( option );
 		}
 	}
+	if ( opt == 'b' )
+	{
+		if ( s[0] == '-' )
+		{
+			std::size_t	first_space = s.find( ' ' );
+			if ( first_space != std::string::npos )
+			{
+				std::string	option = s.substr( 0, first_space );
+				if ( option.size() != 2 )
+				{
+					sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG( c.getNick() ));
+					return ( "" );
+				}
+				return ( option );
+			}
+		}
+	}
 	else if ( s == "-k" )
 		return ( s );
 	sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE #lol +k <password>" ) );
 	return ( "" );
 }
 
-static std::string	getPassword( Client &c, std::string s )
+static std::string	getParam( Client &c, std::string s )
 {
-	std::string	password;
+	std::string	parameter;
 
 	std::size_t	first_space = s.find( ' ' );
 	std::size_t	second_space = s.find( ' ', first_space + 1 );
@@ -152,12 +260,12 @@ static std::string	getPassword( Client &c, std::string s )
 	}
 	if ( first_space != std::string::npos )
 	{
-		password = s.substr( first_space + 1 );
-		if ( password.empty() )
+		parameter = s.substr( first_space + 1 );
+		if ( parameter.empty() )
 		{
-			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE #lol +k <password>" ) );
+			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "ex: MODE #lol +k <parameter>" ) );
 			return ( "" );
 		}
 	}
-	return ( password );
+	return ( parameter );
 }

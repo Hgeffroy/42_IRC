@@ -189,7 +189,6 @@ static std::string	getMode( Client &c, Channel *channel, std::string str )
 	if ( second_space != std::string::npos )
 	{
 		mode = str.substr( second_space + 1 );
-		std::cout << YELLOW << "=" << mode << "=" << END << std::endl;
 		if ( mode.empty() )
 		{
 			sendToClient(c.getFd(), RPL_CHANNELMODEIS(c.getNick(), channel->getName(), channel->getModes(), "*parameters"));
@@ -241,6 +240,9 @@ void	mode(Server& s, Client& c, std::string& str)
 			break;
 		case l:
 			setUserLimit(c, *(chan[target]), mode);
+			break;
+		case b:
+			b_opt(c, chan[target], mode);
 			break;
 		default:
 			sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), option));

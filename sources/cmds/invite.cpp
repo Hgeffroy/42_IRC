@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2023/12/18 13:40:54 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 17:01:39 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	invite( Server& s, Client& c, std::string& params )
 
 	if ( channels[channel] )
 	{
-		std::map<std::string, std::string> 		members = channels[channel]->getMembers();
+		std::map<std::string, std::string>		members = channels[channel]->getMembers();
 		if( !channels[channel]->getInviteStatus() )
 		{
 			std::cerr << PURPLE << "le channel n'est pas en mode +i" << END << std::endl;
@@ -60,6 +60,15 @@ void	invite( Server& s, Client& c, std::string& params )
 		{
 			sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel));
 			return ;
+		}
+		std::vector<std::string>					bannedList = channels[channel]->getBannedGuest();
+		for ( std::vector< std::string >::iterator	it = bannedList.begin(); it != bannedList.end() ; it++ )
+		{
+			if ( *it == nickname )
+			{
+				sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channels[channel]->getName(), "invite", nickname, " this client has been banned from this channel."));
+				return ;
+			}
 		}
 		channels[channel]->setGuest( nickname );
 		sendToClient(c.getFd(), RPL_INVITING(c.getNick(), nickname, channel));
