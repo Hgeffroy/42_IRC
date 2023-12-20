@@ -6,15 +6,21 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 08:57:14 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 09:26:17 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/20 16:43:10 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	who(Server& s, Client& c, std::string& str) // Verifier que le chan existe !!
+void	who(Server& s, Client& c, std::string& str)
 {
-	int 										space = static_cast<int>(str.find(' '));
+	size_t 										space = str.find(' ');
+	if (space == std::string::npos)
+	{
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "WHO", "Need more parameters"));
+		return ;
+	}
+	
 	std::string 								mask = str.substr(space + 1, str.length() - (space + 1));
 	std::map<std::string, Channel*>				channels = s.getChannels();
 	std::map<std::string, Client*>				clients = s.getClients();

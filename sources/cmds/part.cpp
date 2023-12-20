@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 10:05:57 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 11:12:55 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/20 16:40:48 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	part(Server& s, Client& c, std::string& str) // Need more params
 	if (itMembers == members.end())
 	{
 		sendToClient(c.getFd(), ERR_NOTONCHANNEL(c.getNick(), chan));
-		return ; // ERR_NOTONCHANNEL (442)
+		return ;
 	}
 
 	itChan->second->removeUserFromChan(c.getNick());

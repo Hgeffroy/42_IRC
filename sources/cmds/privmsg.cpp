@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 15:30:34 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/20 16:35:47 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,13 @@ void	sendBroadcast(Server& s, Client& c, std::string& msg)
 
 void	sendMsg(Server& s, Client& c, std::string& str)
 {
-	int sep1 = static_cast<int>(str.find(' '));
-	int sep2 = static_cast<int>(str.find(' ', sep1 + 1));
+	size_t sep1 = str.find(' ');
+	size_t sep2 = str.find(' ', sep1 + 1);
+	if (sep1 == std::string::npos || sep2 == std::string::npos)
+	{
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "PRIVMSG"));
+		return ;
+	}
 
 	// Mettre des protections ici !
 

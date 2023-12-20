@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:47:13 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 16:27:44 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,18 @@ void	pass(Server& s, Client& c, std::string& str)
 		return ;
 	}
 
-	int 		nextSpace = static_cast<int>(str.find_first_of(" \n\r", 6));
-	std::string pass;
-	if (nextSpace == static_cast<int>(std::string::npos))
-		pass = str.substr(5);
-	else
-		pass = str.substr(5, nextSpace - 5);
+	if (str.find(' ', 5) != std::string::npos)
+	{
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "PASS", "Too many parameters"));
+		return ;
+	}
 
-//	std::cout << "Pass is: " << pass << " of size " << pass.size() << std::endl;
+	size_t 		nextSpace = str.find_first_of("\n\r", 5); // Si on trouve un espace, too many params ?
+	std::string pass;
+	if (nextSpace == std::string::npos && str.size() > 5)
+		pass = str.substr(5);
+	else if (nextSpace != std::string::npos)
+		pass = str.substr(5, nextSpace - 5);
 
 	if (pass.empty())
 	{
@@ -36,10 +40,7 @@ void	pass(Server& s, Client& c, std::string& str)
 	}
 
 	if (pass == s.getPass())
-	{
 		c.setPassOk();
-//		std::cout << "Correct password" << std::endl;
-	}
 	else
 		sendToClient(c.getFd(), ERR_PASSWDMISMATCH(c.getNick())); // May close connection
 }

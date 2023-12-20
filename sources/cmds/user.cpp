@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 10:22:49 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 16:30:47 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,18 @@
 
 void	user(Server& s, Client& c, std::string& str) // Doublon ?
 {
-	int 		nextSpace = static_cast<int>(str.find_first_of(" \n\r", 6));
+	if (str.find(' ', 5) != std::string::npos)
+	{
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "USER", "Too many parameters"));
+		return ;
+	}
+	
+	size_t 		nextSpace = str.find_first_of("\n\r", 5);
 	std::string usr;
 
-	if (nextSpace == static_cast<int>(std::string::npos))
+	if (nextSpace == std::string::npos && str.size() > 5)
 		usr = str.substr(5);
-	else
+	else if (nextSpace != std::string::npos)
 		usr = str.substr(5, nextSpace - 5);
 
 	std::map<std::string, Client*>	clients = s.getClients();
