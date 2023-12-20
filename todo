@@ -3,3 +3,5 @@
 -[] add ban in join
 
 -[] join with too much parameters
+
+-[] founder does not start with ~ when shown in the servers stats.
