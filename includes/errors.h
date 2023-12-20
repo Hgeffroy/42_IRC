@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 12:44:00 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 13:55:51 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/19 16:06:31 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef ERRORS_H
 # define ERRORS_H
@@ -61,6 +62,10 @@
 # define ERR_UNKNOWNMODE(client, modechar)							std::string(":server ") + "472 " + client + " " + modechar + " :is unknown mode char to me" + ENDLINE
 // 473
 # define ERR_INVITEONLYCHAN(client, channel)						std::string(":server ") + "473 " + client + " " + channel + " :Cannot join channel (+i)" + ENDLINE
+// 474
+# define ERR_BANNEDFROMCHAN(client, channel)						std::string(":server ") + "474 " + client + " " + channel + " :Cannot join channel (+b)" + ENDLINE
+// 475
+# define ERR_BADCHANNELKEY(client, channel)							std::string(":server ") + "475 " + client + " " + channel + " :Cannot join channel (+k)" + ENDLINE
 
 // 482
 # define ERR_CHANOPRIVSNEEDED(client, channel)						std::string(":server ") + "482 " + client + " " + channel + " :You're not channel operator" + ENDLINE
