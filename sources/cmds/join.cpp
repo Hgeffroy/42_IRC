@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 17:06:39 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 20:06:08 by wangthea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	join(Server& s, Client& c, std::string& str)
 	std::string								channelName = getChannelName(str);
 	std::string								channelPass = getChannelPass(str);
 
-	std::cout << YELLOW << "=" << channelName << "=" << std::endl;
 	if ( channelName.empty() )
 	{
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));

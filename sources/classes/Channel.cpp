@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 13:38:06 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/20 20:01:34 by wangthea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,9 +192,11 @@ void	Channel::removeUserFromGuestList(std::string const& name)
 {
 	for ( std::vector< std::string >::iterator	it = _guestList.begin(); it != _guestList.end(); it++ )
 	{
-		std::cout << PURPLE << *it << END << std::endl;
 		if ( *it == name )
+		{
 			it = _guestList.erase( it );
+			return ;
+		}
 	}
 }
 
