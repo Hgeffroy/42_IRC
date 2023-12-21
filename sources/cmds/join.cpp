@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/21 15:12:06 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/21 15:59:46 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,36 @@ void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 	}
 }
 
+static bool	checkChannelRights( Server& s, Client& c, std::string& str )
+{
+	std::map<std::string, Channel*>			channels = s.getChannels();
+	std::string								channelName = getChannelName(c, str);
+	std::string								channelPass = getChannelPass(str);
+
+	if ( channelName.empty() )
+	{
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
+		return ;
+	}
+	if ( channelName[0] != '#' || channelName.size() < 2 )
+	{
+		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
+		return ;
+	}
+
+	if (channels.find(channelName) != channels.end())
+	{
+		Channel* channel = channels[channelName];
+		if ( !checkOption_I( c, channel, channelName ) )
+			return ;
+		if ( !checkOption_K( c, channel, channelPass ) )
+			return ;
+		if ( !checkOption_L( c, channel, channelName ) )
+			return ;
+		if ( !checkOption_B( c, channel, channelName ) )
+			return ;
+	}
+}
 
 void	join(Server& s, Client& c, std::string& str)
 {
