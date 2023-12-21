@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/21 14:49:43 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/21 15:12:06 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	join(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
 		return ;
 	}
-	if ( channelName[0] != '#' )
+	if ( channelName[0] != '#' || channelName.size() < 2 )
 	{
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 		return ;
