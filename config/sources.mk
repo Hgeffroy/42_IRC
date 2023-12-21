@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    sources.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/12/18 15:00:17 by hgeffroy         ###   ########.fr        #
+#    Updated: 2023/12/21 13:07:21 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/sendToClient.cpp								\
 				sources/cmds/topic.cpp										\
 				sources/cmds/kick.cpp										\
-				sources/cmds/mode_a.cpp										\
-				sources/cmds/mode_t.cpp										\
+				sources/cmds/mode.cpp										\
 				sources/cmds/motd.cpp										\
 				sources/cmds/invite.cpp										\
 				sources/cmds/join.cpp										\

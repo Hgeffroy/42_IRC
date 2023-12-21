@@ -3,23 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 20:06:08 by wangthea         ###   ########.fr       */
+/*   Updated: 2023/12/21 14:49:43 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
+/*---- static defines --------------------------------------------------------*/
 // join avec des trucs derriere
 
-static std::string	getChannelName(std::string& str);
+static std::string	getChannelName(Client& c, std::string& str);
 static std::string	getChannelPass(std::string& str);
 static bool			checkOption_I( Client& c, Channel* channel, std::string channelName );
 static bool			checkOption_K( Client& c, Channel* channel, std::string channelPass );
 static bool			checkOption_L( Client& c, Channel* channel, std::string channelName );
 static bool			checkOption_B( Client& c, Channel* channel, std::string channelName );
+
+/*----------------------------------------------------------------------------*/
 
 void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 {
@@ -53,7 +56,7 @@ void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 void	join(Server& s, Client& c, std::string& str)
 {
 	std::map<std::string, Channel*>			channels = s.getChannels();
-	std::string								channelName = getChannelName(str);
+	std::string								channelName = getChannelName(c, str);
 	std::string								channelPass = getChannelPass(str);
 
 	if ( channelName.empty() )
@@ -100,12 +103,7 @@ static bool	checkOption_K( Client& c, Channel* channel, std::string channelPass 
 {
 	if ( channel->getKeyStatus() )
 	{
-		if ( channelPass.empty() )
-		{
-			sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
-			return ( false );
-		}
-		if ( channelPass != channel->getPassword() )
+		if ( channelPass.empty() || channelPass != channel->getPassword() )
 		{
 			sendToClient(c.getFd(), ERR_BADCHANNELKEY(c.getNick(), channel->getName()));
 			return ( false );
@@ -148,31 +146,53 @@ static bool	checkOption_B( Client& c, Channel* channel, std::string channelName 
 	{
 		if ( *it == c.getNick( ) )
 		{
-			sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channel->getName(), "join", c.getNick( ), " this client has been banned from this channel."));
+			sendToClient( c.getFd(), ERR_BANNEDFROMCHAN( c.getNick(), channelName ) );
 			return ( false );
 		}
 	}
 	return ( true );
 }
 
-static std::string	getChannelName(std::string& str)
+static std::string	getChannelName(Client& c, std::string& str)
 {
+	std::cout << YELLOW << "=" << str << "=" << std::endl;
 	std::string	channelName;
 
-	size_t sep1 = str.find(' ');
-	size_t sep2 = str.find(' ', sep1 + 1);
-	if (sep2 == std::string::npos)
+	std::size_t	first_space = str.find( ' ' );
+	std::size_t	second_space = str.find( ' ', first_space + 1 );
+	if ( second_space != std::string::npos )
 	{
-		if (str[sep2] == '\n')
-			sep2 = str.size() - 1;
-		else
-			sep2 = str.size();
+		channelName = str.substr( first_space + 1, second_space - first_space - 1 );
+		if ( channelName.empty() )
+		{
+			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel> [*parameters]" ) );
+			return ( "" );
+		}
+		return ( channelName );
 	}
-	// Mettre des protections !!
-	channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
-	if (channelName[0] != '#')
-		return ( "" ); // Send une erreur ici
+	channelName = str.substr( first_space + 1 );
+	if ( channelName.empty() )
+	{
+		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel> [*parameters]" ) );
+		return ( "" );
+	}
 	return ( channelName );
+	// std::string	channelName;
+
+	// size_t sep1 = str.find(' ');
+	// size_t sep2 = str.find(' ', sep1 + 1);
+	// if (sep2 == std::string::npos)
+	// {
+	// 	if (str[sep2] == '\n')
+	// 		sep2 = str.size() - 1;
+	// 	else
+	// 		sep2 = str.size();
+	// }
+	// // Mettre des protections !!
+	// channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
+	// if (channelName[0] != '#')
+	// 	return ( "" ); // Send une erreur ici
+	// return ( channelName );
 }
 
 static std::string	getChannelPass(std::string& str)
