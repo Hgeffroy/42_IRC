@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/18 14:47:50 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2023/12/21 19:23:43 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ Server::~Server()
 
 	for (itNewClients = _newClients.begin(); itNewClients != _newClients.end(); ++itNewClients)
 		delete *itNewClients;
+
+
 
 	close(_listener);
 	std::cout << "Salut, je suis le destructeur de server" << std::endl;
@@ -197,7 +199,7 @@ void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi
 	{
 		if (*it== &c)
 		{
-//			delete *it;
+			delete *it;
 			it = _newClients.erase(it); // Verifier qu'on a bien delete, pas de leaks.
 			break;
 		}
@@ -207,7 +209,7 @@ void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi
 	{
 		if (it->second == &c)
 		{
-//			delete it->second;
+			delete it->second;
 			_clients.erase(it->first);
 			break;
 		}
