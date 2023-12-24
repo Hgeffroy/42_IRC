@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 12:17:16 by twang             #+#    #+#             */
-/*   Updated: 2023/12/21 13:05:11 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/24 15:46:25 by wangthea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,7 +335,7 @@ static void	k_opt( Client &c, Channel *channel, std::string s )
 	if ( s[0] == '+' )
 	{
 		std::string	password = getParam( c, s );
-		if ( password.empty( ) )
+		if ( password.empty( ) || password.size( ) < 6 )
 			return ;
 		if ( channel->getKeyStatus( ) )
 		{

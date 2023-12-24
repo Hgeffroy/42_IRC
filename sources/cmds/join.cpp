@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/21 15:59:46 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/24 15:45:26 by wangthea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*---- static defines --------------------------------------------------------*/
 // join avec des trucs derriere
 
-static std::string	getChannelName(Client& c, std::string& str);
+static std::string	getChannelName( Server& s, Client& c, std::string& str );
 static std::string	getChannelPass(std::string& str);
 static bool			checkOption_I( Client& c, Channel* channel, std::string channelName );
 static bool			checkOption_K( Client& c, Channel* channel, std::string channelPass );
@@ -52,54 +52,14 @@ void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 	}
 }
 
-static bool	checkChannelRights( Server& s, Client& c, std::string& str )
-{
-	std::map<std::string, Channel*>			channels = s.getChannels();
-	std::string								channelName = getChannelName(c, str);
-	std::string								channelPass = getChannelPass(str);
-
-	if ( channelName.empty() )
-	{
-		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
-		return ;
-	}
-	if ( channelName[0] != '#' || channelName.size() < 2 )
-	{
-		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
-		return ;
-	}
-
-	if (channels.find(channelName) != channels.end())
-	{
-		Channel* channel = channels[channelName];
-		if ( !checkOption_I( c, channel, channelName ) )
-			return ;
-		if ( !checkOption_K( c, channel, channelPass ) )
-			return ;
-		if ( !checkOption_L( c, channel, channelName ) )
-			return ;
-		if ( !checkOption_B( c, channel, channelName ) )
-			return ;
-	}
-}
-
 void	join(Server& s, Client& c, std::string& str)
 {
-	std::map<std::string, Channel*>			channels = s.getChannels();
-	std::string								channelName = getChannelName(c, str);
-	std::string								channelPass = getChannelPass(str);
-
+	std::string						channelName = getChannelName(s, c, str);
 	if ( channelName.empty() )
-	{
-		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "JOIN"));
 		return ;
-	}
-	if ( channelName[0] != '#' || channelName.size() < 2 )
-	{
-		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
-		return ;
-	}
 
+	std::map<std::string, Channel*>	channels = s.getChannels();
+	std::string						channelPass = getChannelPass(str);
 	if (channels.find(channelName) != channels.end())
 	{
 		Channel* channel = channels[channelName];
@@ -123,7 +83,7 @@ void	join(Server& s, Client& c, std::string& str)
 	}
 	else
 	{
-		Channel* newChannel = new Channel(channelName, c.getNick()); // Verifier la taille de channelname
+		Channel* newChannel = new Channel(channelName, c.getNick());
 		s.addChannel(newChannel);
 		sendChannelRPL(s, c, newChannel);
 	}
@@ -183,11 +143,10 @@ static bool	checkOption_B( Client& c, Channel* channel, std::string channelName 
 	return ( true );
 }
 
-static std::string	getChannelName(Client& c, std::string& str)
+static std::string	getChannelName( Server& s, Client& c, std::string& str )
 {
-	std::cout << YELLOW << "=" << str << "=" << std::endl;
+	std::cout << YELLOW << "=" << str << "=" << END << std::endl;
 	std::string	channelName;
-
 	std::size_t	first_space = str.find( ' ' );
 	std::size_t	second_space = str.find( ' ', first_space + 1 );
 	if ( second_space != std::string::npos )
@@ -195,34 +154,50 @@ static std::string	getChannelName(Client& c, std::string& str)
 		channelName = str.substr( first_space + 1, second_space - first_space - 1 );
 		if ( channelName.empty() )
 		{
-			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel> [*parameters]" ) );
+			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel>" ) );
+			return ( "" );
+		}
+		if ( channelName[0] != '#' || channelName.size() < 2 )
+		{
+			sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
+			return ( "" );
+		}
+		std::map<std::string, Channel*>	channels = s.getChannels();
+		if (channels.find(channelName) != channels.end())
+		{
+			if ( !channels[channelName]->getKeyStatus() )
+			{
+				std::cout << PURPLE << "TOO MUCH PARAMETERS" << END << std::endl ;
+				return ( "" );
+			}
+		}
+		else
+		{
+			std::cout << PURPLE << "TOO MUCH PARAMETERS" << END << std::endl ;
 			return ( "" );
 		}
 		return ( channelName );
 	}
-	channelName = str.substr( first_space + 1 );
-	if ( channelName.empty() )
+	if ( first_space != std::string::npos )
 	{
-		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel> [*parameters]" ) );
+		channelName = str.substr( first_space + 1 );
+		if ( channelName.empty() )
+		{
+			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel>" ) );
+			return ( "" );
+		}
+		if ( channelName[0] != '#' || channelName.size() < 2 )
+		{
+			sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
+			return ( "" );
+		}
+		return ( channelName );
+	}
+	else
+	{
+		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel>" ) );
 		return ( "" );
 	}
-	return ( channelName );
-	// std::string	channelName;
-
-	// size_t sep1 = str.find(' ');
-	// size_t sep2 = str.find(' ', sep1 + 1);
-	// if (sep2 == std::string::npos)
-	// {
-	// 	if (str[sep2] == '\n')
-	// 		sep2 = str.size() - 1;
-	// 	else
-	// 		sep2 = str.size();
-	// }
-	// // Mettre des protections !!
-	// channelName = str.substr(sep1 + 1, sep2 - sep1 - 1);
-	// if (channelName[0] != '#')
-	// 	return ( "" ); // Send une erreur ici
-	// return ( channelName );
 }
 
 static std::string	getChannelPass(std::string& str)
@@ -234,6 +209,8 @@ static std::string	getChannelPass(std::string& str)
 	if ( second_space != std::string::npos )
 	{
 		channelPass = str.substr( second_space + 1 );
+		if ( channelPass.empty() || channelPass.size() < 6 )
+			return ( "" );
 		return ( channelPass );
 	}
 	return ( "" );

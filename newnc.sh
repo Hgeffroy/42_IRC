@@ -3,6 +3,6 @@
 {
 	echo PASS popopo
 	echo NICK thea
-	echo USER thea 0 \* :jfkdls
-	echo JOIN \#lol
+	echo USER thea
+	echo JOIN \#lol a
 } | nc -C localhost 2000
