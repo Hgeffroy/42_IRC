@@ -47,7 +47,6 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 	std::string	prev;
 	if (!c.getNick().empty())
 	{
-		std::cout << "ici" << std::endl;
 		prev = c.getNick();
 	}
 
@@ -55,9 +54,6 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 
 	if (!prev.empty())
 	{
-		std::cout << "la" << std::endl;
 		sendToClient(c.getFd(), SWITCH_NICK(prev, nick));
 	}
-
-//	std::cout << "Nickname set to: " << c.getNick() << std::endl;
 }
