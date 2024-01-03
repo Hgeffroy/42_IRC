@@ -38,12 +38,11 @@ void	kick(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), user, (*chan[target]).getName()));
 		return ;
 	}
-	
 	std::string	comment = "";
 	if (end != static_cast<int>(str.length())) {
 		int startThree = str.find(' ', end);
 		comment = " :" + str.substr(startThree + 1, str.length() - startThree - 1);
 	}
 	sendToClient(c.getFd(), KICK_MSG((*chan[target]).getName(), user, comment));
-	(*chan[target]).removeUserFromChan(c.getNick());
+	(*chan[target]).removeUserFromChan(user);
 }
