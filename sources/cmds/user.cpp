@@ -14,13 +14,12 @@
 
 void	user(Server& s, Client& c, std::string& str) // Doublon ?
 {
+	size_t 		nextSpace;
 	if (str.find(' ', 5) != std::string::npos)
-	{
-		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "USER", "Too many parameters"));
-		return ;
-	}
-	
-	size_t 		nextSpace = str.find_first_of("\n\r", 5);
+		nextSpace = str.find(' ', 5);
+	else
+		nextSpace = str.find_first_of("\n\r", 5);
+
 	std::string usr;
 
 	if (nextSpace == std::string::npos && str.size() > 5)
@@ -46,5 +45,5 @@ void	user(Server& s, Client& c, std::string& str) // Doublon ?
 	}
 
 	c.setUser(usr);
-//	std::cout << "Username set to: " << c.getUser() << std::endl;
+	std::cout << "Username set to: " << c.getUser() << std::endl;
 }
