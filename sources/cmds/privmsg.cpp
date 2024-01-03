@@ -41,6 +41,10 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 	}
 
 	std::map<std::string, std::string>	members = channels[dest]->getMembers();
+	if (members.find(c.getNick()) == members.end()) {
+		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), c.getNick(), (*channels[dest]).getName()));
+		return ;
+	}
 	for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
 	{
 		if (it2->first != c.getNick())

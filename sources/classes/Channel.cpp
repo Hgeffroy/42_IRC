@@ -183,7 +183,7 @@ void	Channel::removeUserFromChan(std::string const& name)
 
 	if (it != _members.end())
 	{
-		_members.erase(it->first);
+		_members.erase(it);
 		_nbUsers--;
 	}
 }
