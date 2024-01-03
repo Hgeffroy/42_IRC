@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 09:53:43 by twang            ###   ########.fr       */
+/*   Updated: 2023/12/21 13:06:55 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@ void	kick(Server& s, Client& c, std::string& str);
 void	motd(Server& s, Client& c);
 void	pong(Server& s, Client& c, std::string str);
 void	list(Server& s, Client& c, std::string str);
-
-
-// Modes
-void	i_opt( Client &c, Channel *channel, std::string s );
-void	k_opt(Client &c, Channel *channel, std::string s);
-void	b_opt( Client &c, Channel *channel, std::string s );
 
 #endif
 
