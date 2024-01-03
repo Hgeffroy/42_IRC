@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:44:16 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 16:29:51 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:34:29 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 		prev = c.getNick();
 	}
 
-	c.setNick(nick); // Whitespaces ?
+	c.setNick(nick);
 
 	if (!prev.empty())
 	{

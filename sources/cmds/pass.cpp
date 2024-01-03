@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:47:13 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 16:27:44 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:35:24 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	pass(Server& s, Client& c, std::string& str)
 		return ;
 	}
 
-	size_t 		nextSpace = str.find_first_of("\n\r", 5); // Si on trouve un espace, too many params ?
+	size_t 		nextSpace = str.find_first_of("\n\r", 5);
 	std::string pass;
 	if (nextSpace == std::string::npos && str.size() > 5)
 		pass = str.substr(5);

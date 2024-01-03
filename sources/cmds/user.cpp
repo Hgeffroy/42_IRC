@@ -6,13 +6,13 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 16:30:47 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:36:56 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	user(Server& s, Client& c, std::string& str) // Doublon ?
+void	user(Server& s, Client& c, std::string& str)
 {
 	size_t 		nextSpace;
 	if (str.find(' ', 5) != std::string::npos)

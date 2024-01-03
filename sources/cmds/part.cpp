@@ -6,13 +6,13 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 10:05:57 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 16:40:48 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:34:59 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	part(Server& s, Client& c, std::string& str) // Need more params
+void	part(Server& s, Client& c, std::string& str)
 {
 	std::size_t			space1 = str.find(' ');
 	std::size_t 		space2 = str.find(' ', space1 + 1);

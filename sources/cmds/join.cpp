@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/24 15:45:26 by wangthea         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:33:39 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 	sendToClient(c.getFd(), JOIN_MSG(c.getNick(), c.getUser(), getIP(), chan->getName()));
 
 	if (!chan->getTopic().empty())
-		sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), chan->getName(), chan->getTopic())); // Seulement s'il y a un topic !
+		sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), chan->getName(), chan->getTopic()));
 
 
 	// Partie a envoyer a tous les clients du chan
@@ -46,7 +46,7 @@ void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 			std::string prefix = it2->second;
 			if (it2->second == "~")
 				prefix = "@";
-			sendToClient(client->getFd(), RPL_NAMREPLY(client->getNick(), "=", chan->getName(), prefix + it2->first)); // A changer !!
+			sendToClient(client->getFd(), RPL_NAMREPLY(client->getNick(), "=", chan->getName(), prefix + it2->first));
 		}
 		sendToClient(client->getFd(), RPL_ENDOFNAMES(chan->getName()));
 	}
