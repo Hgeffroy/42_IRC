@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/15 10:29:12 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/03 15:12:59 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class	Client
 		char						_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
 
 		int							getCmd(std::string& buffer);
-		void						execCmd(Server &s, std::string& str);
+		int							execCmd(Server &s, std::string& str);
 		std::vector<std::string>	splitBuf();
 
 		int							setInfos(Server& s, std::string& str);
