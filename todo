@@ -1,12 +1,5 @@
-
--[] join with too much parameters
-
--[] verifier taille du password mode +k
-
--[] verifier les codes d'erreur
-
--[] founder does not start with ~ when shown in the servers stats.
-
 -[] le bot va prendre la liste des channels et tous les joins - moderateur.
 
 -[] je lui donne la position founder.
+
+-[] part , quit to do check .

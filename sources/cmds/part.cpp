@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 10:05:57 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 16:40:48 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/03 10:56:09 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	part(Server& s, Client& c, std::string& str) // Need more params
 {
-	std::size_t			space1 = str.find(' ');
-	std::size_t 		space2 = str.find(' ', space1 + 1);
+	std::size_t	space1 = str.find(' ');
+	std::size_t	space2 = str.find(' ', space1 + 1);
 
 	if (space1 == std::string::npos || space2 == std::string::npos)
 	{
@@ -26,7 +26,7 @@ void	part(Server& s, Client& c, std::string& str) // Need more params
 	std::string	chan = str.substr(space1 + 1, space2 - space1 - 1);
 
 	std::map<std::string, Channel*>				channels = s.getChannels();
-	std::map<std::string, Channel*>::iterator 	itChan = channels.find(chan);
+	std::map<std::string, Channel*>::iterator	itChan = channels.find(chan);
 
 	if (itChan == channels.end())
 	{
@@ -44,4 +44,5 @@ void	part(Server& s, Client& c, std::string& str) // Need more params
 	}
 
 	itChan->second->removeUserFromChan(c.getNick());
+	//nous avons un part qui detruit le client .
 }
