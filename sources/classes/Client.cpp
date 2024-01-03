@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 13:55:51 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/03 13:06:45 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ void Client::execCmd(Server &s, std::string &str)
 				break;
 			case PART:
 				part(s, *this, str);
+				break;
 			case QUIT:
 				quit(s, *this, str);
 				break;
