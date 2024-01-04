@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/12/18 13:34:36 by twang            ###   ########.fr        #
+#    Updated: 2024/01/04 13:11:57 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,8 @@ TWANG			=		\e]8;;https://profile.intra.42.fr/users/twang\a\e[34mtwang\e[34m\e]8;
 INC_DIR			=		includes/
 
 SRC_DIR			=		sources/
+
+BOT_DIR			=		bot/
 
 #--sources & objects-----------------------------------------------------------#
 
@@ -90,6 +92,9 @@ leaks:
 		$(MAKE) -j VALGRIND=yes
 		$(LEAKS) ./ircserv 1234 lalala
 
+bonus:
+		$(MAKE) -C $(BOT_DIR)
+
 #--print header----------------------------------------------------------------#
 
 header:
@@ -110,15 +115,17 @@ re:
 		$(MAKE) -j all
 
 clean:
+		$(MAKE) -C $(BOT_DIR) clean
 		$(RM) -rf $(OBJ_DIR)
 		$(PRINT_CLEAN)
 
 fclean:
 #clear
+		$(MAKE) -C $(BOT_DIR) fclean
 		$(MAKE) clean
 		$(RM) $(NAME)
 		$(PRINT_FCLEAN)
 
 #--PHONY-----------------------------------------------------------------------#
 
-.PHONY: all debug leaks header re clean fclean
+.PHONY: all debug leaks bonus header re clean fclean

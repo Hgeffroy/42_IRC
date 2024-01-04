@@ -6,10 +6,11 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/12/18 13:34:36 by twang            ###   ########.fr        #
+#    Updated: 2024/01/04 11:14:44 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+include config/includes.mk
 include config/print.mk
 include config/sources.mk
 
@@ -87,18 +88,18 @@ debug:
 leaks:
 		clear
 		$(MAKE) -j VALGRIND=yes
-		$(LEAKS) ./ircserv 1234 lalala
+		$(LEAKS) ./bot 
 
 #--print header----------------------------------------------------------------#
 
 header:
-	printf "\n${PURPLE}project:\t${END}${BLUE}ft_irc${END}\n"
+	printf "\n${PURPLE}project:\t${END}${BLUE}ft_irc : bot ${END}\n"
 	printf "${PURPLE}author:\t\t${END}${BLUE}${HGEFFROY}, ${AASCEDU} & ${TWANG}${END}\n"
 	printf "${PURPLE}leaks mode:\t${END}${BLUE}${VALGRIND}${END}\n"
 	printf "${PURPLE}debug mode:\t${END}${BLUE}${DEBUG}${END}\n"
 	printf "${PURPLE}compiler:\t${END}${BLUE}${CPP}${END}\n"
 	printf "${PURPLE}flags:\t\t${END}${BLUE}${CFLAGS}${END}\n"
-	printf "${PURPLE}date:\t\t${END}${BLUE}2023/11/25${END}\n"
+	printf "${PURPLE}date:\t\t${END}${BLUE}2024/01/04${END}\n"
 	printf "              ____________________________\n\n"
 
 #--re, clean & fclean----------------------------------------------------------#
