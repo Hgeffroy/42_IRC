@@ -17,7 +17,7 @@ int main() {
     struct sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(80); // HTTPS port
-    struct hostent *server = gethostbyname("www.boredapi.com");
+    struct hostent *server = gethostbyname("catfact.ninja");
     if (server == NULL) {
         std::cerr << "Error resolving hostname" << std::endl;
         return 1;
@@ -31,7 +31,7 @@ int main() {
     }
 
     // Send HTTP GET request
-    const char* getRequest = "GET /documentation HTTP/1.1\r\nHost: www.boredapi.com\r\n\r\n";
+    const char* getRequest = "GET /api/activity HTTP/1.1\r\nHost: www.boredapi.com\r\nConnection: close\r\n\r\n";
     if (send(clientSocket, getRequest, strlen(getRequest), 0) < 0) {
         std::cerr << "Error sending request" << std::endl;
         return 1;

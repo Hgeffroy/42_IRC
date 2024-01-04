@@ -1,1 +1,2 @@
-SOURCES = sources/main.cpp
+SOURCES =	sources/main.cpp			\
+			sources/bot.cpp
