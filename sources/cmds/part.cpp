@@ -3,45 +3,90 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 10:05:57 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 15:34:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:48:54 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	part(Server& s, Client& c, std::string& str)
+/*---- static defines --------------------------------------------------------*/
+
+static std::vector< std::string >	getNames( std::string s );
+static std::string					getReason( std::string s );
+
+/*----------------------------------------------------------------------------*/
+
+void	part( Server& s, Client& c, std::string& str )
 {
-	std::size_t			space1 = str.find(' ');
-	std::size_t 		space2 = str.find(' ', space1 + 1);
+	std::map< std::string, Channel* >	channels = s.getChannels( );
+	std::vector< std::string >			names = getNames( str );
+	std::string							reason = getReason( str );
 
-	if (space1 == std::string::npos || space2 == std::string::npos)
+	if ( names.empty( ) )
+		sendToClient( c.getFd( ), ERR_NEEDMOREPARAMS( c.getNick( ), "PART" ) );
+
+	for (std::vector< std::string >::iterator it = names.begin( ) ; it != names.end( ); ++it )
 	{
-		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "PART"));
-		return ;
+		std::map< std::string, Channel* >::iterator	itc = channels.find(*it);
+		if ( itc != channels.end( ) )
+		{
+			std::map<std::string, std::string>				members = itc->second->getMembers( );
+			std::map<std::string, std::string>::iterator	itm = members.find( c.getNick( ) );
+			if ( itm != members.end( ) )
+			{
+				std::cout << YELLOW << c.getNick( ) << " left channel " << *it;
+				if ( !reason.empty( ) )
+					std::cout << " - " << reason;
+				std::cout << END << std::endl;
+				itc->second->removeUserFromChan( c.getNick( ) );
+			}
+			else
+				sendToClient(c.getFd(), ERR_NOTONCHANNEL(c.getNick(), *it));
+		}
+		else
+			sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), *it ) );
 	}
+}
 
-	std::string	chan = str.substr(space1 + 1, space2 - space1 - 1);
+static std::vector< std::string >	getNames( std::string s )
+{
+	std::vector< std::string >	channels;
+	std::string					names;
 
-	std::map<std::string, Channel*>				channels = s.getChannels();
-	std::map<std::string, Channel*>::iterator 	itChan = channels.find(chan);
-
-	if (itChan == channels.end())
+	std::size_t	first_space = s.find( ' ' );
+	std::size_t	second_space = s.find( ' ', first_space + 1 );
+	if ( second_space != std::string::npos )
 	{
-		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), chan));
-		return ;
+		std::string			str = s.substr( first_space + 1, second_space - first_space - 1 );
+		std::istringstream	iss(str);
+		while (std::getline(iss, names, ','))
+			channels.push_back( names.substr(0) );
+		return ( channels );
 	}
-
-	std::map<std::string, std::string>				members = itChan->second->getMembers();
-	std::map<std::string, std::string>::iterator	itMembers = members.find(c.getNick());
-
-	if (itMembers == members.end())
+	if ( first_space != std::string::npos )
 	{
-		sendToClient(c.getFd(), ERR_NOTONCHANNEL(c.getNick(), chan));
-		return ;
+		std::string			str = s.substr( first_space + 1 );
+		std::istringstream	iss(str);
+		while (std::getline(iss, names, ','))
+			channels.push_back( names.substr(0) );
+		return ( channels );
 	}
+	return ( channels );
+}
 
-	itChan->second->removeUserFromChan(c.getNick());
+static std::string	getReason( std::string s )
+{
+	std::string	reason;
+
+	std::size_t	first_space = s.find( ' ' );
+	std::size_t	second_space = s.find( ' ', first_space + 1 );
+	if ( second_space != std::string::npos )
+	{
+		reason = s.substr( second_space + 1 );
+		return ( reason );
+	}
+	return ( "" );
 }
