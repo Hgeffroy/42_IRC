@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 16:35:47 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:36:31 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	sendBroadcast(Server& s, Client& c, std::string& msg)
 	std::cout << c.getNick() << " tries to send a msg in broadcast" << std::endl;
 	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
 	{
-		std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + it->first+ " :" + msg + ENDLINE;
+		std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + it->first + " :" + msg + ENDLINE;
 		sendToClient(it->second->getFd(), msg);
 	}
 }
@@ -92,5 +92,5 @@ void	sendMsg(Server& s, Client& c, std::string& str)
 	else if (dest[0] == '#')
 		sendChan(s, c, dest, msg);
 	else if (dest[0] == '$')
-		; // Send to all clients on server (broadcast)
+		sendBroadcast(s, c, msg); // Send to all clients on server (broadcast)
 }

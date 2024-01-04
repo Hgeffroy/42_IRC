@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 13:06:45 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/04 08:44:19 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ std::vector<std::string> Client::splitBuf()
 	return (res);
 }
 
-void Client::execCmd(Server &s, std::string &str)
+int Client::execCmd(Server &s, std::string &str)
 {
 	std::cout << "Executing cmd" << std::endl;
 
@@ -191,9 +191,7 @@ void Client::execCmd(Server &s, std::string &str)
 	{
 		int cmd = getCmd(str);
 		if (cmd < 0 && str != "")
-		{
 			std::cout << "Error sent" << std::endl; // Actually need to send one
-		}
 
 		switch (cmd)
 		{
@@ -221,7 +219,7 @@ void Client::execCmd(Server &s, std::string &str)
 				break;
 			case QUIT:
 				quit(s, *this, str);
-				break;
+				return (1);
 			case INVITE:
 				invite(s, *this, str);
 				break;
@@ -247,6 +245,7 @@ void Client::execCmd(Server &s, std::string &str)
 				break;
 		}
 	}
+	return (0);
 }
 
 /**  Public member functions  *****************************************************************************************/
@@ -270,8 +269,9 @@ int Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 //		std::cout << *it << std::endl;
 
 	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it)
-		execCmd(s, *it);
-
+		if (execCmd(s, *it) == 1)
+			return (0);
+		
 	std::memset(_bufRead, 0, BUFFER_SIZE); // On vide le buffer !
 
 	return (0);

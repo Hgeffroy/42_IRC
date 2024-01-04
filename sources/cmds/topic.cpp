@@ -50,5 +50,4 @@ void	topic(Server& s, Client& c, std::string& str)
 	{
 		sendToClient(clients[it->first]->getFd(), RPL_TOPIC(it->first, target, chan[target]->getTopic()));
 	}
-	
 }
