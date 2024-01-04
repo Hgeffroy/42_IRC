@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 15:33:39 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/04 12:38:11 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 
 	if (!chan->getTopic().empty())
 		sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), chan->getName(), chan->getTopic()));
-
 
 	// Partie a envoyer a tous les clients du chan
 	std::map<std::string, std::string>::iterator	it;
@@ -145,7 +144,6 @@ static bool	checkOption_B( Client& c, Channel* channel, std::string channelName 
 
 static std::string	getChannelName( Server& s, Client& c, std::string& str )
 {
-	std::cout << YELLOW << "=" << str << "=" << END << std::endl;
 	std::string	channelName;
 	std::size_t	first_space = str.find( ' ' );
 	std::size_t	second_space = str.find( ' ', first_space + 1 );
@@ -158,6 +156,12 @@ static std::string	getChannelName( Server& s, Client& c, std::string& str )
 			return ( "" );
 		}
 		if ( channelName[0] != '#' || channelName.size() < 2 )
+		{
+			sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
+			return ( "" );
+		}
+		std::size_t	comma = channelName.find( ',' );
+		if ( comma != std::string::npos )
 		{
 			sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 			return ( "" );
@@ -188,7 +192,13 @@ static std::string	getChannelName( Server& s, Client& c, std::string& str )
 		}
 		if ( channelName[0] != '#' || channelName.size() < 2 )
 		{
-			sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
+			sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), channelName ) );
+			return ( "" );
+		}
+		std::size_t	comma = channelName.find( ',' );
+		if ( comma != std::string::npos )
+		{
+			sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), channelName ) );
 			return ( "" );
 		}
 		return ( channelName );
