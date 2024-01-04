@@ -7,6 +7,6 @@
 	echo JOIN \#lol
 	echo JOIN \#pop
 	echo JOIN \#kik
-	echo PART \#lol,\#pop,\#kik voila
+	echo PART \#lol,\#pop,\#hehe,\#kik voila
 	echo QUIT
 } | nc -C localhost 2000

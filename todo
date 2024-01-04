@@ -7,3 +7,5 @@
 -[] echo INVITE \#lol twang +3eme argument check
 
 -[] JOIN : interdiction de channelname avec ','
+
+-[] PART : PART \#lol -> not enough parameters XXX
