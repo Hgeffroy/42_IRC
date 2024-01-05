@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/21 19:23:43 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/05 10:25:58 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,13 +194,14 @@ void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi
 {
 	close(c.getFd());
 	std::cout << "Client on socket " << c.getFd() << " gone" << std::endl;
+	removeClientFromServers(c);
 
 	for (std::vector<Client*>::iterator it = _newClients.begin(); it != _newClients.end(); ++it)
 	{
 		if (*it== &c)
 		{
 			delete *it;
-			it = _newClients.erase(it); // Verifier qu'on a bien delete, pas de leaks.
+			_newClients.erase(it); // Verifier qu'on a bien delete, pas de leaks.
 			break;
 		}
 	}
@@ -214,8 +215,6 @@ void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi
 			break;
 		}
 	}
-
-	removeClientFromServers(c);
 }
 
 void	Server::addChannel(Channel* newChannel)

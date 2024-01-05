@@ -49,6 +49,9 @@ void	part( Server& s, Client& c, std::string& str )
 		else
 			sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), *it ) );
 	}
+
+	std::string tmp = "WHO " + names[0];
+	who( s, c, tmp );
 }
 
 static std::vector< std::string >	getNames( std::string s )

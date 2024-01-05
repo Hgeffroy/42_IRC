@@ -5,5 +5,6 @@
 	echo NICK thea
 	echo USER thea
 	echo JOIN \#lol
-	echo INVITE arthur \#lol
+	echo PART \#lol
+	echo QUIT
 } | nc -C localhost 2000
