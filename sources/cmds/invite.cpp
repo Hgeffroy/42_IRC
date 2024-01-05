@@ -27,60 +27,61 @@ void	invite( Server& s, Client& c, std::string& params )
 
 	if ( channel.empty() || nickname.empty() )
 	{
-		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "INVITE"));
+		sendToClient( c.getFd( ), ERR_NEEDMOREPARAMS( c.getNick( ), "INVITE") );
 		return ;
 	}
 	else if ( channel == "invalid" )
 	{
-		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "INVITE", "Too many parameters"));
+		sendToClient( c.getFd( ), ERR_UNKNOWNERROR( c.getNick( ), "INVITE", "Too many parameters") );
 		return ;
 	}
 	else if( channel[0] != '#' )
 	{
-		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channel));
+		sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), channel ) );
 		return ;
 	}
 
 	if ( channels[channel] )
 	{
 		std::map<std::string, std::string>		members = channels[channel]->getMembers();
-		if( !channels[channel]->getInviteStatus() )
+		if ( !channels[channel]->getInviteStatus() )
 		{
 			std::cerr << PURPLE << "le channel n'est pas en mode +i" << END << std::endl;
 			return ;
 		}
 		std::map<std::string, std::string>::iterator it = members.find(nickname);
-		if ( it != members.end() )
+		if ( it != members.end( ) )
 		{
-			sendToClient(c.getFd(), ERR_USERONCHANNEL(c.getNick(), nickname, channel));
+			sendToClient( c.getFd( ), ERR_USERONCHANNEL( c.getNick( ), nickname, channel ) );
 			return ;
 		}
-		std::map<std::string, std::string>::iterator ite = members.find( c.getNick() );
-		if ( ite == members.end() )
+		std::map<std::string, std::string>::iterator ite = members.find( c.getNick( ) );
+		if ( ite == members.end( ) )
 		{
-			sendToClient(c.getFd(), ERR_NOTONCHANNEL(c.getNick(), channel));
+			sendToClient( c.getFd( ), ERR_NOTONCHANNEL( c.getNick( ), channel ) );
 			return ;
 		}
-		if ( members[c.getNick()] != "~" && members[c.getNick()] != "@" )
+		if ( members[c.getNick( )] != "~" && members[c.getNick( )] != "@" )
 		{
-			sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), channel));
+			sendToClient( c.getFd( ), ERR_CHANOPRIVSNEEDED( c.getNick( ), channel ) );
 			return ;
 		}
-		std::vector<std::string>					bannedList = channels[channel]->getBannedGuest();
-		for ( std::vector< std::string >::iterator	it = bannedList.begin(); it != bannedList.end() ; it++ )
+		std::vector<std::string>					bannedList = channels[channel]->getBannedGuest( );
+		for ( std::vector< std::string >::iterator	it = bannedList.begin( ); it != bannedList.end( ) ; it++ )
 		{
 			if ( *it == nickname )
 			{
-				sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channels[channel]->getName(), "invite", nickname, " this client has been banned from this channel."));
+				sendToClient( c.getFd( ), ERR_INVALIDMODEPARAM( c.getNick(), channels[channel]->getName( ), "invite", nickname, " this client has been banned from this channel." ) );
 				return ;
 			}
 		}
 		channels[channel]->setGuest( nickname );
-		sendToClient(c.getFd(), RPL_INVITING(c.getNick(), nickname, channel));
+		sendToClient( c.getFd( ), RPL_INVITING( c.getNick( ), nickname, channel ) );
+		sendToClient( c.getFd( ), INVITE_MSG( c.getNick( ), c.getUser( ), nickname, channel ) );
 	}
 	else
 	{
-		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channel));
+		sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), channel ) );
 		return ;
 	}
 }
