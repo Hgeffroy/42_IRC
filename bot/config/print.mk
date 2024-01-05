@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/21 17:19:52 by twang             #+#    #+#              #
-#    Updated: 2023/11/27 12:55:51 by twang            ###   ########.fr        #
+#    Updated: 2024/01/05 11:21:21 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,11 +32,11 @@ DEL_LINE	=	\033[2K\r
 ##    ~~    Prints -------------------------------------------------------------
 
 define	PRINT_CLEAN
-	printf "[ ${RED}removing${END} ]\t${LIGHTBLUE}binaries files${END}\n"
+	printf "[ ${RED}removing${END} ]\t${LIGHTBLUE}bot's binaries files${END}\n"
 endef
 
 define	PRINT_FCLEAN
-	printf "[ ${RED}removing${END} ]\t${LIGHTBLUE}executable file${END}\n\n"
+	printf "[ ${RED}removing${END} ]\t${LIGHTBLUE}bot's executable file${END}\n"
 endef
 
 define	PRINT_COMPILING
