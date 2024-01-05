@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:44:16 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 15:34:29 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/05 09:43:02 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 		return ;
 	}
 
-	size_t 		nextSpace = str.find_first_of("\n\r", 5);
-	std::string nick;
+	size_t		nextSpace = str.find_first_of("\n\r", 5);
+	std::string	nick;
 	if (nextSpace == std::string::npos && str.size() > 5)
 		nick = str.substr(5);
 	else if (nextSpace != std::string::npos)
@@ -41,6 +41,11 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 	if (nick.empty())
 	{
 		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
+		return ;
+	}
+	if (nick == "bot")
+	{
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "This nickname is already reserved"));
 		return ;
 	}
 

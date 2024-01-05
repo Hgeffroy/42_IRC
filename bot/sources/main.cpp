@@ -1,55 +1,30 @@
-#include <unistd.h>
-#include <iostream>
-#include <cstring>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
+/*   Updated: 2024/01/05 11:05:17 by twang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int main() {
-    // Create a socket
-    int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (clientSocket < 0) {
-        std::cerr << "Error creating socket" << std::endl;
-        return 1;
-    }
+#include "Bot.hpp"
 
-    // Set up the server address structure
-    struct sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = htons(80); // HTTPS port
-    struct hostent *server = gethostbyname("catfact.ninja");
-    if (server == NULL) {
-        std::cerr << "Error resolving hostname" << std::endl;
-        return 1;
-    }
-    memcpy(&serverAddress.sin_addr.s_addr, server->h_addr, server->h_length);
+int	main( int ac, char **av )
+{
+	try
+	{
+		if ( ac != 5 )
+			throw std::invalid_argument( "Wrong usage:\n./bot <port> <password> <apikey>");
+		Bot	bot( av[1], av[2], av[3] );
+	}
+	catch ( std::invalid_argument const & error )
+	{
+		std::cerr << error.what( ) << std::endl;
+		return ( -1 );
+	}
 
-    // Connect to the server
-    if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
-        std::cerr << "Error connecting to server" << std::endl;
-        return 1;
-    }
-
-    // Send HTTP GET request
-    const char* getRequest = "GET /api/activity HTTP/1.1\r\nHost: www.boredapi.com\r\nConnection: close\r\n\r\n";
-    if (send(clientSocket, getRequest, strlen(getRequest), 0) < 0) {
-        std::cerr << "Error sending request" << std::endl;
-        return 1;
-    }
-
-    // Receive and print the response
-    char buffer[8192];
-    memset(buffer, 0, sizeof(buffer));
-    int bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
-    if (bytesRead < 0) {
-        std::cerr << "Error receiving response" << std::endl;
-        return 1;
-    }
-
-    std::cout << "Response:\n-" << buffer << "-" << std::endl;
-
-    // Close the socket
-    close(clientSocket);
-
-    return 0;
+	return ( 0 );
 }

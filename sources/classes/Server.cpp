@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/21 19:23:43 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:00:30 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 {
 	struct sockaddr_in	sin;
 	int					port;
-	int 				s;
-	int 				optval = 1;
+	int					s;
+	int					optval = 1;
 
 
 	close(STDIN_FILENO);
