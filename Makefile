@@ -116,14 +116,14 @@ re:
 		$(MAKE) -j all
 
 clean:
-		$(MAKE) -C $(BOT_DIR) clean
 		$(RM) -rf $(OBJ_DIR)
+		$(MAKE) -C $(BOT_DIR) clean
 		$(PRINT_CLEAN)
 
 fclean:
 #clear
-		$(MAKE) -C $(BOT_DIR) fclean
 		$(MAKE) clean
+		$(MAKE) -C $(BOT_DIR) fclean
 		$(RM) $(NAME)
 		$(PRINT_FCLEAN)
 

@@ -38,7 +38,6 @@
 # include <cctype> // Pas inclus dans cstdlib ?
 # include <cstdio>
 # include <ios>
-# include <sstream>
 
 /*---- includes --------------------------------------------------------------*/
 
