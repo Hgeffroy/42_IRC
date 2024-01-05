@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 10:05:57 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/04 10:48:54 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 12:41:46 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /*---- static defines --------------------------------------------------------*/
 
-static std::vector< std::string >	getNames( std::string s );
-static std::string					getReason( std::string s );
+static std::vector< std::string >	getNames( std::string& s );
+static std::string					getReason( std::string& s );
 
 /*----------------------------------------------------------------------------*/
 
@@ -39,22 +39,21 @@ void	part( Server& s, Client& c, std::string& str )
 			{
 				std::cout << YELLOW << c.getNick( ) << " left channel " << *it;
 				if ( !reason.empty( ) )
-					std::cout << " - " << reason;
+					std::cout << reason;
 				std::cout << END << std::endl;
 				itc->second->removeUserFromChan( c.getNick( ) );
+				sendToClient( c.getFd(), PART_MSG( c.getNick( ), c.getUser( ), itc->second->getName( ) ) );
 			}
 			else
-				sendToClient(c.getFd(), ERR_NOTONCHANNEL(c.getNick(), *it));
+				sendToClient(c.getFd(), ERR_NOTONCHANNEL( c.getNick( ), *it) );
 		}
 		else
 			sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), *it ) );
 	}
 
-	std::string tmp = "WHO " + names[0];
-	who( s, c, tmp );
 }
 
-static std::vector< std::string >	getNames( std::string s )
+static std::vector< std::string >	getNames( std::string& s )
 {
 	std::vector< std::string >	channels;
 	std::string					names;
@@ -69,7 +68,7 @@ static std::vector< std::string >	getNames( std::string s )
 			channels.push_back( names.substr(0) );
 		return ( channels );
 	}
-	if ( first_space != std::string::npos )
+	else if ( first_space != std::string::npos )
 	{
 		std::string			str = s.substr( first_space + 1 );
 		std::istringstream	iss(str);
@@ -80,7 +79,7 @@ static std::vector< std::string >	getNames( std::string s )
 	return ( channels );
 }
 
-static std::string	getReason( std::string s )
+static std::string	getReason( std::string& s )
 {
 	std::string	reason;
 

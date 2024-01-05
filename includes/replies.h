@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 11:36:52 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/05 12:35:21 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define SWITCH_NICK(prev, new)											std::string(":") + prev + " NICK " + new + ENDLINE
 # define PONG_MSG(token)												std::string(":server ") + "PONG " + token + ENDLINE
 # define KICK_MSG(channel, usr, comment)								std::string(":server ") + "KICK " + channel + " " + usr + comment + ENDLINE
-# define PART_MSG(client, username, channel)							std::string(":") + client + " !" + username + "@localhost" + "PART " + channel + ENDLINE
+# define PART_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + ENDLINE
 
 // 001
 # define RPL_WELCOME(client, nickname, username, IP)					std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@" + IP + ENDLINE
