@@ -6,19 +6,25 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 09:36:06 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 13:14:35 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
+/*---- includes ---------------------------------------------------------------*/
+
 # include "irc.h"
 # include "Client.hpp"
 # include "Channel.hpp"
 
+/*---- class includes ---------------------------------------------------------*/
+
 class Client;
 class Channel;
+
+/*---- class defines ----------------------------------------------------------*/
 
 class	Server
 {

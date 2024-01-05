@@ -6,13 +6,13 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 09:42:59 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 17:00:31 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	user(Server& s, Client& c, std::string& str)
+void	user(Server& s, Client& c, std::string& str, bool is_bot )
 {
 	size_t		nextSpace;
 	if (str.find(' ', 5) != std::string::npos)
@@ -20,7 +20,7 @@ void	user(Server& s, Client& c, std::string& str)
 	else
 		nextSpace = str.find_first_of("\n\r", 5);
 
-	std::string usr;
+	std::string	usr;
 
 	if (nextSpace == std::string::npos && str.size() > 5)
 		usr = str.substr(5);
@@ -43,8 +43,7 @@ void	user(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
 		return ;
 	}
-	
-	if (usr == "bot")
+	if (usr == "bot" && !is_bot)
 	{
 		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "This username is already reserved"));
 		return ;

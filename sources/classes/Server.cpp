@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/04 14:00:30 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 15:32:25 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 	close(STDIN_FILENO);
 	port = setPort(portstr);
 	_password = setPassword(password);
-	s = socket(PF_INET, SOCK_STREAM, 0); // Check le 0 (Check si SOCK_STREAM n'a qu'un seul protocole), a recup !!
+	s = socket(PF_INET, SOCK_STREAM, 0);
 	if (s < 0)
 		throw std::runtime_error("socket failed");
 	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
@@ -120,7 +120,6 @@ std::string	Server::setPassword(std::string& pass)
 	if (pass.size() < 5)
 		throw std::invalid_argument("<password> is too short");
 
-
 	std::string::iterator	it;
 	for (it = pass.begin(); it != pass.end(); ++it)
 		if (!std::isprint(*it) || *it == ' ' || *it == '	')
@@ -136,6 +135,8 @@ void	Server::accept()
 	socklen_t			csin_len = sizeof(csin);
 
 	cs = ::accept(_listener, reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
+	if ( cs < 0 )
+		throw std::invalid_argument( "<accept> cannot connect to the server" );
 	std::cout << "New client on socket: " << cs << std::endl;
 	Client* newClient = new Client(cs);
 	_newClients.push_back(newClient);

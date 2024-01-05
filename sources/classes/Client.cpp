@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/04 08:44:19 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 17:02:48 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void Client::setNick(std::string &str)
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 15;
+	const int nbcmd = 16;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK"};
+									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "BOT"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -110,10 +110,13 @@ int Client::setInfos(Server &s, std::string &str)
 			pass(s, *this, str);
 			break;
 		case NICK:
-			nick(s, *this, str);
+			nick(s, *this, str, false);
 			break;
 		case USER:
-			user(s, *this, str);
+			user(s, *this, str, false);
+			break;
+		case BOT:
+			bot(s, *this, str);
 			break;
 		default:
 			sendToClient(this->getFd(), ERR_NOTREGISTERED(this->getNick()));
@@ -200,7 +203,7 @@ int Client::execCmd(Server &s, std::string &str)
 				sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
 				break;
 			case NICK:
-				nick(s, *this, str);
+				nick(s, *this, str, false);
 				break;
 			case PRIVMSG:
 				sendMsg(s, *this, str);
@@ -250,9 +253,9 @@ int Client::execCmd(Server &s, std::string &str)
 
 /**  Public member functions  *****************************************************************************************/
 
-int Client::read(Server &s) // Le serveur lit ce que lui envoit le client
+int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 {
-	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0); // Met un \n a la fin !
+	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0);
 
 	if (r <= 0)
 	{
@@ -264,15 +267,11 @@ int Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 
 	std::vector<std::string> cmds = splitBuf();
 
-//	std::cout << "After split: " << std::endl;
-//	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it)
-//		std::cout << *it << std::endl;
-
 	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it)
 		if (execCmd(s, *it) == 1)
 			return (0);
 		
-	std::memset(_bufRead, 0, BUFFER_SIZE); // On vide le buffer !
+	std::memset(_bufRead, 0, BUFFER_SIZE);
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/21 13:06:55 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 17:02:20 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void		printClients(std::map<std::string, Client*> map);
 
 // Cmds
 void	pass(Server& s, Client& c, std::string& str);
-void	user(Server& s, Client& c, std::string& str);
-void	nick(Server& s, Client& c, std::string& str);
+void	user(Server& s, Client& c, std::string& str, bool is_bot);
+void	nick(Server& s, Client& c, std::string& str, bool is_bot);
 
 void	sendMsg(Server& s, Client& c, std::string& str);
 void	join(Server& s, Client& c, std::string& str);
@@ -48,6 +48,7 @@ void	kick(Server& s, Client& c, std::string& str);
 void	motd(Server& s, Client& c);
 void	pong(Server& s, Client& c, std::string str);
 void	list(Server& s, Client& c, std::string str);
+void	bot( Server &s, Client& c, std::string& str );
 
 #endif
 
