@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/04 12:38:11 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 11:19:18 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,13 +171,13 @@ static std::string	getChannelName( Server& s, Client& c, std::string& str )
 		{
 			if ( !channels[channelName]->getKeyStatus() )
 			{
-				std::cout << PURPLE << "TOO MUCH PARAMETERS" << END << std::endl ;
+				sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "Too many parameters"));
 				return ( "" );
 			}
 		}
 		else
 		{
-			std::cout << PURPLE << "TOO MUCH PARAMETERS" << END << std::endl ;
+			sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "Too many parameters"));
 			return ( "" );
 		}
 		return ( channelName );
@@ -188,6 +188,11 @@ static std::string	getChannelName( Server& s, Client& c, std::string& str )
 		if ( channelName.empty() )
 		{
 			sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel>" ) );
+			return ( "" );
+		}
+		if ( channelName == "#bot" )
+		{
+			sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "This channel name is already reserved"));
 			return ( "" );
 		}
 		if ( channelName[0] != '#' || channelName.size() < 2 )
