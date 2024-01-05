@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/05 10:00:08 by twang            ###   ########.fr        #
+#    Updated: 2024/01/05 11:28:28 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,7 +107,7 @@ header:
 	printf "${PURPLE}compiler:\t${END}${BLUE}${CPP}${END}\n"
 	printf "${PURPLE}flags:\t\t${END}${BLUE}${CFLAGS}${END}\n"
 	printf "${PURPLE}date:\t\t${END}${BLUE}2023/11/25${END}\n"
-	printf "              ____________________________\n\n"
+	$(LINE)
 
 #--re, clean & fclean----------------------------------------------------------#
 
@@ -118,6 +118,7 @@ re:
 
 clean:
 		$(MAKE) -C $(BOT_DIR) clean
+		$(LINE)
 		$(RM) -rf $(OBJ_DIR)
 		$(PRINT_CLEAN)
 

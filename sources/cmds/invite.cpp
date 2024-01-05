@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2024/01/04 13:03:22 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 11:15:02 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	invite( Server& s, Client& c, std::string& params )
 	}
 	else if ( channel == "invalid" )
 	{
-		std::cout << PURPLE << "TOO MUCH PARAMETERS" << END << std::endl ;
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "INVITE", "Too many parameters"));
 		return ;
 	}
 	else if( channel[0] != '#' )
