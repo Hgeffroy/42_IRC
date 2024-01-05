@@ -2,8 +2,8 @@
 
 {
 	echo PASS popopo
-	echo NICK thea
-	echo USER thea
+	echo NICK bot
+	echo USER bot
 	echo JOIN \#lol
 	echo PART \#lol
 	echo QUIT

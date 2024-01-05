@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/04 13:11:57 by twang            ###   ########.fr        #
+#    Updated: 2024/01/05 10:00:08 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,7 @@ DEPS			=		$(addprefix $(OBJ_DIR), $(SOURCES:.cpp=.d))
 all:
 		$(MAKE) header
 		$(MAKE) $(NAME) -j
+		./ircserv 2000 popopo
 
 $(NAME): $(OBJECTS)
 		$(CPP) $(CFLAGS) $^ -o $@
@@ -90,10 +91,11 @@ debug:
 leaks:
 		clear
 		$(MAKE) -j VALGRIND=yes
-		$(LEAKS) ./ircserv 1234 lalala
+		$(LEAKS) ./ircserv 2000 popopo
 
 bonus:
 		$(MAKE) -C $(BOT_DIR)
+		./bot/bot server port password apikey
 
 #--print header----------------------------------------------------------------#
 
@@ -115,14 +117,14 @@ re:
 		$(MAKE) -j all
 
 clean:
-		$(RM) -rf $(OBJ_DIR)
 		$(MAKE) -C $(BOT_DIR) clean
+		$(RM) -rf $(OBJ_DIR)
 		$(PRINT_CLEAN)
 
 fclean:
 #clear
-		$(MAKE) clean
 		$(MAKE) -C $(BOT_DIR) fclean
+		$(MAKE) clean
 		$(RM) $(NAME)
 		$(PRINT_FCLEAN)
 

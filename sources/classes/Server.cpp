@@ -44,8 +44,8 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 {
 	struct sockaddr_in	sin;
 	int					port;
-	int 				s;
-	int 				optval = 1;
+	int					s;
+	int					optval = 1;
 
 
 	close(STDIN_FILENO);
