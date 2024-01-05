@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 15:36:56 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/05 09:42:59 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	user(Server& s, Client& c, std::string& str)
 {
-	size_t 		nextSpace;
+	size_t		nextSpace;
 	if (str.find(' ', 5) != std::string::npos)
 		nextSpace = str.find(' ', 5);
 	else
@@ -41,6 +41,12 @@ void	user(Server& s, Client& c, std::string& str)
 	if (usr.empty())
 	{
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
+		return ;
+	}
+	
+	if (usr == "bot")
+	{
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "This username is already reserved"));
 		return ;
 	}
 

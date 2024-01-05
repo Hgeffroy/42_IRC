@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/04 14:34:44 by twang            ###   ########.fr       */
+/*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
+/*   Updated: 2024/01/05 10:17:23 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bot.h"
+#include "Bot.hpp"
 
-// ./bot server port password
+Bot::Bot( void ) {}
 
-int	main( int ac, char **av )
+Bot::Bot( std::string port, std::string password, std::string apikey )
 {
-	if ( ac != 4 )
-	{
-		std::cout << "Wrong usage:" << std::endl;
-		std::cout << "./bot <server> <port> <password>" << std::endl;
-		return (-1);
-	}
-
-	return ( 0 );
+	
 }
+
+
+Bot::~Bot( void ) {}
