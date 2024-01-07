@@ -33,4 +33,5 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/cmds/user.cpp										\
 				sources/cmds/who.cpp										\
 				sources/cmds/quit.cpp										\
+				sources/cmds/away.cpp										\
 				sources/main.cpp

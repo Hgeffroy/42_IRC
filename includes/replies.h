@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 08:55:05 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 09:17:14 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@
 
 // 301
 # define RPL_AWAY(client, nick)											std::string(":server ") + "301 " + client + " " + nick + " :is away" + ENDLINE
+// 305
+# define RPL_UNAWAY(client)												std::string(":server ") + "305 " + client + " :You are no longer marked as being away" + ENDLINE
+// 306
+# define RPL_NOWAWAY(client)											std::string(":server ") + "306 " + client + " :You have been marked as being away" + ENDLINE
 
 // 315
 # define RPL_ENDOFWHO(client, mask)										std::string(":server ") + "315 " + client + " " + mask + " :End of /WHO list" + ENDLINE
@@ -58,7 +62,7 @@
 # define RPL_INVITING(client, nick, channel)							std::string(":server ") + "341 " + client + " " + nick + " " + channel + ENDLINE
 
 // 352
-# define RPL_WHOREPLY(client, channel, username, nick, realname)	std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " localhost" + " server " + " :" + realname + ENDLINE
+# define RPL_WHOREPLY(client, channel, username, nick, realname)		std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " localhost" + " server " + nick + " :" + realname + ENDLINE
 // 353 (:channel ?)
 # define RPL_NAMREPLY(client, symbol, channel, nickPrefixed)			std::string(":server ") + "353 " + client + " " + symbol + " " + channel + " :" + nickPrefixed + ENDLINE
 

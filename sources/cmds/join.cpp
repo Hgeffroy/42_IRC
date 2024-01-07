@@ -13,7 +13,6 @@
 #include "irc.hpp"
 
 /*---- static defines --------------------------------------------------------*/
-// join avec des trucs derriere
 
 static std::map< std::string, std::string >	getChannelMap( Client& c, std::string& s );
 static bool									checkOption_I( Client& c, Channel* channel, const std::string& channelName );

@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 08:51:32 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 08:55:05 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,19 @@ void Client::setNick(std::string &str)
 	_nickname = str;
 }
 
+void Client::setAway(bool away)
+{
+	_away = away;
+}
+
 
 /**  Private member functions  ****************************************************************************************/
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 15;
+	const int nbcmd = 16;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK"};
+									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "AWAY"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -240,6 +245,9 @@ int Client::execCmd(Server &s, std::string &str)
 				break;
 			case KICK:
 				kick(s, *this, str);
+				break;
+			case AWAY:
+				away(s, *this, str);
 				break;
 			default:
 				std::size_t end = str.find(' ');
