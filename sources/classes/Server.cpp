@@ -51,7 +51,7 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 	close(STDIN_FILENO);
 	port = setPort(portstr);
 	_password = setPassword(password);
-	s = socket(PF_INET, SOCK_STREAM, 0); // Check le 0 (Check si SOCK_STREAM n'a qu'un seul protocole), a recup !!
+	s = socket(PF_INET, SOCK_STREAM, 0);
 	if (s < 0)
 		throw std::runtime_error("socket failed");
 	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
@@ -190,7 +190,7 @@ void	Server::addClient(Client *client)
 		}
 }
 
-void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi !
+void	Server::removeClient(Client& c)
 {
 	close(c.getFd());
 	std::cout << "Client on socket " << c.getFd() << " gone" << std::endl;
@@ -201,7 +201,7 @@ void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi
 		if (*it== &c)
 		{
 			delete *it;
-			_newClients.erase(it); // Verifier qu'on a bien delete, pas de leaks.
+			_newClients.erase(it);
 			break;
 		}
 	}

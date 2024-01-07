@@ -15,8 +15,9 @@
 
 # define MAX_CLIENTS		50
 # define BUFFER_SIZE		4096
-# define NICKLEN			10
-# define CHANNELEN			50
+
+# define NICKLEN			"10"
+# define CHANNELEN			"50"
 
 # define NETWORKNAME		"NotANetwork"
 # define VERSION			"1.0"
