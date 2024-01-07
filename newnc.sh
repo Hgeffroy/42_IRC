@@ -2,9 +2,6 @@
 
 {
 	echo PASS popopo
-	echo NICK bot
-	echo USER bot
-	echo JOIN \#lol
-	echo PART \#lol
-	echo QUIT
+	echo NICK h
+	echo USER h
 } | nc -C localhost 2000

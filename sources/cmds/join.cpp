@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 15:52:35 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 08:35:05 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,9 @@ static int	checkChannelName( Server& s, Client& c, const std::string& channelNam
 		return ( -1 );
 	}
 	std::map<std::string, Channel*>	channels = s.getChannels();
-	if (channels.find(channelName) != channels.end())
+	if (channels.find(channelName) != channels.end()) // C'est quoi ce test ??
 	{
-		if ( !channels[channelName]->getKeyStatus() )
+		if ( !channels[channelName]->getKeyStatus() ) // Probleme la !!
 		{
 			sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "Too many parameters"));
 			return ( -1 );

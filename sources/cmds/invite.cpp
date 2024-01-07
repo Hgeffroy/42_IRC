@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2024/01/05 11:15:02 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/07 08:31:22 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,24 @@
 
 static std::string	getNickName( std::string params );
 static std::string	getChannelName( std::string params );
+static void			inviteList( Server& s, Client& c );
+
 
 /*----------------------------------------------------------------------------*/
 
 void	invite( Server& s, Client& c, std::string& params )
 {
+
 	std::map<std::string, Channel*>			channels = s.getChannels();
 	std::string								channel = getChannelName( params );
 	std::string								nickname = getNickName( params );
 
-	if ( channel.empty() || nickname.empty() )
+	if ( channel.empty() && nickname.empty() ) {
+		inviteList( s, c );
+		return ;
+	}
+
+	else if ( channel.empty() || nickname.empty() )
 	{
 		sendToClient( c.getFd( ), ERR_NEEDMOREPARAMS( c.getNick( ), "INVITE") );
 		return ;
@@ -86,6 +94,23 @@ void	invite( Server& s, Client& c, std::string& params )
 	}
 }
 
+static void	inviteList( Server& s, Client& c )
+{
+	std::map< std::string, Channel* >			channels = s.getChannels();
+	std::map< std::string, Channel* >::iterator	it;
+
+	for ( it = channels.begin(); it != channels.end(); ++it ) {
+		std::vector< std::string >				invitedOnChan = it->second->getGuest();
+		std::vector< std::string >::iterator	it2;
+
+		for ( it2 = invitedOnChan.begin(); it2 != invitedOnChan.end(); ++it2 ) {
+			if ( *it2 == c.getNick() )
+				sendToClient( c.getFd(), RPL_INVITELIST( c.getNick(), it->second->getName() ) );
+		}
+	}
+	sendToClient( c.getFd(), RPL_ENDOFINVITELIST( c.getNick() ) );
+}
+
 static std::string	getNickName( std::string params )
 {
 	std::string	nickname;
@@ -106,10 +131,10 @@ static std::string	getNickName( std::string params )
 static std::string	getChannelName( std::string params )
 {
 	std::string	channelname;
-
 	std::size_t	first_space = params.find( ' ' );
 	std::size_t second_space = params.find( ' ', first_space + 1 );
 	std::size_t third_space = params.find( ' ', second_space + 1 );
+
 	if ( third_space != std::string::npos )
 		return ( "invalid" );
 	if ( second_space != std::string::npos )

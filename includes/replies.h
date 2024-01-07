@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 12:40:33 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 08:02:56 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@
 // 332 (:channel ?)
 # define RPL_TOPIC(client, channel, topic)								std::string(":server ") + "332 " + client + " " + channel + " :" + topic + ENDLINE
 
+// 336
+# define RPL_INVITELIST(client, channel)								std::string(":server ") + "336 " + client + " " + channel + ENDLINE
+// 337
+# define RPL_ENDOFINVITELIST(client)									std::string(":server ") + "337 " + client + " :End of /INVITE list" + ENDLINE
 // 341
 # define RPL_INVITING(client, nick, channel)							std::string(":server ") + "341 " + client + " " + nick + " " + channel + ENDLINE
 
