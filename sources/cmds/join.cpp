@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 08:41:25 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 10:22:03 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,16 @@ static bool	checkOption_K( Client& c, Channel* channel, const std::string& chann
 {
 	if ( channel->getKeyStatus() )
 	{
-		if ( channelPass.empty() || channelPass != channel->getPassword() )
+		if ( channelPass != channel->getPassword() )
 		{
 			sendToClient(c.getFd(), ERR_BADCHANNELKEY(c.getNick(), channel->getName()));
 			return ( false );
 		}
+	}
+	else if ( !channelPass.empty() && !channel->getKeyStatus() ) {
+		std::cout << "channelPass: " << channelPass << std::endl;
+		sendToClient( c.getFd(), ERR_UNKNOWNERROR( c.getNick(), "JOIN", "Too many parameters" ) );
+		return ( false );
 	}
 	return ( true );
 }
@@ -169,14 +174,10 @@ static int	checkChannelName( Server& s, Client& c, const std::string& channelNam
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 		return ( -1 );
 	}
-	std::map<std::string, Channel*>	channels = s.getChannels();
-	if (channels.find(channelName) != channels.end()) // C'est quoi ce test ??
+	if ( channelName == "#bot" )
 	{
-		if ( !channels[channelName]->getKeyStatus() ) // Probleme la !!
-		{
-			sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "Too many parameters"));
-			return ( -1 );
-		}
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "This channel name is already reserved"));
+		return ( -1 );
 	}
 	return ( 0 );
 }
@@ -190,8 +191,10 @@ static std::map< std::string, std::string >	getChannelMap( Client& c, std::strin
 	std::size_t	first_space = s.find( ' ' );
 	std::size_t	second_space = s.find( ' ', first_space + 1 );
 	if ( first_space != std::string::npos ) {
-		std::string			chans = s.substr( first_space + 1, second_space );
-		std::string			pass = s.substr( second_space + 1 );
+		std::string pass;
+		std::string	chans = s.substr( first_space + 1, second_space );
+		if ( second_space != std::string::npos )
+			pass = s.substr( second_space + 1 );
 		std::istringstream	iss(chans);
 		std::istringstream	iss2(pass);
 
