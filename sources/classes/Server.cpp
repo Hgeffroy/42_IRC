@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 10:25:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 11:02:59 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ void	Server::checkFd()
 		if (FD_ISSET((*it)->getFd(), &_fdRead))
 		{
 			if ((*it)->read(*this) == 1)
-				break;// Iterateur casse si qqn se barre
+				break;
 			i--;
 		}
 	}
@@ -265,7 +265,7 @@ void	Server::checkFd()
 		if (FD_ISSET(it2->second->getFd(), &_fdRead))
 		{
 			if (it2->second->read(*this) == 1)
-				break; // Iterateur casse si qqn se barre
+				break;
 			i--;
 		}
 	}

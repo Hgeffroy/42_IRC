@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 10:22:03 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 10:25:22 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 				prefix = "@";
 			sendToClient(client->getFd(), RPL_NAMREPLY(client->getNick(), "=", chan->getName(), prefix + it2->first));
 		}
-		sendToClient(client->getFd(), RPL_ENDOFNAMES(chan->getName()));
+		sendToClient(client->getFd(), RPL_ENDOFNAMES(client->getNick(), chan->getName()));
 	}
 }
 

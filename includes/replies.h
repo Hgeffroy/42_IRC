@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 09:17:14 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 11:37:50 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 // 315
 # define RPL_ENDOFWHO(client, mask)										std::string(":server ") + "315 " + client + " " + mask + " :End of /WHO list" + ENDLINE
 // 321
-# define RPL_LISTSTART(client)											std::string(":server ") + "321 " + client + " Cannel :Users  Name" + ENDLINE
+# define RPL_LISTSTART(client)											std::string(":server ") + "321 " + client + " Channel :Users  Name" + ENDLINE
 // 322
 # define RPL_LIST(client, channel, nb, topic)							std::string(":server ") + "322 " + client + " " + channel + " " + nb + " :" + topic + ENDLINE
 // 323
@@ -51,7 +51,7 @@
 
 // 331
 # define RPL_NOTOPIC(client, channel)									std::string(":server ") + "331 " + client + " " + channel + " :No topic is set" + ENDLINE
-// 332 (:channel ?)
+// 332
 # define RPL_TOPIC(client, channel, topic)								std::string(":server ") + "332 " + client + " " + channel + " :" + topic + ENDLINE
 
 // 336
@@ -62,19 +62,19 @@
 # define RPL_INVITING(client, nick, channel)							std::string(":server ") + "341 " + client + " " + nick + " " + channel + ENDLINE
 
 // 352
-# define RPL_WHOREPLY(client, channel, username, nick, realname)		std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " localhost" + " server " + nick + " :" + realname + ENDLINE
+# define RPL_WHOREPLY(client, channel, username, nick, realname, flags)	std::string(":server ") + "352 " + client + " " + channel + " " + username + " localhost" + " server " + nick + " " + flags + " :" + "1 " + realname + ENDLINE
 // 353 (:channel ?)
 # define RPL_NAMREPLY(client, symbol, channel, nickPrefixed)			std::string(":server ") + "353 " + client + " " + symbol + " " + channel + " :" + nickPrefixed + ENDLINE
 
 // 366 (:channel ?)
-# define RPL_ENDOFNAMES(channel)										std::string(":server ") + "366 " + channel + " :End of /NAMES list" + ENDLINE
+# define RPL_ENDOFNAMES(client, channel)								std::string(":server ") + "366 " + client + " " + channel + " :End of /NAMES list" + ENDLINE
 
 // 372
 # define RPL_MOTD(client, motd)											std::string(":server ") + "372 " + client + " :" + motd + ENDLINE
 // 375
 # define RPL_MOTDSTART(client, server)									std::string(":server ") + "375 " + client + " :- " + server + " Message of the day - " + ENDLINE
 // 376
-# define RPL_ENDOFMOTD(client)											std::string(":server ") + "376 " + client + " :End of /MOTD command" + ENDLINE
+# define RPL_ENDOFMOTD(client)											std::string(":server ") + "376 " + client + " :End of /MOTD command." + ENDLINE
 
 // 381
 # define RPL_YOUREOPER(client)											std::string(":server ") + "381 " + client + " :You are now an IRC operator" + ENDLINE
