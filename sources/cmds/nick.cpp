@@ -6,13 +6,13 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:44:16 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 09:43:02 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 17:00:34 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
+void	nick(Server& s, Client& c, std::string& str, bool is_bot ) // Verifier la taille
 {
 	if (str.find(' ', 5) != std::string::npos)
 	{
@@ -43,7 +43,7 @@ void	nick(Server& s, Client& c, std::string& str) // Verifier la taille
 		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
 		return ;
 	}
-	if (nick == "bot")
+	if (nick == "bot" && !is_bot)
 	{
 		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "This nickname is already reserved"));
 		return ;

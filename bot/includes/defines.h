@@ -1,30 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/05 13:18:00 by twang            ###   ########.fr       */
+/*   Created: 2024/01/07 12:13:21 by twang             #+#    #+#             */
+/*   Updated: 2024/01/07 12:14:10 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Bot.hpp"
+#ifndef DEFINES_H
+# define DEFINES_H
 
-int	main( int ac, char **av )
-{
-	try
-	{
-		if ( ac != 4 )
-			throw std::invalid_argument( "Wrong usage:\n./bot <port> <password> <apikey>");
-		Bot	bot( av[1], av[2], av[3] );
-	}
-	catch ( std::invalid_argument const & error )
-	{
-		std::cerr << error.what( ) << std::endl;
-		return ( -1 );
-	}
+# define BUFFER_SIZE	4096
 
-	return ( 0 );
-}
+#endif
