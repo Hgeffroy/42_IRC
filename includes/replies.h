@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 08:02:56 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 08:55:05 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 # define REPLIES_H
 
 # define SWITCH_NICK(prev, next)										std::string(":") + prev + " NICK " + next + ENDLINE
-# define JOIN_MSG(client, username, IP, channel)						std::string(":") + client + "!" + username + "@" + IP + " JOIN " + channel + ENDLINE
+# define JOIN_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " JOIN " + channel + ENDLINE
 # define PONG_MSG(token)												std::string(":server ") + "PONG " + token + ENDLINE
 # define KICK_MSG(channel, usr, comment)								std::string(":server ") + "KICK " + channel + " " + usr + comment + ENDLINE
 # define PART_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + ENDLINE
 # define INVITE_MSG(client, username, invited, channel)					std::string(":") + client + "!" + username + "@localhost" + " INVITE " + invited + " " + channel + ENDLINE
 
 // 001
-# define RPL_WELCOME(client, nickname, username, IP)					std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@" + IP + ENDLINE
+# define RPL_WELCOME(client, nickname, username)						std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@localhost" + ENDLINE
 // 002
 # define RPL_YOURHOST(client, servername)								std::string(":server ") + "002 " + client + " :Your host is " + servername + ", running version " + VERSION + ENDLINE
 // 003
@@ -58,7 +58,7 @@
 # define RPL_INVITING(client, nick, channel)							std::string(":server ") + "341 " + client + " " + nick + " " + channel + ENDLINE
 
 // 352
-# define RPL_WHOREPLY(client, channel, username, host, nick, realname)	std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " " + host + " server " + " :" + realname + ENDLINE
+# define RPL_WHOREPLY(client, channel, username, nick, realname)	std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " localhost" + " server " + " :" + realname + ENDLINE
 // 353 (:channel ?)
 # define RPL_NAMREPLY(client, symbol, channel, nickPrefixed)			std::string(":server ") + "353 " + client + " " + symbol + " " + channel + " :" + nickPrefixed + ENDLINE
 

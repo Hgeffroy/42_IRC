@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 08:35:05 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 08:41:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 	std::map<std::string, std::string>	members = chan->getMembers();
 	std::map<std::string, Client*>		clientList = s.getClients();
 
-	sendToClient(c.getFd(), JOIN_MSG(c.getNick(), c.getUser(), getIP(), chan->getName()));
+	sendToClient(c.getFd(), JOIN_MSG(c.getNick(), c.getUser(), chan->getName()));
 
 	if (!chan->getTopic().empty())
 		sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), chan->getName(), chan->getTopic()));

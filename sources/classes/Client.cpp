@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 08:48:38 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 08:51:32 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int Client::setInfos(Server &s, std::string &str)
 
 		_connected = true;
 		motd(s, *this);
-		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
+		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username));
 		sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
 		sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
 		sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
