@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 17:02:48 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/07 13:06:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false),
 {
 	std::memset(_bufRead, 0, BUFFER_SIZE);
 	std::memset(_bufWrite, 0, BUFFER_SIZE);
-	std::cout << "Salut je suis le constructeur de Client" << std::endl;
+	std::cout << "Salut, je suis le constructeur de Client" << std::endl;
 }
 
 Client::~Client()
 {
 	close(_fd);
-	std::cout << "Salut je suis le destructeur de Client" << std::endl;
+	std::cout << "Salut, je suis le destructeur de Client" << std::endl;
 }
 
 /**  Setters and getters  *********************************************************************************************/
@@ -75,14 +75,19 @@ void Client::setNick(std::string &str)
 	_nickname = str;
 }
 
+void Client::setAway(bool away)
+{
+	_away = away;
+}
+
 
 /**  Private member functions  ****************************************************************************************/
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 16;
+	const int nbcmd = 17;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "BOT"};
+									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "AWAY", "BOT"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -102,7 +107,12 @@ int Client::getCmd(std::string &buffer)
 int Client::setInfos(Server &s, std::string &str)
 {
 	int cmd = getCmd(str);
-	// if (cmd < 0)
+
+	if (cmd < 0) {
+		std::size_t end = str.find(' ');
+		std::string cmdStr = str.substr(0, end);
+		sendToClient(this->getFd(), ERR_UNKNOWNCOMMAND(this->getNick(), cmdStr));
+	}
 
 	switch (cmd)
 	{
@@ -123,17 +133,17 @@ int Client::setInfos(Server &s, std::string &str)
 			break;
 	}
 
-	if (_passwordOk && !_username.empty() && !_nickname.empty()) // Faire ca dans la classe Server !!
+	if (_passwordOk && !_username.empty() && !_nickname.empty())
 	{
 		s.addClient(this);
 
 		_connected = true;
 		motd(s, *this);
-		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username, getIP()));
+		sendToClient(_fd, RPL_WELCOME(_nickname, _nickname, _username));
 		sendToClient(_fd, RPL_YOURHOST(_nickname, s.getName()));
 		sendToClient(_fd, RPL_CREATED(_nickname, getTime(s)));
 		sendToClient(_fd, RPL_MYINFO(_nickname, s.getName()));
-		sendToClient(_fd, RPL_ISUPPORT(_nickname, "10", "50")); // A changer avec le define
+		sendToClient(_fd, RPL_ISUPPORT(_nickname, NICKLEN, CHANNELEN));
 	}
 	return (0);
 }
@@ -193,8 +203,6 @@ int Client::execCmd(Server &s, std::string &str)
 	else // Verifier la commande
 	{
 		int cmd = getCmd(str);
-		if (cmd < 0 && str != "")
-			std::cout << "Error sent" << std::endl; // Actually need to send one
 
 		switch (cmd)
 		{
@@ -240,6 +248,9 @@ int Client::execCmd(Server &s, std::string &str)
 				break;
 			case KICK:
 				kick(s, *this, str);
+				break;
+			case AWAY:
+				away(s, *this, str);
 				break;
 			default:
 				std::size_t end = str.find(' ');

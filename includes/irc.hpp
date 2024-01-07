@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 17:02:20 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/07 10:57:44 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	kick(Server& s, Client& c, std::string& str);
 void	motd(Server& s, Client& c);
 void	pong(Server& s, Client& c, std::string str);
 void	list(Server& s, Client& c, std::string str);
+void	away(Server& s, Client& c, std::string& str);
 void	bot( Server &s, Client& c, std::string& str );
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 08:57:14 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 16:43:10 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 09:12:25 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	who(Server& s, Client& c, std::string& str)
 	{
 		std::map<std::string, std::string>	chanMembers = itc->second->getMembers();
 		for (std::map<std::string, std::string>::iterator it = chanMembers.begin(); it != chanMembers.end(); ++it)
-			sendToClient(c.getFd(), RPL_WHOREPLY(c.getNick(), mask, clients[it->first]->getUser(), getIP(), it->first, clients[it->first]->getUser())); // H if user here, G if gone, @ for ops (second thing on the map in chan)
+			sendToClient(c.getFd(), RPL_WHOREPLY(c.getNick(), mask, clients[it->first]->getUser(), it->first, clients[it->first]->getUser())); // H if user here, G if gone, @ for ops (second thing on the map in chan)
 		sendToClient(c.getFd(), RPL_ENDOFWHO(c.getNick(), mask));
 	}
 	else

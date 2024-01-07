@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/05 16:27:26 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/07 15:02:15 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,14 @@ void	Bot::connect( int port, std::string& password )
 
 	sendToServer( "PASS " + password + "\n" );
 	sendToServer( "BOT\n" );
+	sendToServer( "JOIN #bot\n" );
 	// sendToServer( "LIST\n" );
+	while (true)
+	{
+		readFromServer();
+	}
 
-	// peut pas join #bot si tu ne t'apelle pas bot
+	// 322
 	// envoie LIST, parse list puis join un par un.
 	// status de operator.
 }
@@ -99,4 +104,41 @@ void	Bot::sendToServer( std::string str )
 {
 	send( _socket, str.c_str(), str.length(), MSG_DONTWAIT + MSG_NOSIGNAL);
 	std::cout << BLUE << "To " << _socket << ": " << str << END;
+}
+
+int	Bot::readFromServer( void ) // Le bot lit ce que lui renvoit le client
+{
+	int r = recv( _socket, _bufRead, BUFFER_SIZE, 0);
+
+	if ( r <= 0 )
+		return (-1);
+
+	std::cout << RED << "From " << _socket << ": " << _bufRead << END << std::endl;
+
+	std::vector<std::string> cmds = splitBuffer();
+	for ( std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); it++ )
+		if ( execute( *it ) == 1 )
+			return ( 0 );
+
+	std::memset( _bufRead, 0, BUFFER_SIZE );
+
+	return (0);
+}
+
+int	Bot::execute( std::string &buffer )
+{
+	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg } };
+	std::string			command = splitCommand( buffer );
+	std::string			msg = splitMessage( buffer );
+
+	for ( int i = 0; i < 1; i++ )
+		if ( command == list[i].key )
+			( this->*list[i].function )( msg );
+
+	return (0);
+}
+
+void	Bot::privmsg( std::string &msg )
+{
+	std::cout << PURPLE << msg << END << std::endl;
 }

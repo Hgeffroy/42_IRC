@@ -6,9 +6,10 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 15:32:25 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/07 10:59:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "irc.hpp"
 
@@ -191,17 +192,18 @@ void	Server::addClient(Client *client)
 		}
 }
 
-void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi !
+void	Server::removeClient(Client& c)
 {
 	close(c.getFd());
 	std::cout << "Client on socket " << c.getFd() << " gone" << std::endl;
+	removeClientFromServers(c);
 
 	for (std::vector<Client*>::iterator it = _newClients.begin(); it != _newClients.end(); ++it)
 	{
 		if (*it== &c)
 		{
 			delete *it;
-			it = _newClients.erase(it); // Verifier qu'on a bien delete, pas de leaks.
+			_newClients.erase(it);
 			break;
 		}
 	}
@@ -215,8 +217,6 @@ void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi
 			break;
 		}
 	}
-
-	removeClientFromServers(c);
 }
 
 void	Server::addChannel(Channel* newChannel)

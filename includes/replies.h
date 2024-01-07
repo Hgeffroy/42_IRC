@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   replies.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 14:21:53 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 09:17:14 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REPLIES_H
 # define REPLIES_H
 
-# define JOIN_MSG(client, username, IP, channel)						std::string(":") + client + "!" + username + "@" + IP + " JOIN " + channel + ENDLINE
-# define SWITCH_NICK(prev, new)											std::string(":") + prev + " NICK " + new + ENDLINE
+# define SWITCH_NICK(prev, next)										std::string(":") + prev + " NICK " + next + ENDLINE
+# define JOIN_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " JOIN " + channel + ENDLINE
 # define PONG_MSG(token)												std::string(":server ") + "PONG " + token + ENDLINE
 # define KICK_MSG(channel, usr, comment)								std::string(":server ") + "KICK " + channel + " " + usr + comment + ENDLINE
+# define PART_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + ENDLINE
+# define INVITE_MSG(client, username, invited, channel)					std::string(":") + client + "!" + username + "@localhost" + " INVITE " + invited + " " + channel + ENDLINE
 
 // 001
-# define RPL_WELCOME(client, nickname, username, IP)					std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@" + IP + ENDLINE
+# define RPL_WELCOME(client, nickname, username)						std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@localhost" + ENDLINE
 // 002
 # define RPL_YOURHOST(client, servername)								std::string(":server ") + "002 " + client + " :Your host is " + servername + ", running version " + VERSION + ENDLINE
 // 003
@@ -31,6 +33,10 @@
 
 // 301
 # define RPL_AWAY(client, nick)											std::string(":server ") + "301 " + client + " " + nick + " :is away" + ENDLINE
+// 305
+# define RPL_UNAWAY(client)												std::string(":server ") + "305 " + client + " :You are no longer marked as being away" + ENDLINE
+// 306
+# define RPL_NOWAWAY(client)											std::string(":server ") + "306 " + client + " :You have been marked as being away" + ENDLINE
 
 // 315
 # define RPL_ENDOFWHO(client, mask)										std::string(":server ") + "315 " + client + " " + mask + " :End of /WHO list" + ENDLINE
@@ -48,11 +54,15 @@
 // 332 (:channel ?)
 # define RPL_TOPIC(client, channel, topic)								std::string(":server ") + "332 " + client + " " + channel + " :" + topic + ENDLINE
 
+// 336
+# define RPL_INVITELIST(client, channel)								std::string(":server ") + "336 " + client + " " + channel + ENDLINE
+// 337
+# define RPL_ENDOFINVITELIST(client)									std::string(":server ") + "337 " + client + " :End of /INVITE list" + ENDLINE
 // 341
 # define RPL_INVITING(client, nick, channel)							std::string(":server ") + "341 " + client + " " + nick + " " + channel + ENDLINE
 
 // 352
-# define RPL_WHOREPLY(client, channel, username, host, nick, realname)	std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " " + host + " server " + " :" + realname + ENDLINE
+# define RPL_WHOREPLY(client, channel, username, nick, realname)		std::string(":server ") + "352 " + client + " " + nick + " " + channel + " " + username + " localhost" + " server " + nick + " :" + realname + ENDLINE
 // 353 (:channel ?)
 # define RPL_NAMREPLY(client, symbol, channel, nickPrefixed)			std::string(":server ") + "353 " + client + " " + symbol + " " + channel + " :" + nickPrefixed + ENDLINE
 

@@ -6,9 +6,10 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/05 09:33:35 by twang             #+#    #+#              #
-#    Updated: 2024/01/05 09:33:57 by twang            ###   ########.fr        #
+#    Updated: 2024/01/07 14:51:57 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SOURCES	=	sources/Bot.cpp													\
-			sources/main.cpp
+			sources/main.cpp												\
+			sources/utils.cpp

@@ -6,9 +6,10 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 11:04:39 by twang             #+#    #+#              #
-#    Updated: 2024/01/05 09:34:33 by twang            ###   ########.fr        #
+#    Updated: 2024/01/07 12:14:39 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 HEADERS	=	includes/bot.h													\
-			includes/Bot.hpp
+			includes/Bot.hpp												\
+			includes/defines.h

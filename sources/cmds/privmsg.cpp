@@ -49,7 +49,7 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 	{
 		if (it2->first != c.getNick())
 		{
-			std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " " + msg + ENDLINE; // Ce msg est pas bon
+			std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " " + msg + ENDLINE;
 			sendToClient(s.getClientFd(it2->first), fullMsg);
 		}
 	}
