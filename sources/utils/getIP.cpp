@@ -14,10 +14,11 @@
 
 std::string	getIP() //getsockname ?
 {
-	char szBuffer[1024] = "192.168.122.1";
-
-	struct hostent *host = gethostbyname(szBuffer);
-	if (!host)
-		return ("localhost");
-	return (host->h_name);
+	return ("localhost");
+//	char szBuffer[1024] = "192.168.122.1";
+//
+//	struct hostent *host = gethostbyname(szBuffer);
+//	if (!host)
+//		return ("localhost");
+//	return (host->h_name);
 }

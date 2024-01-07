@@ -2,7 +2,6 @@
 
 {
 	echo PASS popopo
-	echo NICK thea
-	echo USER thea
-	echo JOIN \#bot
+	echo NICK h
+	echo USER h
 } | nc -C localhost 2000

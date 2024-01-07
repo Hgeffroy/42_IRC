@@ -36,7 +36,8 @@ enum	e_cmd
 	MOTD,
 	PONG,
 	LIST,
-	KICK
+	KICK,
+	AWAY
 };
 
 enum	e_mode

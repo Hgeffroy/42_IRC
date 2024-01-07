@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/04 14:00:30 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 10:25:58 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 	close(STDIN_FILENO);
 	port = setPort(portstr);
 	_password = setPassword(password);
-	s = socket(PF_INET, SOCK_STREAM, 0); // Check le 0 (Check si SOCK_STREAM n'a qu'un seul protocole), a recup !!
+	s = socket(PF_INET, SOCK_STREAM, 0);
 	if (s < 0)
 		throw std::runtime_error("socket failed");
 	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
@@ -190,17 +190,18 @@ void	Server::addClient(Client *client)
 		}
 }
 
-void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi !
+void	Server::removeClient(Client& c)
 {
 	close(c.getFd());
 	std::cout << "Client on socket " << c.getFd() << " gone" << std::endl;
+	removeClientFromServers(c);
 
 	for (std::vector<Client*>::iterator it = _newClients.begin(); it != _newClients.end(); ++it)
 	{
 		if (*it== &c)
 		{
 			delete *it;
-			it = _newClients.erase(it); // Verifier qu'on a bien delete, pas de leaks.
+			_newClients.erase(it);
 			break;
 		}
 	}
@@ -214,8 +215,6 @@ void	Server::removeClient(Client& c) // Attention a bien del dans les chan aussi
 			break;
 		}
 	}
-
-	removeClientFromServers(c);
 }
 
 void	Server::addChannel(Channel* newChannel)
