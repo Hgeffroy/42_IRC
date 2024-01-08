@@ -34,8 +34,6 @@ Server::~Server()
 	for (itNewClients = _newClients.begin(); itNewClients != _newClients.end(); ++itNewClients)
 		delete *itNewClients;
 
-
-
 	close(_listener);
 	std::cout << "Salut, je suis le destructeur de server" << std::endl;
 }
