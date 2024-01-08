@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 14:40:33 by twang             #+#    #+#             */
-/*   Updated: 2024/01/07 15:02:00 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 08:53:09 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ std::string	splitCommand( std::string &buffer )
 	std::size_t	first_space = buffer.find( ' ' );
 	std::size_t	second_space = buffer.find( ' ', first_space + 1 );
 	std::string	command = buffer.substr( first_space + 1, second_space - first_space - 1 );
-	std::cout << YELLOW << "-" << command << "-" << END << std::endl;
-	
 	return ( command );
 }
 
