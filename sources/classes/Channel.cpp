@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 11:31:35 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:42:01 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,18 +201,19 @@ void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
 	refreshChanMembers(s);
 }
 
-void	Channel::removeUserFromChan(Server& s, std::string const& name)
+int	Channel::removeUserFromChan(Server& s, std::string const& name)
 {
 	std::map<std::string, std::string>::iterator	it2 = _members.find(name);
 
 	if (it2 != _members.end()) {
 		if (it2->second == "~") {
 			s.removeChannel(this);
-			return ;
+			return (1);
 		}
 		_members.erase(it2);
 		_nbUsers--;
 	}
+	return (0);
 }
 
 void	Channel::removeUserFromGuestList(std::string const& name)

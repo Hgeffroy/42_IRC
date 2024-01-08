@@ -18,6 +18,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/intostr.cpp									\
 				sources/utils/printMap.cpp									\
 				sources/utils/sendToClient.cpp								\
+				sources/utils/splitCmd.cpp									\
 				sources/cmds/topic.cpp										\
 				sources/cmds/kick.cpp										\
 				sources/cmds/mode.cpp										\

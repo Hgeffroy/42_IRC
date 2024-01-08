@@ -25,11 +25,13 @@
 /*---- prototypes ------------------------------------------------------------*/
 
 // Utils
-std::string	getIP();
-std::string getTime(Server& s);
-std::string	intostr(int a);
-void		sendToClient(int fd, std::string str);
-void		printClients(std::map<std::string, Client*> map);
+std::string					getIP();
+std::string 				getTime(Server& s);
+std::string					intostr(int a);
+std::vector<std::string>	splitCmd(std::string str);
+void						sendToClient(int fd, std::string str);
+void						printClients(std::map<std::string, Client*> map);
+
 
 // Cmds
 void	pass(Server& s, Client& c, std::string& str);
