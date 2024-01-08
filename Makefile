@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/08 13:32:12 by twang            ###   ########.fr        #
+#    Updated: 2024/01/05 14:33:18 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,7 +95,7 @@ leaks:
 
 bonus:
 		$(MAKE) -C $(BOT_DIR)
-		./bot/bot 2000 popopo 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
+		./bot/bot 2000 popopo apikey
 
 #--print header----------------------------------------------------------------#
 
