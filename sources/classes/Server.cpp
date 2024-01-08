@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 14:11:46 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/05 10:25:58 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ std::string	Server::setPassword(std::string& pass)
 	if (pass.size() < 5)
 		throw std::invalid_argument("<password> is too short");
 
-
 	std::string::iterator	it;
 	for (it = pass.begin(); it != pass.end(); ++it)
 		if (!std::isprint(*it) || *it == ' ' || *it == '	')
@@ -136,6 +135,8 @@ void	Server::accept()
 	socklen_t			csin_len = sizeof(csin);
 
 	cs = ::accept(_listener, reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
+	if ( cs < 0 )
+		throw std::invalid_argument( "<accept> cannot connect to the server" );
 	std::cout << "New client on socket: " << cs << std::endl;
 	Client* newClient = new Client(cs);
 	_newClients.push_back(newClient);

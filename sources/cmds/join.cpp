@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 14:41:41 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 10:22:03 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static bool									checkOption_I( Client& c, Channel* channel, const std::strin
 static bool									checkOption_K( Client& c, Channel* channel, const std::string& channelPass );
 static bool									checkOption_L( Client& c, Channel* channel, const std::string& channelName );
 static bool									checkOption_B( Client& c, Channel* channel, const std::string& channelName );
-static int									checkChannelName( Server& s, Client& c, const std::string& channelName );
+static int									checkChannelName( Client& c, const std::string& channelName );
 static void									joinOneChannel( Server& s, Client& c, const std::string& channelName, const std::string& channelPass );
 static void									sendChannelRPL( Server& s, Client& c, Channel* chan );
 
@@ -39,11 +39,11 @@ void	join(Server& s, Client& c, std::string& str)
 
 static void	joinOneChannel(Server& s, Client& c, const std::string& channelName, const std::string& channelPass)
 {
-	if (checkChannelName(s, c, channelName) < 0)
+	if ( checkChannelName( c, channelName ) < 0 )
 		return ;
 
 	std::map<std::string, Channel*>	channels = s.getChannels();
-	if (channels.find(channelName) != channels.end())
+	if ( channels.find( channelName ) != channels.end() )
 	{
 		Channel* channel = channels[channelName];
 		if ( !checkOption_I( c, channel, channelName ) )
@@ -61,7 +61,7 @@ static void	joinOneChannel(Server& s, Client& c, const std::string& channelName,
 			channel->addUserToChan(s, c, false);
 		}
 		else
-			sendToClient(c.getFd(), ERR_USERONCHANNEL(c.getNick(), c.getNick(), channelName));
+			sendToClient( c.getFd(), ERR_USERONCHANNEL( c.getNick(), c.getNick(), channelName ) );
 	}
 	else {
 		Channel* newChannel = new Channel(channelName);
@@ -71,7 +71,7 @@ static void	joinOneChannel(Server& s, Client& c, const std::string& channelName,
 	}
 }
 
-static void	sendChannelRPL(Server& s, Client& c, Channel* chan)
+static void	sendChannelRPL( Server& s, Client& c, Channel* chan )
 {
 	std::map<std::string, std::string>	members = chan->getMembers();
 	std::map<std::string, Client*>		clientList = s.getClients();
@@ -157,7 +157,7 @@ static bool	checkOption_B( Client& c, Channel* channel, const std::string& chann
 	return ( true );
 }
 
-static int	checkChannelName( Server& s, Client& c, const std::string& channelName )
+static int	checkChannelName( Client& c, const std::string& channelName )
 {
 	if ( channelName.empty() )
 	{
@@ -175,7 +175,7 @@ static int	checkChannelName( Server& s, Client& c, const std::string& channelNam
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 		return ( -1 );
 	}
-	if ( channelName == "#bot" )
+	if ( channelName == "#bot" && ( c.getUser() != "bot" || c.getNick() != "bot" ) )
 	{
 		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "This channel name is already reserved"));
 		return ( -1 );

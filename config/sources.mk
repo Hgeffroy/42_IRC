@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2023/12/21 13:07:21 by twang            ###   ########.fr        #
+#    Updated: 2024/01/05 16:09:52 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/cmds/kick.cpp										\
 				sources/cmds/mode.cpp										\
 				sources/cmds/motd.cpp										\
+				sources/cmds/bot.cpp										\
 				sources/cmds/invite.cpp										\
 				sources/cmds/join.cpp										\
 				sources/cmds/list.cpp										\

@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/05 13:18:00 by twang            ###   ########.fr       */
+/*   Created: 2024/01/05 16:04:56 by twang             #+#    #+#             */
+/*   Updated: 2024/01/07 11:19:28 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Bot.hpp"
+#include "irc.hpp"
 
-int	main( int ac, char **av )
+void	bot( Server &s, Client& c, std::string& str )
 {
-	try
-	{
-		if ( ac != 4 )
-			throw std::invalid_argument( "Wrong usage:\n./bot <port> <password> <apikey>");
-		Bot	bot( av[1], av[2], av[3] );
-	}
-	catch ( std::invalid_argument const & error )
-	{
-		std::cerr << error.what( ) << std::endl;
-		return ( -1 );
-	}
+	( void )str;
 
-	return ( 0 );
+	std::string userCmd = "USER bot\n";
+	std::string nickCmd = "NICK bot\n";
+	std::string joinCmd = "JOIN #bot";
+
+	user( s, c, userCmd, true );
+	nick( s, c, nickCmd, true );
 }

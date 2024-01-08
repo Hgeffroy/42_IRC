@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 08:55:05 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 13:06:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false),
 {
 	std::memset(_bufRead, 0, BUFFER_SIZE);
 	std::memset(_bufWrite, 0, BUFFER_SIZE);
-	std::cout << "Salut je suis le constructeur de Client" << std::endl;
+	std::cout << "Salut, je suis le constructeur de Client" << std::endl;
 }
 
 Client::~Client()
 {
 	close(_fd);
-	std::cout << "Salut je suis le destructeur de Client" << std::endl;
+	std::cout << "Salut, je suis le destructeur de Client" << std::endl;
 }
 
 /**  Setters and getters  *********************************************************************************************/
@@ -85,9 +85,9 @@ void Client::setAway(bool away)
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 16;
+	const int nbcmd = 17;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "AWAY"};
+									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "AWAY", "BOT"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -120,10 +120,13 @@ int Client::setInfos(Server &s, std::string &str)
 			pass(s, *this, str);
 			break;
 		case NICK:
-			nick(s, *this, str);
+			nick(s, *this, str, false);
 			break;
 		case USER:
-			user(s, *this, str);
+			user(s, *this, str, false);
+			break;
+		case BOT:
+			bot(s, *this, str);
 			break;
 		default:
 			sendToClient(this->getFd(), ERR_NOTREGISTERED(this->getNick()));
@@ -208,7 +211,7 @@ int Client::execCmd(Server &s, std::string &str)
 				sendToClient(_fd, ERR_ALREADYREGISTERED(_nickname));
 				break;
 			case NICK:
-				nick(s, *this, str);
+				nick(s, *this, str, false);
 				break;
 			case PRIVMSG:
 				sendMsg(s, *this, str);
@@ -261,7 +264,7 @@ int Client::execCmd(Server &s, std::string &str)
 
 /**  Public member functions  *****************************************************************************************/
 
-int Client::read(Server &s) // Le serveur lit ce que lui envoit le client
+int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 {
 	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0);
 
