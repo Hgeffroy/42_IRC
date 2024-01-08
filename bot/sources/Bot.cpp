@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 14:24:36 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 14:36:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ void	Bot::connect( int port, std::string& password )
 	sendToServer( "BOT\n" );
 	sendToServer( "JOIN #bot\n" );
 	while (true)
-	{
 		readFromServer();
-	}
 }
 
 /**  Public member functions  *****************************************************************************************/
@@ -129,7 +127,7 @@ int	Bot::execute( std::string &buffer )
 	if (buffer.find('#', 0) == std::string::npos)
 		user = buffer.substr(1, buffer.find(' '));
 	else
-		user = buffer.substr(buffer.find('#', 0), buffer.find(' ', buffer.find('#', 0)) - buffer.find('#', 0));
+		user = buffer.substr(buffer.find('#', 0), buffer.find(' ', buffer.find('#', 0)) - buffer.find('#', 0)) + " " + buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
 	for ( int i = 0; i < 2; i++ )
@@ -163,9 +161,21 @@ std::string	getGPTanswer(const char *str)
 
 void	Bot::privmsg( std::string &msg, std::string &usr )
 {
-	std::string command = ASSISTANT;
-	std::string answer = getGPTanswer(command.c_str());
-	sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
+	std::cout << usr << std::endl;
+	if (usr[0] != '#') {
+		std::string command = ASSISTANT;
+		std::string answer = getGPTanswer(command.c_str());
+		sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
+	}
+	else {
+		std::string command = MODERATOR;
+		std::string answer = getGPTanswer(command.c_str());
+		if (answer == "\"KICK\"\n") {
+			std::string channel = usr.substr(0, usr.find(' '));
+			std::string toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
+			sendToServer( "KICK " + channel + toBeKicked + " Bad words in the chat\n" );
+		}
+	}
 }
 
 void	Bot::moderate( std::string &msg, std::string &usr )
