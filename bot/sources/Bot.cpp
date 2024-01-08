@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 12:49:10 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 14:36:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ void	Bot::connect( int port, std::string& password )
 	sendToServer( "BOT\n" );
 	sendToServer( "JOIN #bot\n" );
 	while (true)
-	{
 		readFromServer();
-	}
 }
 
 /**  Public member functions  *****************************************************************************************/
@@ -125,12 +123,16 @@ int	Bot::execute( std::string &buffer )
 {
 	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg }, {"MODERATE", &Bot::moderate} };
 	std::string			command = splitCommand( buffer );
-	std::string			user = buffer.substr(1, buffer.find(' '));
+	std::string			user;
+	if (buffer.find('#', 0) == std::string::npos)
+		user = buffer.substr(1, buffer.find(' '));
+	else
+		user = buffer.substr(buffer.find('#', 0), buffer.find(' ', buffer.find('#', 0)) - buffer.find('#', 0)) + " " + buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
 	for ( int i = 0; i < 2; i++ )
 		if ( command == list[i].key )
-			( this->*list[i].function )( msg ); // I NEED USER IN THE ARGS !!!!!!
+			( this->*list[i].function )( msg, user ); // I NEED USER IN THE ARGS !!!!!!
 
 	return (0);
 }
@@ -157,24 +159,35 @@ std::string	getGPTanswer(const char *str)
 	return (res);
 }
 
-void	Bot::privmsg( std::string &msg )
+void	Bot::privmsg( std::string &msg, std::string &usr )
 {
-    std::string command = "curl -s https://api.openai.com/v1/chat/completions \
-        -H \"Content-Type: application/json\" \
-        -H \"Authorization: Bearer " + _apiKey + "\" \
-        -d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant, but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
-	std::string answer = getGPTanswer(command.c_str());
-	std::cout << "-" << answer << "-" << std::endl;
+	std::cout << usr << std::endl;
+	if (usr[0] != '#') {
+		std::string command = ASSISTANT;
+		std::string answer = getGPTanswer(command.c_str());
+		sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
+	}
+	else {
+		std::string command = MODERATOR;
+		std::string answer = getGPTanswer(command.c_str());
+		if (answer == "\"KICK\"\n") {
+			std::string channel = usr.substr(0, usr.find(' '));
+			std::string toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
+			sendToServer( "KICK " + channel + toBeKicked + " Bad words in the chat\n" );
+		}
+	}
 }
 
-void	Bot::moderate( std::string &msg )
+void	Bot::moderate( std::string &msg, std::string &usr )
 {
-	std::cout << YELLOW << "-" << msg << "-" << END << std::endl;
+	(void)usr;
 	std::vector< std::string >	channels = splitArguments( msg );
+	if ( channels.empty() )
+		return ;
+
 	for ( std::vector< std::string >::iterator		it = channels.begin() ; it != channels.end(); it++ )
 	{
 		std::cout << BLUE << *it << END << std::endl;
 		sendToServer( "JOIN " + *it + "\n" );
 	}
-
 }

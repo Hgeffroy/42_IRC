@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:30:24 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 12:40:56 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 13:58:57 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ class Bot
 		void						sendToServer( std::string str );
 		int							readFromServer( void );
 		int							execute( std::string &buffer );
-		void						privmsg( std::string &msg );
-		void						moderate( std::string &msg );
+		void						privmsg( std::string &msg, std::string &usr );
+		void						moderate( std::string &msg, std::string &usr );
 
 		std::vector< std::string >	splitBuffer( void );
 
@@ -57,7 +57,7 @@ typedef struct s_commands	t_commands;
 struct s_commands
 {
 	std::string	key;
-	void		(Bot::*function)( std::string &str );
+	void		(Bot::*function)( std::string &str, std::string &usr );
 };
 
 /*---- prototypes -------------------------------------------------------------*/

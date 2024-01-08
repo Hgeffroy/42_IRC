@@ -16,7 +16,8 @@ void	kick(Server& s, Client& c, std::string& str)
 		return ;
 	}
 	std::map<std::string, std::string> members = (*chan[target]).getMembers();
-	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
+	if (members[c.getNick()] != "@" && members[c.getNick()] != "~" && c.getNick() != "bot")
+	{
 		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), (*chan[target]).getName()));
 		return ;
 	}
@@ -38,10 +39,19 @@ void	kick(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), user, (*chan[target]).getName()));
 		return ;
 	}
+
+	std::cout << PURPLE << c.getNick() << END << "\n\n";
+	std::cout << YELLOW << user << END << "\n\n";
+
 	std::string	comment = "";
 	if (end != static_cast<int>(str.length())) {
 		int startThree = str.find(' ', end);
 		comment = " :" + str.substr(startThree + 1, str.length() - startThree - 1);
+	}
+	if (members[user] == "~")
+	{
+		sendToClient(c.getFd(), ERR_NOPRIVS( "bot" ) );
+		return ;
 	}
 	sendToClient(c.getFd(), KICK_MSG((*chan[target]).getName(), user, comment)); // Changer le kick msg (premier arg doit etre le client qui kick)
 	(*chan[target]).removeUserFromChan(s, user);
