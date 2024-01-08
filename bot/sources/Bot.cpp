@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 10:10:17 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 12:49:10 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,6 @@ void	Bot::connect( int port, std::string& password )
 	{
 		readFromServer();
 	}
-
-	// 322
-	// envoie LIST, parse list puis join un par un.
-	// status de operator.
 }
 
 /**  Public member functions  *****************************************************************************************/
@@ -113,7 +109,7 @@ int	Bot::readFromServer( void )
 	if ( r <= 0 )
 		return (-1);
 
-	std::cout << RED << "From " << _socket << ": " << _bufRead << END << std::endl;
+	std::cout << RED << "From " << _socket << ": " << _bufRead << END;
 
 	std::vector<std::string> cmds = splitBuffer();
 	for ( std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); it++ )
@@ -169,13 +165,16 @@ void	Bot::privmsg( std::string &msg )
         -d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant, but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
 	std::string answer = getGPTanswer(command.c_str());
 	std::cout << "-" << answer << "-" << std::endl;
-	//peut etre parser le message que l'utilisateur ne puisse pas demander n'importe quoi ? -code-
-	//ici on recupere le message qu'on envoit a chat gpt?
 }
 
 void	Bot::moderate( std::string &msg )
 {
-	std::cout << YELLOW << "hehehehe tu vas etre moderateur maintenant." << END << std::endl;
-	// sendToServer( "LIST\n" );
+	std::cout << YELLOW << "-" << msg << "-" << END << std::endl;
+	std::vector< std::string >	channels = splitArguments( msg );
+	for ( std::vector< std::string >::iterator		it = channels.begin() ; it != channels.end(); it++ )
+	{
+		std::cout << BLUE << *it << END << std::endl;
+		sendToServer( "JOIN " + *it + "\n" );
+	}
 
 }

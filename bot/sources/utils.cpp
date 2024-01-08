@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 14:40:33 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 08:53:09 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 12:36:46 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,30 @@ std::string	splitMessage( std::string &buffer )
 	std::string	message = buffer.substr( colon + 1 );
 
 	return ( message );
+}
+
+std::vector< std::string >	splitArguments( std::string &s )
+{
+	std::vector< std::string >	channels;
+	std::string					names;
+
+	std::size_t	first_space = s.find( ' ' );
+	std::size_t	second_space = s.find( ' ', first_space + 1 );
+	if ( second_space != std::string::npos )
+	{
+		std::string			str = s.substr( first_space + 1, second_space - first_space - 1 );
+		std::istringstream	iss(str);
+		while (std::getline(iss, names, ','))
+			channels.push_back( names.substr(0) );
+		return ( channels );
+	}
+	else if ( first_space != std::string::npos )
+	{
+		std::string			str = s.substr( first_space + 1 );
+		std::istringstream	iss(str);
+		while (std::getline(iss, names, ','))
+			channels.push_back( names.substr(0) );
+		return ( channels );
+	}
+	return ( channels );
 }
