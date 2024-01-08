@@ -20,3 +20,14 @@ void	printClients(std::map<std::string, Client*> map)
 		std::cout << "First: " << it->first << " Second: " << it->second->getNick() << std::endl;
 	}
 }
+
+void	printStrVec(std::vector<std::string> v)
+{
+	std::vector<std::string>::iterator it;
+	int i = 0;
+
+	for (it = v.begin(); it != v.end(); ++it) {
+		std::cout << "v[" << i << "] = " << *it << std::endl;
+		i++;
+	}
+}

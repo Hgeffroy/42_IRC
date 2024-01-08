@@ -31,6 +31,7 @@ std::string					intostr(int a);
 std::vector<std::string>	splitCmd(std::string str);
 void						sendToClient(int fd, std::string str);
 void						printClients(std::map<std::string, Client*> map);
+void						printStrVec(std::vector<std::string> v);
 
 
 // Cmds

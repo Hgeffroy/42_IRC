@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:07:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 14:15:52 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:34:43 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,16 @@ std::vector<std::string>	splitCmd(std::string str)
 
 	size_t	pspace = 0;
 	size_t	nspace = str.find(' ');
-	while (pspace != std::string::npos) {
-		std::string	tmp = str.substr(pspace, nspace - 1);
-		
+
+	int i = 0;
+
+	while (i < 10) {
+		i++;
+		res.push_back(str.substr(pspace, nspace));
+		if (nspace == std::string::npos)
+			break ;
+		pspace = nspace + 1;
+		nspace = str.find(' ', pspace);
 	}
+	return (res);
 }
