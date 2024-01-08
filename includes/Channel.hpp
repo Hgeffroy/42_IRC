@@ -77,6 +77,8 @@ class	Channel
 		void								removeUserFromChan(Server& s, std::string const& name);
 		void								removeUserFromGuestList(std::string const& name);
 		void								removeUserFromBanList(std::string const& name);
+		void								sendToChannel( Server& s, std::string str );
+
 
 };
 
