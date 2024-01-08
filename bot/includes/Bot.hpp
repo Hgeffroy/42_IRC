@@ -43,8 +43,8 @@ class Bot
 		void						sendToServer( std::string str );
 		int							readFromServer( void );
 		int							execute( std::string &buffer );
-		void						privmsg( std::string &msg );
-		void						moderate( std::string &msg );
+		void						privmsg( std::string &msg, std::string &usr );
+		void						moderate( std::string &msg, std::string &usr );
 
 		std::vector< std::string >	splitBuffer( void );
 
@@ -57,7 +57,7 @@ typedef struct s_commands	t_commands;
 struct s_commands
 {
 	std::string	key;
-	void		(Bot::*function)( std::string &str );
+	void		(Bot::*function)( std::string &str, std::string &usr );
 };
 
 /*---- prototypes -------------------------------------------------------------*/
