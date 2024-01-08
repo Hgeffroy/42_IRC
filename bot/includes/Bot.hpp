@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:30:24 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 08:53:38 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 12:40:56 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ struct s_commands
 
 /*---- prototypes -------------------------------------------------------------*/
 
-std::vector< std::string >	splitBuffer( void );
 std::string					splitCommand( std::string &buffer );
 std::string					splitMessage( std::string &buffer );
+std::vector< std::string >	splitArguments( std::string &s );
 
 #endif
