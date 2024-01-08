@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/07 15:02:15 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 10:10:17 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	Bot::connect( int port, std::string& password )
 	sendToServer( "PASS " + password + "\n" );
 	sendToServer( "BOT\n" );
 	sendToServer( "JOIN #bot\n" );
-	// sendToServer( "LIST\n" );
 	while (true)
 	{
 		readFromServer();
@@ -107,7 +106,7 @@ void	Bot::sendToServer( std::string str )
 	std::cout << BLUE << "To " << _socket << ": " << str << END;
 }
 
-int	Bot::readFromServer( void ) // Le bot lit ce que lui renvoit le client
+int	Bot::readFromServer( void )
 {
 	int r = recv( _socket, _bufRead, BUFFER_SIZE, 0);
 
@@ -128,12 +127,14 @@ int	Bot::readFromServer( void ) // Le bot lit ce que lui renvoit le client
 
 int	Bot::execute( std::string &buffer )
 {
-	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg } };
+	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg }, {"MODERATE", &Bot::moderate} };
 	std::string			command = splitCommand( buffer );
 	std::string			user = buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
-	for ( int i = 0; i < 1; i++ )
+	std::cout << PURPLE << "-" << command << "-" << END << std::endl;
+
+	for ( int i = 0; i < 2; i++ )
 		if ( command == list[i].key )
 			( this->*list[i].function )( msg ); // I NEED USER IN THE ARGS !!!!!!
 
@@ -185,4 +186,13 @@ void	Bot::privmsg( std::string &msg )
 	//std::cout << request << std::endl;
 	std::string answer = getGPTanswer(request.c_str());
 	std::cout << "-" << answer << "-" << std::endl;
+	//peut etre parser le message que l'utilisateur ne puisse pas demander n'importe quoi ? -code-
+	//ici on recupere le message qu'on envoit a chat gpt?
+}
+
+void	Bot::moderate( std::string &msg )
+{
+	std::cout << YELLOW << "hehehehe tu vas etre moderateur maintenant." << END << std::endl;
+	// sendToServer( "LIST\n" );
+
 }
