@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 12:17:16 by twang             #+#    #+#             */
-/*   Updated: 2024/01/07 13:13:18 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:31:35 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,6 +389,7 @@ static void	b_opt( Server& s, Client &c, Channel *channel, std::string str )
 			}
 			channel->setBannedGuest( banned );
 			channel->removeUserFromChan( s, banned );
+			channel->sendToChannel( s, PART_MSG( banned, banned, channel->getName( ), "This creep has been banned" ) );
 			channel->removeUserFromGuestList( banned );
 			std::cout << YELLOW << "MODE " << channel->getName() << " +b";
 			std::cout << " : Setting the \"ban\" mode for : <" << banned << ">" << END << std::endl;
