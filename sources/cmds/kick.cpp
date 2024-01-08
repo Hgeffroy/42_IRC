@@ -44,5 +44,5 @@ void	kick(Server& s, Client& c, std::string& str)
 		comment = " :" + str.substr(startThree + 1, str.length() - startThree - 1);
 	}
 	sendToClient(c.getFd(), KICK_MSG((*chan[target]).getName(), user, comment));
-	(*chan[target]).removeUserFromChan(user);
+	(*chan[target]).removeUserFromChan(s, user);
 }

@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 10:59:00 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/05 10:25:58 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "irc.hpp"
 
@@ -168,7 +167,7 @@ void	Server::removeClientFromServers(Client& c)
 		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
 
 		if (find != members.end())
-			it->second->removeUserFromChan(find->first);
+			it->second->removeUserFromChan(*this, find->first);
 	}
 }
 
@@ -257,7 +256,7 @@ void	Server::checkFd()
 		if (FD_ISSET((*it)->getFd(), &_fdRead))
 		{
 			if ((*it)->read(*this) == 1)
-				break;// Iterateur casse si qqn se barre
+				break;
 			i--;
 		}
 	}
@@ -267,7 +266,7 @@ void	Server::checkFd()
 		if (FD_ISSET(it2->second->getFd(), &_fdRead))
 		{
 			if (it2->second->read(*this) == 1)
-				break; // Iterateur casse si qqn se barre
+				break;
 			i--;
 		}
 	}
