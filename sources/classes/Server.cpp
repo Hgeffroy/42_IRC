@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 10:25:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:31:35 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ int	Server::higherFd() const
 	return (max);
 }
 
-void	Server::removeClientFromServers(Client& c)
+void	Server::removeClientFromChannels(Client& c)
 {
 	std::map<std::string, Channel*>::iterator	it;
 
@@ -166,8 +166,10 @@ void	Server::removeClientFromServers(Client& c)
 		std::map<std::string, std::string>				members = it->second->getMembers();
 		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
 
-		if (find != members.end())
+		if (find != members.end()) {
 			it->second->removeUserFromChan(*this, find->first);
+			it->second->sendToChannel(*this, PART_MSG(c.getNick(), c.getUser(), it->second->getName(), "Disconnected"));
+		}
 	}
 }
 
@@ -195,7 +197,7 @@ void	Server::removeClient(Client& c)
 {
 	close(c.getFd());
 	std::cout << "Client on socket " << c.getFd() << " gone" << std::endl;
-	removeClientFromServers(c);
+	removeClientFromChannels(c);
 
 	for (std::vector<Client*>::iterator it = _newClients.begin(); it != _newClients.end(); ++it)
 	{
@@ -221,6 +223,14 @@ void	Server::removeClient(Client& c)
 void	Server::addChannel(Channel* newChannel)
 {
 	_channels[newChannel->getName()] = newChannel;
+}
+
+void	Server::removeChannel(Channel* chan)
+{
+	if (_channels.find(chan->getName()) != _channels.end()) {
+		_channels.erase(chan->getName());
+		delete chan;
+	}
 }
 
 void	Server::initFd()
