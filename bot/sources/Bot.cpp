@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 12:49:10 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 13:34:13 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,12 @@ std::string	getGPTanswer(const char *str)
 
 void	Bot::privmsg( std::string &msg )
 {
-    std::string command = "curl -s https://api.openai.com/v1/chat/completions \
-        -H \"Content-Type: application/json\" \
-        -H \"Authorization: Bearer " + _apiKey + "\" \
-        -d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant, but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
+	std::cout << BLUE << "-" << msg << "-" << END << std::endl;
+
+	std::string command = "curl -s https://api.openai.com/v1/chat/completions \
+		-H \"Content-Type: application/json\" \
+		-H \"Authorization: Bearer " + _apiKey + "\" \
+		-d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant, but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
 	std::string answer = getGPTanswer(command.c_str());
 	std::cout << "-" << answer << "-" << std::endl;
 }

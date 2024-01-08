@@ -5,7 +5,6 @@
 	echo NICK h
 	echo USER h
 	echo JOIN \#lol
-	echo JOIN \#kik
-	echo MODERATE \#lol,\#kik,\#pop
+	echo PRIVMSG bot voila voila
 	echo QUIT
 } | nc -C localhost 2000
