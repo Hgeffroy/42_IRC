@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 12:49:10 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 14:36:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ void	Bot::connect( int port, std::string& password )
 	sendToServer( "BOT\n" );
 	sendToServer( "JOIN #bot\n" );
 	while (true)
-	{
 		readFromServer();
-	}
 }
 
 /**  Public member functions  *****************************************************************************************/
@@ -165,18 +163,12 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 {
 	std::cout << usr << std::endl;
 	if (usr[0] != '#') {
-		std::string command = "curl -s https://api.openai.com/v1/chat/completions \
-			-H \"Content-Type: application/json\" \
-			-H \"Authorization: Bearer " + _apiKey + "\" \
-			-d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant that , but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
+		std::string command = ASSISTANT;
 		std::string answer = getGPTanswer(command.c_str());
 		sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
 	}
 	else {
-		std::string command = "curl -s https://api.openai.com/v1/chat/completions \
-			-H \"Content-Type: application/json\" \
-			-H \"Authorization: Bearer " + _apiKey + "\" \
-			-d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are a IRC channel moderator , you answer KICK if the message is insulting, racist, or homophobic or GOOD if it is alright\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
+		std::string command = MODERATOR;
 		std::string answer = getGPTanswer(command.c_str());
 		if (answer == "\"KICK\"\n") {
 			std::string channel = usr.substr(0, usr.find(' '));
@@ -184,14 +176,15 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 			sendToServer( "KICK " + channel + toBeKicked + " Bad words in the chat\n" );
 		}
 	}
-	//std::cout << "-" << answer << "-" << std::endl;
 }
 
 void	Bot::moderate( std::string &msg, std::string &usr )
 {
 	(void)usr;
-	std::cout << YELLOW << "-" << msg << "-" << END << std::endl;
 	std::vector< std::string >	channels = splitArguments( msg );
+	if ( channels.empty() )
+		return ;
+
 	for ( std::vector< std::string >::iterator		it = channels.begin() ; it != channels.end(); it++ )
 	{
 		std::cout << BLUE << *it << END << std::endl;
