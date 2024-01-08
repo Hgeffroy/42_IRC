@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 12:17:16 by twang             #+#    #+#             */
-/*   Updated: 2024/01/04 09:32:50 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/07 13:13:18 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void			setUserLimit(Client &c, Channel &ch, std::string str);
 static void			setTopicProtection(Client &c, Channel &ch, std::string str);
 static void			i_opt( Client &c, Channel *channel, std::string s );
 static void			k_opt( Client &c, Channel *channel, std::string s );
-static void			b_opt( Client &c, Channel *channel, std::string s );
+static void			b_opt( Server& s, Client &c, Channel *channel, std::string str );
 
 static bool			isOperator( Client &c, Channel *channel );
 static bool			isBanned( Channel *channel, std::string unbanned );
@@ -67,7 +67,7 @@ void	mode(Server& s, Client& c, std::string& str)
 			k_opt(c, chan[target], mode);
 			break;
 		case b:
-			b_opt(c, chan[target], mode);
+			b_opt(s, c, chan[target], mode);
 			break;
 		default:
 			sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), option));
@@ -170,26 +170,18 @@ static void	opPrivilege(Client &c, Channel &ch, std::string str)
 	}
 	if (members[c.getNick()] == "~") {
 		if (members[who] != "~") {
-			if (sign == -1) {
+			if (sign == -1)
 				ch.setPrivilege(who, "");
-				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
-			}
-			else {
+			else
 				ch.setPrivilege(who, "@");
-				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
-			}
 		}
 	}
 	else if (members[c.getNick()] == "@") {
 		if (members[who] != "~" && members[who] != "@") {
-			if (sign == -1) {
+			if (sign == -1)
 				ch.setPrivilege(who, "");
-				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
-			}
-			else {
+			else
 				ch.setPrivilege(who, "@");
-				//sendToClient(c.getFd(), RPL_YOUREOPER(c.getNick()));
-			}
 		}
 	}
 }
@@ -363,20 +355,20 @@ static void	k_opt( Client &c, Channel *channel, std::string s )
 
 
 //b: Ban/un-ban client from channel
-static void	b_opt( Client &c, Channel *channel, std::string s )
+static void	b_opt( Server& s, Client &c, Channel *channel, std::string str )
 {
 	std::map< std::string, std::string >	members = channel->getMembers();
 	std::vector< std::string >				bannedList = channel->getBannedGuest();
-	std::string								option = getOption( c, 'b', s );
+	std::string								option = getOption( c, 'b', str );
 	if ( option.empty() )
 		return ;
 
 	if ( !isOperator( c, channel ) )
 		return ;
 
-	if ( s[0] == '+' )
+	if ( str[0] == '+' )
 	{
-		std::string	banned = getParam( c, s );
+		std::string	banned = getParam( c, str );
 		if ( banned.empty( ) )
 			return ;
 		std::map<std::string, std::string>::iterator ite = members.find( banned );
@@ -396,7 +388,7 @@ static void	b_opt( Client &c, Channel *channel, std::string s )
 				}
 			}
 			channel->setBannedGuest( banned );
-			channel->removeUserFromChan( banned );
+			channel->removeUserFromChan( s, banned );
 			channel->removeUserFromGuestList( banned );
 			std::cout << YELLOW << "MODE " << channel->getName() << " +b";
 			std::cout << " : Setting the \"ban\" mode for : <" << banned << ">" << END << std::endl;
@@ -413,9 +405,9 @@ static void	b_opt( Client &c, Channel *channel, std::string s )
 		sendToClient( c.getFd(), ERR_NOTONCHANNEL( banned, channel->getName() ) );
 		return ;
 	}
-	else if ( s[0] == '-' )
+	else if ( str[0] == '-' )
 	{
-		std::string	unbanned = getParam( c, s );
+		std::string	unbanned = getParam( c, str );
 		if ( unbanned.empty( ) )
 			return ;
 		if ( isBanned( channel, unbanned ) )

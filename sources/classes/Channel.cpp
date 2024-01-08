@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/20 20:01:34 by wangthea         ###   ########.fr       */
+/*   Updated: 2024/01/07 14:42:04 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@ Channel::Channel()
 
 }
 
-Channel::Channel(std::string const& name, std::string const& founder) : _name(name), _topic(""), \
-																		_userLimit(-1), _nbUsers(1), \
+Channel::Channel(std::string const& name) : _name(name), _topic(""), \
+																		_userLimit(-1), _nbUsers(0), \
 																		_inviteOnly(false), _keyProtect(false), \
 																		_topicProtect(false)
 {
-	_members[founder] = "~";
 	std::cout << "Channel -" << _name << "- was created" << std::endl;
 }
 
@@ -168,24 +167,51 @@ void	Channel::setTopic( std::string topic )
 }
 
 
-/**  Public member functions  *****************************************************************************************/
+/**  Private member functions  ****************************************************************************************/
 
-void	Channel::addUserToChan(Client& newClient)
+void	Channel::refreshChanMembers(Server& s)
 {
-	_members[newClient.getNick()] = "";
-	std::cout << newClient.getNick() << " joined channel " << _name << std::endl;
-	_nbUsers++;
+	std::map<std::string, Client*>		clientList = s.getClients();
+	std::map<std::string, std::string>::iterator	it;
+	for (it = _members.begin(); it != _members.end(); ++it)
+	{
+		Client* client = clientList[it->first];
+		std::map<std::string, std::string>::iterator	it2;
+		for (it2 = _members.begin(); it2 != _members.end(); ++it2)
+		{
+			std::string prefix = it2->second;
+			if (it2->second == "~")
+				prefix = "@";
+			sendToClient(client->getFd(), RPL_NAMREPLY(client->getNick(), "=", _name, prefix + it2->first));
+		}
+		sendToClient(client->getFd(), RPL_ENDOFNAMES(_name));
+	}
 }
 
-void	Channel::removeUserFromChan(std::string const& name)
-{
-	std::map<std::string, std::string>::iterator	it = _members.find(name);
+/**  Public member functions  *****************************************************************************************/
 
-	if (it != _members.end())
+void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
+{
+	_members[newClient.getNick()] = "";
+	if (isFounder)
+		_members[newClient.getNick()] = "~";
+	std::cout << newClient.getNick() << " joined channel " << _name << std::endl;
+	_nbUsers++;
+
+	refreshChanMembers(s);
+}
+
+void	Channel::removeUserFromChan(Server& s, std::string const& name)
+{
+	std::map<std::string, std::string>::iterator	it2 = _members.find(name);
+
+	if (it2 != _members.end())
 	{
-		_members.erase(it);
+		_members.erase(it2);
 		_nbUsers--;
 	}
+
+	refreshChanMembers(s);
 }
 
 void	Channel::removeUserFromGuestList(std::string const& name)
