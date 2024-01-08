@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/07 15:02:15 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 10:10:17 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 	close( STDIN_FILENO );
 	p = setPort( port );
 	_password = setPassword( password );
+	_apiKey = apikey;
 	s = socket( PF_INET, SOCK_STREAM, 0 );
 	if ( s < 0 )
 		throw std::runtime_error( "socket failed" );
@@ -87,7 +88,6 @@ void	Bot::connect( int port, std::string& password )
 	sendToServer( "PASS " + password + "\n" );
 	sendToServer( "BOT\n" );
 	sendToServer( "JOIN #bot\n" );
-	// sendToServer( "LIST\n" );
 	while (true)
 	{
 		readFromServer();
@@ -106,7 +106,7 @@ void	Bot::sendToServer( std::string str )
 	std::cout << BLUE << "To " << _socket << ": " << str << END;
 }
 
-int	Bot::readFromServer( void ) // Le bot lit ce que lui renvoit le client
+int	Bot::readFromServer( void )
 {
 	int r = recv( _socket, _bufRead, BUFFER_SIZE, 0);
 
@@ -127,18 +127,72 @@ int	Bot::readFromServer( void ) // Le bot lit ce que lui renvoit le client
 
 int	Bot::execute( std::string &buffer )
 {
-	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg } };
+	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg }, {"MODERATE", &Bot::moderate} };
 	std::string			command = splitCommand( buffer );
+	std::string			user = buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
-	for ( int i = 0; i < 1; i++ )
+	std::cout << PURPLE << "-" << command << "-" << END << std::endl;
+
+	for ( int i = 0; i < 2; i++ )
 		if ( command == list[i].key )
-			( this->*list[i].function )( msg );
+			( this->*list[i].function )( msg ); // I NEED USER IN THE ARGS !!!!!!
 
 	return (0);
 }
 
+std::string	getGPTanswer(const char *str)
+{
+	FILE*	pipe = popen(str, "r");
+	if (!pipe) {
+		std::cerr << RED << "Error popen()" << END << std::endl;
+		return ("Error when using popen function");
+	}
+
+	char	buff[256];
+	std::string res;
+
+	while (fgets(buff, 256, pipe) != NULL) {
+		if (ferror(pipe)) {
+			std::cerr << RED << "Error fgets()" << END << std::endl;
+			return ("Error when using fgets function");
+		}
+		res += buff;
+	}
+	pclose(pipe);
+	return (res);
+}
+
 void	Bot::privmsg( std::string &msg )
 {
+	std::string apiKey = "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";
 	std::cout << PURPLE << msg << END << std::endl;
+	std::string request = "curl -s https://api.openai.com/v1/chat/completions \
+	-H \"Content-Type: application/json\" \
+	-H \"Authorization: Bearer " + _apiKey + "\" \
+	-d '{ \
+		\"model\": \"gpt-3.5-turbo-16k\", \
+		\"messages\": [ \
+			{ \
+				\"role\": \"system\", \
+				\"content\": \"You are a helpful assistant that can give answers with 500 caracters at most.\"" // A voir si il faut changer ici ou po.
+			+ "}, \
+			{ \
+				\"role\": \"user\", \
+				\"content\": " + msg + "\" \
+			} \
+		] \
+	}' | jq '.choices[].message.content'";
+	//std::cout << request << std::endl;
+	std::string answer = getGPTanswer(request.c_str());
+	std::cout << "-" << answer << "-" << std::endl;
+	//peut etre parser le message que l'utilisateur ne puisse pas demander n'importe quoi ? -code-
+	//ici on recupere le message qu'on envoit a chat gpt?
+}
+
+void	Bot::moderate( std::string &msg )
+{
+	std::cout << YELLOW << "hehehehe tu vas etre moderateur maintenant." << END << std::endl;
+	// sendToServer( "LIST\n" );
+
 }

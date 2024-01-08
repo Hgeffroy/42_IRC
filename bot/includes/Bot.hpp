@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:30:24 by twang             #+#    #+#             */
-/*   Updated: 2024/01/07 14:52:48 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 08:53:38 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Bot
 		// std::string	_addr; -> voir avec arthur?
 		std::size_t	_socket;
 		std::string	_password;
+		std::string	_apiKey;
 		char		_bufRead[BUFFER_SIZE];
 		Bot( void );
 
@@ -43,6 +44,7 @@ class Bot
 		int							readFromServer( void );
 		int							execute( std::string &buffer );
 		void						privmsg( std::string &msg );
+		void						moderate( std::string &msg );
 
 		std::vector< std::string >	splitBuffer( void );
 

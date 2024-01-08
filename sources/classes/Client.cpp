@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 13:06:00 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 10:04:43 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ void Client::setAway(bool away)
 
 int Client::getCmd(std::string &buffer)
 {
-	const int nbcmd = 17;
+	const int nbcmd = 19;
 	const std::string cmds[nbcmd] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "WHO", "PART", "QUIT",
-									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "AWAY", "BOT"};
+									 "INVITE", "TOPIC", "MOTD", "PING", "LIST", "KICK", "AWAY", "BOT", "MODERATE", "moderate"};
 
 	int end = static_cast<int>(buffer.find(' '));
 	std::string cmd = buffer.substr(0, end);
@@ -251,6 +251,12 @@ int Client::execCmd(Server &s, std::string &str)
 				break;
 			case AWAY:
 				away(s, *this, str);
+				break;
+			case MODERATE:
+				moderator(s, *this, str);
+				break;
+			case moderate:
+				moderator(s, *this, str);
 				break;
 			default:
 				std::size_t end = str.find(' ');
