@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 13:34:22 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 10:57:36 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 10:03:06 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ enum	e_cmd
 	LIST,
 	KICK,
 	AWAY,
-	BOT
+	BOT,
+	MODERATE,
+	moderate
 };
 
 enum	e_mode
