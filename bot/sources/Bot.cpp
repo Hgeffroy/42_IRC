@@ -132,8 +132,6 @@ int	Bot::execute( std::string &buffer )
 	std::string			user = buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
-	std::cout << PURPLE << "-" << command << "-" << END << std::endl;
-
 	for ( int i = 0; i < 2; i++ )
 		if ( command == list[i].key )
 			( this->*list[i].function )( msg ); // I NEED USER IN THE ARGS !!!!!!
@@ -165,26 +163,11 @@ std::string	getGPTanswer(const char *str)
 
 void	Bot::privmsg( std::string &msg )
 {
-	std::string apiKey = "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";
-	std::cout << PURPLE << msg << END << std::endl;
-	std::string request = "curl -s https://api.openai.com/v1/chat/completions \
-	-H \"Content-Type: application/json\" \
-	-H \"Authorization: Bearer " + _apiKey + "\" \
-	-d '{ \
-		\"model\": \"gpt-3.5-turbo-16k\", \
-		\"messages\": [ \
-			{ \
-				\"role\": \"system\", \
-				\"content\": \"You are a helpful assistant that can give answers with 500 caracters at most.\"" // A voir si il faut changer ici ou po.
-			+ "}, \
-			{ \
-				\"role\": \"user\", \
-				\"content\": " + msg + "\" \
-			} \
-		] \
-	}' | jq '.choices[].message.content'";
-	//std::cout << request << std::endl;
-	std::string answer = getGPTanswer(request.c_str());
+    std::string command = "curl -s https://api.openai.com/v1/chat/completions \
+        -H \"Content-Type: application/json\" \
+        -H \"Authorization: Bearer " + _apiKey + "\" \
+        -d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant, but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
+	std::string answer = getGPTanswer(command.c_str());
 	std::cout << "-" << answer << "-" << std::endl;
 	//peut etre parser le message que l'utilisateur ne puisse pas demander n'importe quoi ? -code-
 	//ici on recupere le message qu'on envoit a chat gpt?
