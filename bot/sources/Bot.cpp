@@ -129,7 +129,7 @@ int	Bot::execute( std::string &buffer )
 	if (buffer.find('#', 0) == std::string::npos)
 		user = buffer.substr(1, buffer.find(' '));
 	else
-		user = buffer.substr(buffer.find('#', 0), buffer.find(' ', buffer.find('#', 0)) - buffer.find('#', 0));
+		user = buffer.substr(buffer.find('#', 0), buffer.find(' ', buffer.find('#', 0)) - buffer.find('#', 0)) + " " + buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
 	for ( int i = 0; i < 2; i++ )
@@ -163,12 +163,27 @@ std::string	getGPTanswer(const char *str)
 
 void	Bot::privmsg( std::string &msg, std::string &usr )
 {
-    std::string command = "curl -s https://api.openai.com/v1/chat/completions \
-        -H \"Content-Type: application/json\" \
-        -H \"Authorization: Bearer " + _apiKey + "\" \
-        -d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant that , but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
-	std::string answer = getGPTanswer(command.c_str());
-	sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
+	std::cout << usr << std::endl;
+	if (usr[0] != '#') {
+		std::string command = "curl -s https://api.openai.com/v1/chat/completions \
+			-H \"Content-Type: application/json\" \
+			-H \"Authorization: Bearer " + _apiKey + "\" \
+			-d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are my assistant that , but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
+		std::string answer = getGPTanswer(command.c_str());
+		sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
+	}
+	else {
+		std::string command = "curl -s https://api.openai.com/v1/chat/completions \
+			-H \"Content-Type: application/json\" \
+			-H \"Authorization: Bearer " + _apiKey + "\" \
+			-d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are a IRC channel moderator , you answer KICK if the message is insulting, racist, or homophobic or GOOD if it is alright\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'";
+		std::string answer = getGPTanswer(command.c_str());
+		if (answer == "\"KICK\"\n") {
+			std::string channel = usr.substr(0, usr.find(' '));
+			std::string toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
+			sendToServer( "KICK " + channel + toBeKicked + " Bad words in the chat\n" );
+		}
+	}
 	//std::cout << "-" << answer << "-" << std::endl;
 }
 
