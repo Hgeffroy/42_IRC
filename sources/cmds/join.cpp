@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 10:42:20 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:20:24 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,17 @@ static void	joinOneChannel(Server& s, Client& c, const std::string& channelName,
 	if ( channels.find( channelName ) != channels.end() )
 	{
 		Channel* channel = channels[channelName];
-		if ( !checkOption_I( c, channel, channelName ) )
-			return ;
-		if ( !checkOption_K( c, channel, channelPass ) )
-			return ;
-		if ( !checkOption_L( c, channel, channelName ) )
-			return ;
-		if ( !checkOption_B( c, channel, channelName ) )
-			return ;
+		if ( c.getNick() != "bot" )
+		{
+			if ( !checkOption_I( c, channel, channelName ) )
+				return ;
+			if ( !checkOption_K( c, channel, channelPass ) )
+				return ;
+			if ( !checkOption_L( c, channel, channelName ) )
+				return ;
+			if ( !checkOption_B( c, channel, channelName ) )
+				return ;
+		}
 
 		std::map<std::string, std::string> members = channel->getMembers();
 		if (members.find(c.getNick()) == members.end()) {
