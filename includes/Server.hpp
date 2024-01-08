@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 13:14:35 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 11:25:27 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class	Server
 
 		void				accept();
 		int					higherFd() const;
-		void				removeClientFromServers(Client& c);
+		void				removeClientFromChannels(Client& c);
 
 	public:
 
@@ -68,6 +68,7 @@ class	Server
 		void	addClient(Client* client);
 		void	removeClient(Client& c);
 		void	addChannel(Channel* newChannel);
+		void	removeChannel(Channel* chan);
 
 		void	initFd();
 		void	checkFd();

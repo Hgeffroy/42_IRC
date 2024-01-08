@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 14:42:04 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:31:35 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,12 +173,12 @@ void	Channel::refreshChanMembers(Server& s)
 {
 	std::map<std::string, Client*>		clientList = s.getClients();
 	std::map<std::string, std::string>::iterator	it;
-	for (it = _members.begin(); it != _members.end(); ++it)
-	{
+
+	for (it = _members.begin(); it != _members.end(); ++it) {
 		Client* client = clientList[it->first];
 		std::map<std::string, std::string>::iterator	it2;
-		for (it2 = _members.begin(); it2 != _members.end(); ++it2)
-		{
+
+		for (it2 = _members.begin(); it2 != _members.end(); ++it2) {
 			std::string prefix = it2->second;
 			if (it2->second == "~")
 				prefix = "@";
@@ -205,13 +205,14 @@ void	Channel::removeUserFromChan(Server& s, std::string const& name)
 {
 	std::map<std::string, std::string>::iterator	it2 = _members.find(name);
 
-	if (it2 != _members.end())
-	{
+	if (it2 != _members.end()) {
+		if (it2->second == "~") {
+			s.removeChannel(this);
+			return ;
+		}
 		_members.erase(it2);
 		_nbUsers--;
 	}
-
-	refreshChanMembers(s);
 }
 
 void	Channel::removeUserFromGuestList(std::string const& name)
@@ -235,5 +236,17 @@ void	Channel::removeUserFromBanList(std::string const& name)
 			it = _bannedList.erase( it );
 			return ;
 		}
+	}
+}
+
+void	Channel::sendToChannel( Server& s, std::string str )
+{
+	std::map< std::string, std::string > 			members = this->getMembers( );
+	std::map< std::string, std::string >::iterator	it = members.begin( );
+	std::map< std::string, Client* > 				clients = s.getClients( );
+
+	for ( it = members.begin( ); it != members.end( ); ++it ) {
+		Client* client = clients.find( it->first )->second;
+		sendToClient( client->getFd( ), str );
 	}
 }
