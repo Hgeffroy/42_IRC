@@ -26,6 +26,7 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 	close( STDIN_FILENO );
 	p = setPort( port );
 	_password = setPassword( password );
+	_apiKey = apikey;
 	s = socket( PF_INET, SOCK_STREAM, 0 );
 	if ( s < 0 )
 		throw std::runtime_error( "socket failed" );
@@ -129,16 +130,59 @@ int	Bot::execute( std::string &buffer )
 {
 	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg } };
 	std::string			command = splitCommand( buffer );
+	std::string			user = buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
 	for ( int i = 0; i < 1; i++ )
 		if ( command == list[i].key )
-			( this->*list[i].function )( msg );
+			( this->*list[i].function )( msg ); // I NEED USER IN THE ARGS !!!!!!
 
 	return (0);
 }
 
+std::string	getGPTanswer(const char *str)
+{
+	FILE*	pipe = popen(str, "r");
+	if (!pipe) {
+		std::cerr << RED << "Error popen()" << END << std::endl;
+		return ("Error when using popen function");
+	}
+
+	char	buff[256];
+	std::string res;
+
+	while (fgets(buff, 256, pipe) != NULL) {
+		if (ferror(pipe)) {
+			std::cerr << RED << "Error fgets()" << END << std::endl;
+			return ("Error when using fgets function");
+		}
+		res += buff;
+	}
+	pclose(pipe);
+	return (res);
+}
+
 void	Bot::privmsg( std::string &msg )
 {
+	std::string apiKey = "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";
 	std::cout << PURPLE << msg << END << std::endl;
+	std::string request = "curl -s https://api.openai.com/v1/chat/completions \
+	-H \"Content-Type: application/json\" \
+	-H \"Authorization: Bearer " + _apiKey + "\" \
+	-d '{ \
+		\"model\": \"gpt-3.5-turbo-16k\", \
+		\"messages\": [ \
+			{ \
+				\"role\": \"system\", \
+				\"content\": \"You are a helpful assistant that can give answers with 500 caracters at most.\"" // A voir si il faut changer ici ou po.
+			+ "}, \
+			{ \
+				\"role\": \"user\", \
+				\"content\": " + msg + "\" \
+			} \
+		] \
+	}' | jq '.choices[].message.content'";
+	//std::cout << request << std::endl;
+	std::string answer = getGPTanswer(request.c_str());
+	std::cout << "-" << answer << "-" << std::endl;
 }

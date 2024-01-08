@@ -58,8 +58,6 @@ std::string	splitCommand( std::string &buffer )
 	std::size_t	first_space = buffer.find( ' ' );
 	std::size_t	second_space = buffer.find( ' ', first_space + 1 );
 	std::string	command = buffer.substr( first_space + 1, second_space - first_space - 1 );
-	std::cout << YELLOW << "-" << command << "-" << END << std::endl;
-	
 	return ( command );
 }
 
