@@ -27,6 +27,7 @@ class Bot
 		// std::string	_addr; -> voir avec arthur?
 		std::size_t	_socket;
 		std::string	_password;
+		std::string	_apiKey;
 		char		_bufRead[BUFFER_SIZE];
 		Bot( void );
 
