@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 11:37:50 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 13:01:43 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define JOIN_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " JOIN " + channel + ENDLINE
 # define PONG_MSG(token)												std::string(":server ") + "PONG " + token + ENDLINE
 # define KICK_MSG(channel, usr, comment)								std::string(":server ") + "KICK " + channel + " " + usr + comment + ENDLINE
-# define PART_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + ENDLINE
+# define PART_MSG(client, username, channel, reason)					std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + " :" + reason + ENDLINE
 # define INVITE_MSG(client, username, invited, channel)					std::string(":") + client + "!" + username + "@localhost" + " INVITE " + invited + " " + channel + ENDLINE
 
 // 001
@@ -27,7 +27,7 @@
 // 003
 # define RPL_CREATED(client, time)										std::string(":server ") + "003 " + client + " :This server was created " + time + ENDLINE
 // 004
-# define RPL_MYINFO(client, servername)									std::string(":server ") + "004 " + client + " " + servername + " " + VERSION + " o " + "tpkil" + " k,l" + ENDLINE
+# define RPL_MYINFO(client, servername)									std::string(":server ") + "004 " + client + " " + servername + " " + VERSION + " o " + "tpkilb" + " k,l,b" + ENDLINE
 // 005
 # define RPL_ISUPPORT(client, nicklen, chanlen)							std::string(":server ") + "005 " + client + " " + "NICKLEN=" + nicklen + " CHANNELEN=" + chanlen + " :are supported by this server" + ENDLINE
 
@@ -67,7 +67,7 @@
 # define RPL_NAMREPLY(client, symbol, channel, nickPrefixed)			std::string(":server ") + "353 " + client + " " + symbol + " " + channel + " :" + nickPrefixed + ENDLINE
 
 // 366 (:channel ?)
-# define RPL_ENDOFNAMES(client, channel)								std::string(":server ") + "366 " + client + " " + channel + " :End of /NAMES list" + ENDLINE
+# define RPL_ENDOFNAMES(channel)										std::string(":server ") + "366 " + channel + " :End of /NAMES list" + ENDLINE
 
 // 372
 # define RPL_MOTD(client, motd)											std::string(":server ") + "372 " + client + " :" + motd + ENDLINE

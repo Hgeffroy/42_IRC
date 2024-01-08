@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 11:02:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 14:11:46 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	Server::removeClientFromServers(Client& c)
 		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
 
 		if (find != members.end())
-			it->second->removeUserFromChan(find->first);
+			it->second->removeUserFromChan(*this, find->first);
 	}
 }
 

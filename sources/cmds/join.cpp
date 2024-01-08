@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 10:25:22 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/07 14:41:41 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,17 @@ static void	joinOneChannel(Server& s, Client& c, const std::string& channelName,
 
 		std::map<std::string, std::string> members = channel->getMembers();
 		if (members.find(c.getNick()) == members.end()) {
-			channel->addUserToChan(c);
 			sendChannelRPL(s, c, channel);
+			channel->addUserToChan(s, c, false);
 		}
 		else
 			sendToClient(c.getFd(), ERR_USERONCHANNEL(c.getNick(), c.getNick(), channelName));
 	}
 	else {
-		Channel* newChannel = new Channel(channelName, c.getNick());
-		s.addChannel(newChannel);
+		Channel* newChannel = new Channel(channelName);
 		sendChannelRPL(s, c, newChannel);
+		newChannel->addUserToChan(s, c, true);
+		s.addChannel(newChannel);
 	}
 }
 
@@ -81,20 +82,20 @@ static void	sendChannelRPL(Server& s, Client& c, Channel* chan)
 		sendToClient(c.getFd(), RPL_TOPIC(c.getNick(), chan->getName(), chan->getTopic()));
 
 	// Partie a envoyer a tous les clients du chan
-	std::map<std::string, std::string>::iterator	it;
-	for (it = members.begin(); it != members.end(); ++it)
-	{
-		Client* client = clientList[it->first];
-		std::map<std::string, std::string>::iterator	it2;
-		for (it2 = members.begin(); it2 != members.end(); ++it2)
-		{
-			std::string prefix = it2->second;
-			if (it2->second == "~")
-				prefix = "@";
-			sendToClient(client->getFd(), RPL_NAMREPLY(client->getNick(), "=", chan->getName(), prefix + it2->first));
-		}
-		sendToClient(client->getFd(), RPL_ENDOFNAMES(client->getNick(), chan->getName()));
-	}
+//	std::map<std::string, std::string>::iterator	it;
+//	for (it = members.begin(); it != members.end(); ++it)
+//	{
+//		Client* client = clientList[it->first];
+//		std::map<std::string, std::string>::iterator	it2;
+//		for (it2 = members.begin(); it2 != members.end(); ++it2)
+//		{
+//			std::string prefix = it2->second;
+//			if (it2->second == "~")
+//				prefix = "@";
+//			sendToClient(client->getFd(), RPL_NAMREPLY(client->getNick(), "=", chan->getName(), prefix + it2->first));
+//		}
+//		sendToClient(client->getFd(), RPL_ENDOFNAMES(client->getNick(), chan->getName()));
+//	}
 }
 
 static bool	checkOption_K( Client& c, Channel* channel, const std::string& channelPass )
