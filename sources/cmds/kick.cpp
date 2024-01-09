@@ -50,6 +50,10 @@ void	kick(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_NOPRIVS( "bot" ) );
 		return ;
 	}
-	sendToClient(c.getFd(), KICK_MSG(c.getNick(), (*chan[target]).getName(), user, comment));
+
+	for (std::map<std::string, std::string>::iterator it = members.begin(); it != members.end(); ++it) {
+		sendToClient(s.getClientFd(it->first), KICK_MSG(c.getNick(), (*chan[target]).getName(), user, comment));
+	}
+
 	(*chan[target]).removeUserFromChan(s, user);
 }
