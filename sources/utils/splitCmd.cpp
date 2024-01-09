@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printMap.cpp                                       :+:      :+:    :+:   */
+/*   splitCmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 14:28:15 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/11 14:28:15 by hgeffroy         ###   ########.fr       */
+/*   Created: 2024/01/08 14:07:59 by hgeffroy          #+#    #+#             */
+/*   Updated: 2024/01/08 15:34:43 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	printClients(std::map<std::string, Client*> map)
+std::vector<std::string>	splitCmd(std::string str)
 {
-	std::map<std::string, Client*>::iterator it;
-	for (it = map.begin(); it != map.end(); ++it)
-	{
-		std::cout << "First: " << it->first << " Second: " << it->second->getNick() << std::endl;
-	}
-}
+	std::vector<std::string>	res;
 
-void	printStrVec(std::vector<std::string> v)
-{
-	std::vector<std::string>::iterator it;
+	size_t	pspace = 0;
+	size_t	nspace = str.find(' ');
+
 	int i = 0;
 
-	for (it = v.begin(); it != v.end(); ++it) {
-		std::cout << "v[" << i << "] = " << *it << std::endl;
+	while (i < 10) {
 		i++;
+		res.push_back(str.substr(pspace, nspace));
+		if (nspace == std::string::npos)
+			break ;
+		pspace = nspace + 1;
+		nspace = str.find(' ', pspace);
 	}
+	return (res);
 }

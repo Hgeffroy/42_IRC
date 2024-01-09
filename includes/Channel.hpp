@@ -73,8 +73,8 @@ class	Channel
 		void								setBannedGuest( std::string banned );
 		void								setTopic( std::string topic );
 
+		int									removeUserFromChan(Server& s, std::string const& name);
 		void								addUserToChan(Server& s, Client& newClient, bool isFounder);
-		void								removeUserFromChan(Server& s, std::string const& name);
 		void								removeUserFromGuestList(std::string const& name);
 		void								removeUserFromBanList(std::string const& name);
 		void								sendToChannel( Server& s, std::string str );

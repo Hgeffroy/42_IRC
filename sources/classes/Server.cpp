@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 11:31:35 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:40:20 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,8 @@ void	Server::removeClientFromChannels(Client& c)
 		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
 
 		if (find != members.end()) {
-			it->second->removeUserFromChan(*this, find->first);
+			if (it->second->removeUserFromChan(*this, find->first))
+				return ;// Mettre le if
 			it->second->sendToChannel(*this, PART_MSG(c.getNick(), c.getUser(), it->second->getName(), "Disconnected"));
 		}
 	}

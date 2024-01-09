@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 10:04:43 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 14:55:20 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,10 +284,12 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 
 	std::vector<std::string> cmds = splitBuf();
 
-	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it)
+	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
+		printStrVec(splitCmd(*it));
 		if (execCmd(s, *it) == 1)
 			return (0);
-		
+	}
+
 	std::memset(_bufRead, 0, BUFFER_SIZE);
 
 	return (0);
