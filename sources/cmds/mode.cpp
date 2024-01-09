@@ -177,7 +177,7 @@ static void	opPrivilege(Client &c, Channel &ch, std::string str)
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				std::cout << PURPLE << "MODE " << ch.getName() << " +o";
+				std::cout << YELLOW << "MODE " << ch.getName() << " +o";
 				std::cout << " : Gave Op privilege to " << who << " on " << ch.getName() << END << std::endl;
 			}
 		}
@@ -191,7 +191,7 @@ static void	opPrivilege(Client &c, Channel &ch, std::string str)
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				std::cout << PURPLE << "MODE " << ch.getName() << " +o";
+				std::cout << YELLOW << "MODE " << ch.getName() << " +o";
 				std::cout << " : Gave Op privilege to " << who << " on " << ch.getName() << END << std::endl;
 			}
 		}
@@ -255,7 +255,7 @@ static void	setUserLimit(Client &c, Channel &ch, std::string str)
 	}
 	if (ch.getNbUsers() <= lim) {
 		ch.setUserLimit(lim);
-		std::cout << PURPLE << "MODE " << ch.getName() << " +l";
+		std::cout << YELLOW << "MODE " << ch.getName() << " +l";
 		std::cout << " : Set the \"user limit\" mode on " << ch.getName() << " to " << lim << END << std::endl;
 	}
 	else {
@@ -289,7 +289,7 @@ static void	setTopicProtection(Client &c, Channel &ch, std::string str)
 		else if (str[i] == '+') {
 			if (str[i + 2] == '\0') {
 				ch.setTopicProtect(true);
-				std::cout << PURPLE << "MODE " << ch.getName() << " +t";
+				std::cout << YELLOW << "MODE " << ch.getName() << " +t";
 				std::cout << " : Set the \"topic protection\" mode on " << ch.getName() << END << std::endl;
 			}
 			else {
