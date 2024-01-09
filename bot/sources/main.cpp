@@ -6,13 +6,17 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 09:12:36 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/09 13:03:22 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 
+/*---- static defines --------------------------------------------------------*/
+
 static void	handle_signals( int signal );
+
+/*----------------------------------------------------------------------------*/
 
 int	main( int ac, char **av )
 {
@@ -26,8 +30,9 @@ int	main( int ac, char **av )
 			throw std::invalid_argument( "Wrong usage:\n./bot <port> <password> <apikey>");
 		Bot	bot( av[1], av[2], av[3] );
 	}
-	catch ( std::invalid_argument const & error )
+	catch ( std::exception const & error )
 	{
+		std::cerr << "Bot closed because: ";
 		std::cerr << error.what( ) << std::endl;
 		return ( -1 );
 	}
@@ -38,5 +43,5 @@ int	main( int ac, char **av )
 static void	handle_signals( int signal )
 {
 	if ( signal == SIGINT )
-		throw std::invalid_argument( "SIGINT signal catch.");
+		throw std::runtime_error( "catch signal : SIGINT" );
 }
