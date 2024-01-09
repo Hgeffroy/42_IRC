@@ -50,7 +50,7 @@ void	topic(Server& s, Client& c, std::string& str);
 void	kick(Server& s, Client& c, std::string& str);
 void	motd(Server& s, Client& c);
 void	pong(Server& s, Client& c, std::string str);
-void	list(Server& s, Client& c, std::string str);
+void	list(Server& s, Client& c, std::string& str);
 void	away(Server& s, Client& c, std::string& str);
 void	bot( Server &s, Client& c, std::string& str );
 void	moderator( Server& s, Client& c, std::string& str );

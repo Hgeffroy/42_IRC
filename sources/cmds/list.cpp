@@ -12,7 +12,7 @@
 
 #include "irc.hpp"
 
-void	list(Server& s, Client& c, std::string str)
+void	list(Server& s, Client& c, std::string& str)
 {
 	(void)str;
 	std::map<std::string, Channel*> channels = s.getChannels();

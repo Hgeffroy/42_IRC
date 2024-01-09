@@ -17,7 +17,7 @@
 static std::string	getTarget( Client &c, std::string str );
 static std::string	getMode( Client &c, Channel *channel, std::string str );
 
-static void			opPrivilege(Client &c, Channel &ch, std::string str);
+static void			opPrivilege(Client &c, Channel &ch, std::vector<std::string> params);
 static void			setUserLimit(Client &c, Channel &ch, std::string str);
 static void			setTopicProtection(Client &c, Channel &ch, std::string str);
 static void			i_opt( Client &c, Channel *channel, std::string s );
@@ -33,35 +33,58 @@ static std::string	getParam( Client &c, std::string s );
 
 void	mode(Server& s, Client& c, std::string& str)
 {
-	std::string	target = getTarget( c, str );
-	if ( target.empty() )
+	std::vector<std::string> cmdSplitted = splitCmd(str, ' ');
+	if (cmdSplitted.size() < 3) {
+		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE <channel> <+ | -><mode> [*parameters]" ) );
 		return ;
+	}
+	if (cmdSplitted.size() > 4) {
+		sendToClient( c.getFd( ), ERR_UNKNOWNERROR( c.getNick( ), "MODE", "Too many parameters") );
+		return ;
+	}
+
+	std::string target = cmdSplitted[1];
+//	std::string	target = getTarget( c, str );
+//	if ( target.empty() )
+//		return ;
 
 	std::map<std::string, Channel*>	chan = s.getChannels();
-	if (!chan[target])
-	{
+	if (chan.find(target) == chan.end()) {
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), target));
 		return ;
 	}
 
-	std::string	mode = getMode( c, chan[target], str );
-	if ( mode.empty() )
+	std::string	mode = cmdSplitted[2];
+	if (mode[0] != '+' && mode[0] != '-') {
+		sendToClient(c.getFd(), ERR_UMODEUNKNOWNFLAG( c.getNick() ));
+		sendToClient(c.getFd(), RPL_CHANNELMODEIS(c.getNick(), target, chan[target]->getModes(), "*parameters"));
 		return ;
+	}
 
 	char option = mode[1];
+	if ( option != i && cmdSplitted.size() < 4 ) {
+		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "MODE <channel> <+ | -><mode> [*parameters]" ) );
+		return ;
+	}
+	else if ( option == i && cmdSplitted.size() > 3 ) {
+		sendToClient( c.getFd( ), ERR_UNKNOWNERROR( c.getNick( ), "MODE", "Too many parameters") );
+		return ;
+	}
+
+
 	switch ( option )
 	{
+		case i:
+			i_opt(c, chan[target], mode);
+			break;
 		case o:
-			opPrivilege(c, *(chan[target]), mode);
+			opPrivilege(c, *(chan[target]), cmdSplitted);
 			break;
 		case l:
 			setUserLimit(c, *(chan[target]), mode);
 			break;
 		case t:
 			setTopicProtection(c, *(chan[target]), mode);
-			break;
-		case i:
-			i_opt(c, chan[target], mode);
 			break;
 		case k:
 			k_opt(c, chan[target], mode);
@@ -131,39 +154,21 @@ static std::string	getMode( Client &c, Channel *channel, std::string str )
 /*---- options ---------------------------------------------------------------*/
 
 //o: Set/remove Operator privilege on a client
-static void	opPrivilege(Client &c, Channel &ch, std::string str)
+static void	opPrivilege(Client &c, Channel &ch, std::vector<std::string> params)
 {
 	std::map<std::string, std::string> members = ch.getMembers();
 	if (members[c.getNick()] != "@" && members[c.getNick()] != "~") {
 		sendToClient(c.getFd(), ERR_NOPRIVS(c.getNick()));
 		return ;
 	}
-	size_t	i = 0;
+
+	std::string	mode = params[2];
+	std::string who = params[3];
 	int sign = 1;
-	for (i = 0; i < str.length(); i++)
-	{
-		if (str[i] == '-') {
-			sign = -1;
-			break;
-		}
-		else if (str[i] == '+') {
-			break;
-		}
+	if (mode[0] == '-') {
+		sign = -1;
 	}
-	i += 2;
-	if (str[i] != ' ') {
-		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
-		return ;
-	}
-	i++;
-	std::string who;
-	if (i < str.length()) {
-		who = str.substr(i, str.length() - i);
-	}
-	else {
-		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
-		return ;
-	}
+
 	if (members.find(who) == members.end()) {
 		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), who, ch.getName()));
 		return ;
