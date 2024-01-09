@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 10:05:03 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/09 12:36:23 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ std::vector<std::string>	splitCmd(std::string str);
 void						sendToClient(int fd, std::string str);
 void						printClients(std::map<std::string, Client*> map);
 void						printStrVec(std::vector<std::string> v);
+void						signals_switchman( int signal );
 
 
 // Cmds
