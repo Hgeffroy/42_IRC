@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 12:13:21 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 14:39:36 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/09 15:19:12 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@
 			-H \"Content-Type: application/json\" \
 			-H \"Authorization: Bearer " + _apiKey + "\" \
 			-d '" + "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You are an IRC channel moderator , you answer KICK if the message is insulting, racist, or homophobic or GOOD if it is alright, an empty message is GOOD\"},{\"role\":\"user\",\"content\":\"" + msg + "\"}]}" + "' | jq '.choices[].message.content'"
-
+# define REASON			"Inappropriate language or behavior isn't welcome here\n"
 #endif

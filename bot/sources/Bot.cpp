@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 14:48:24 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/09 15:19:28 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,17 +169,18 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 	}
 
 	if (usr[0] != '#') {
-		std::string command = ASSISTANT;
-		std::string answer = getGPTanswer(command.c_str());
+		std::string	command = ASSISTANT;
+		std::string	answer = getGPTanswer(command.c_str());
 		sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
 	}
 	else {
-		std::string command = MODERATOR;
-		std::string answer = getGPTanswer(command.c_str());
+		std::string	command = MODERATOR;
+		std::string	answer = getGPTanswer(command.c_str());
 		if (answer == "\"KICK\"\n") {
-			std::string channel = usr.substr(0, usr.find(' '));
-			std::string toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
-			sendToServer( "KICK " + channel + toBeKicked + " : Bad words in the chat\n" );
+			std::string	channel = usr.substr(0, usr.find(' '));
+			std::string	toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
+			std::string	kickCommand = "KICK " + channel + toBeKicked + REASON;
+			sendToServer( kickCommand );
 		}
 	}
 }
