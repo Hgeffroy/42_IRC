@@ -40,9 +40,6 @@ void	kick(Server& s, Client& c, std::string& str)
 		return ;
 	}
 
-	std::cout << PURPLE << c.getNick() << END << "\n\n";
-	std::cout << YELLOW << user << END << "\n\n";
-
 	std::string	comment = "";
 	if (end != static_cast<int>(str.length())) {
 		int startThree = str.find(' ', end);

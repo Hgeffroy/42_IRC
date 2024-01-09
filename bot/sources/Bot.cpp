@@ -130,7 +130,7 @@ int	Bot::execute( std::string &buffer )
 
 	for ( int i = 0; i < 2; i++ )
 		if ( command == list[i].key )
-			( this->*list[i].function )( msg, user ); // I NEED USER IN THE ARGS !!!!!!
+			( this->*list[i].function )( msg, user );
 
 	return (0);
 }

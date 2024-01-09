@@ -170,18 +170,30 @@ static void	opPrivilege(Client &c, Channel &ch, std::string str)
 	}
 	if (members[c.getNick()] == "~") {
 		if (members[who] != "~") {
-			if (sign == -1)
+			if (sign == -1) {
 				ch.setPrivilege(who, "");
-			else
+				std::cout << PURPLE << "MODE " << ch.getName() << " -o";
+				std::cout << " : Removed Op privilege to " << who << " on " << ch.getName() << END << std::endl;
+			}
+			else {
 				ch.setPrivilege(who, "@");
+				std::cout << PURPLE << "MODE " << ch.getName() << " +o";
+				std::cout << " : Gave Op privilege to " << who << " on " << ch.getName() << END << std::endl;
+			}
 		}
 	}
 	else if (members[c.getNick()] == "@") {
 		if (members[who] != "~" && members[who] != "@") {
-			if (sign == -1)
+			if (sign == -1) {
 				ch.setPrivilege(who, "");
-			else
+				std::cout << PURPLE << "MODE " << ch.getName() << " -o";
+				std::cout << " : Removed Op privilege to " << who << " on " << ch.getName() << END << std::endl;
+			}
+			else {
 				ch.setPrivilege(who, "@");
+				std::cout << PURPLE << "MODE " << ch.getName() << " +o";
+				std::cout << " : Gave Op privilege to " << who << " on " << ch.getName() << END << std::endl;
+			}
 		}
 	}
 }
@@ -200,6 +212,8 @@ static void	setUserLimit(Client &c, Channel &ch, std::string str)
 		if (str[i] == '-') {
 			if (str[i + 2] == '\0') {
 				ch.setUserLimit(-1);
+				std::cout << PURPLE << "MODE " << ch.getName() << " -l";
+				std::cout << " : Unset the \"user limit\" mode on " << ch.getName() << END << std::endl;
 			}
 			return;
 		}
@@ -241,6 +255,8 @@ static void	setUserLimit(Client &c, Channel &ch, std::string str)
 	}
 	if (ch.getNbUsers() <= lim) {
 		ch.setUserLimit(lim);
+		std::cout << PURPLE << "MODE " << ch.getName() << " +l";
+		std::cout << " : Set the \"user limit\" mode on " << ch.getName() << " to " << lim << END << std::endl;
 	}
 	else {
 		sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "number of members is higher than the member limit"));
@@ -262,6 +278,8 @@ static void	setTopicProtection(Client &c, Channel &ch, std::string str)
 		if (str[i] == '-') {
 			if (str[i + 2] == '\0') {
 				ch.setTopicProtect(false);
+				std::cout << PURPLE << "MODE " << ch.getName() << " -t";
+				std::cout << " : Unset the \"topic protection\" mode on " << ch.getName() << END << std::endl;
 			}
 			else {
 				sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
@@ -271,6 +289,8 @@ static void	setTopicProtection(Client &c, Channel &ch, std::string str)
 		else if (str[i] == '+') {
 			if (str[i + 2] == '\0') {
 				ch.setTopicProtect(true);
+				std::cout << PURPLE << "MODE " << ch.getName() << " +t";
+				std::cout << " : Set the \"topic protection\" mode on " << ch.getName() << END << std::endl;
 			}
 			else {
 				sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
