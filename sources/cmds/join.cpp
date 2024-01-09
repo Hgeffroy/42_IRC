@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 15:20:24 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/09 15:39:08 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,21 +177,27 @@ static std::map< std::string, std::string >	getChannelMap( Client& c, std::strin
 	std::string								passwords;
 
 	std::size_t	first_space = s.find( ' ' );
-	std::size_t	second_space = s.find( ' ', first_space + 1 );
-	if ( first_space != std::string::npos ) {
-		std::string pass;
-		std::string	chans = s.substr( first_space + 1, second_space );
-		if ( second_space != std::string::npos )
-			pass = s.substr( second_space + 1 );
-		std::istringstream	iss(chans);
-		std::istringstream	iss2(pass);
-
-		while (std::getline(iss, channelNames, ',')) {
-			getline(iss2, passwords, ',');
-			channels[channelNames] = passwords;
-		}
+	if (first_space == std::string::npos) {
+		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel>" ) );
 		return ( channels );
 	}
-	sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel>" ) );
+
+	std::size_t	second_space = s.find( ' ', first_space + 1 );
+	std::string pass;
+	std::string chans;
+	if ( second_space == std::string::npos )
+		chans = s.substr( first_space + 1 );
+	else
+		chans = s.substr( first_space + 1, second_space - first_space - 1 );
+	if ( second_space != std::string::npos )
+		pass = s.substr( second_space + 1 );
+	std::istringstream	iss(chans);
+	std::istringstream	iss2(pass);
+
+	while (std::getline(iss, channelNames, ',')) {
+		getline(iss2, passwords, ',');
+		channels[channelNames] = passwords;
+	}
 	return ( channels );
+
 }
