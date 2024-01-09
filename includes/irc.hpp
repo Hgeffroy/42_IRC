@@ -28,7 +28,7 @@
 std::string					getIP();
 std::string 				getTime(Server& s);
 std::string					intostr(int a);
-std::vector<std::string>	splitCmd(std::string str);
+std::vector<std::string>	splitCmd(std::string str, char type);
 void						sendToClient(int fd, std::string str);
 void						printClients(std::map<std::string, Client*> map);
 void						printStrVec(std::vector<std::string> v);

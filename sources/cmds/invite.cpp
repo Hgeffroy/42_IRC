@@ -23,10 +23,18 @@ static void			inviteList( Server& s, Client& c );
 
 void	invite( Server& s, Client& c, std::string& params )
 {
+	std::vector<std::string> cmdSplitted = splitCmd(params, ' ');
+	if (cmdSplitted.size() != 3) {
+		if (cmdSplitted.size() > 3)
+			sendToClient( c.getFd( ), ERR_UNKNOWNERROR( c.getNick( ), "INVITE", "Too many parameters") );
+		else if (cmdSplitted.size() < 3)
+			sendToClient( c.getFd( ), ERR_NEEDMOREPARAMS( c.getNick( ), "INVITE") );
+		return ;
+	}
 
 	std::map<std::string, Channel*>			channels = s.getChannels();
-	std::string								channel = getChannelName( params );
-	std::string								nickname = getNickName( params );
+	std::string								nickname = cmdSplitted[1];
+	std::string								channel = cmdSplitted[2];
 
 	if ( channel.empty() && nickname.empty() ) {
 		inviteList( s, c );
