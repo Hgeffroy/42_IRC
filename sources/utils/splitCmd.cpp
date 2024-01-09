@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   splitCmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:07:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 15:34:43 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/09 10:25:55 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ std::vector<std::string>	splitCmd(std::string str)
 
 	while (i < 10) {
 		i++;
-		res.push_back(str.substr(pspace, nspace));
+		res.push_back(str.substr(pspace, nspace - pspace + 1));
 		if (nspace == std::string::npos)
 			break ;
 		pspace = nspace + 1;

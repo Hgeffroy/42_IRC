@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 22:07:29 by wangthea         ###   ########.fr       */
+/*   Updated: 2024/01/09 09:45:58 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 	setsockopt( s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof( optval ) );
 	sInfo.sin_family = AF_INET;
 	sInfo.sin_addr.s_addr = INADDR_ANY;
-	sInfo.sin_port = htons( 2001 );
+	sInfo.sin_port = htons( 2002 );
 	if ( bind( s, reinterpret_cast< sockaddr* >( &sInfo ), sizeof( sInfo ) ) < 0 )
 		throw std::runtime_error( "bind failed" );
 	_socket = s;
