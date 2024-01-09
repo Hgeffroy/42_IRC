@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2024/01/07 08:31:22 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:03:14 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 static std::string	getNickName( std::string params );
 static std::string	getChannelName( std::string params );
 static void			inviteList( Server& s, Client& c );
-
 
 /*----------------------------------------------------------------------------*/
 

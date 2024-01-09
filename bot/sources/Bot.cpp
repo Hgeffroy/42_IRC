@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 09:45:58 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/09 14:34:46 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,18 @@ std::string	getGPTanswer(const char *str)
 
 void	Bot::privmsg( std::string &msg, std::string &usr )
 {
+	std::cout << "-" << msg << "-" << std::endl;
+	for ( std::size_t i = 0; i < msg.size(); i++ )
+	{
+		if ( msg[i] == '\'' || msg[i] == '\"' )
+		{
+			msg.erase( i, 1 );
+			i--;
+		}
+	}
+	std::cout << "-" << msg << "-" << std::endl;
+
+
 	if (usr[0] != '#') {
 		std::string command = ASSISTANT;
 		std::string answer = getGPTanswer(command.c_str());
