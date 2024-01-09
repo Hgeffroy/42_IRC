@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 08:56:27 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 11:39:05 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 15:54:04 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,14 @@ void	moderator( Server& s, Client& c, std::string& str )
 		{
 			std::map<std::string, std::string>				members = itc->second->getMembers( );
 			std::map<std::string, std::string>::iterator	itm = members.find( c.getNick( ) );
-			if ( itm != members.end( ) )
+			if ( itm != members.end( ) && isFounder( c, channels[*it] ) != false )
 			{
-				if ( isFounder( c, channels[*it] ) != false )
+				selected += *it;
+				command += *it;
+				if ( it != names.end() - 1 )
 				{
-					selected += *it;
-					command += *it;
-					if ( it != names.end() - 1 )
-					{
-						selected += ",";
-						command += ",";
-					}
+					selected += ",";
+					command += ",";
 				}
 			}
 			else

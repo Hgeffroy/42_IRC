@@ -16,7 +16,7 @@
 # define SWITCH_NICK(prev, next)										std::string(":") + prev + " NICK " + next + ENDLINE
 # define JOIN_MSG(client, username, channel)							std::string(":") + client + "!" + username + "@localhost" + " JOIN " + channel + ENDLINE
 # define PONG_MSG(token)												std::string(":server ") + "PONG " + token + ENDLINE
-# define KICK_MSG(channel, usr, comment)								std::string(":server ") + "KICK " + channel + " " + usr + comment + ENDLINE
+# define KICK_MSG(client, channel, usr, comment)						std::string(":") + client + " KICK " + channel + " " + usr + comment + ENDLINE
 # define PART_MSG(client, username, channel, reason)					std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + " :" + reason + ENDLINE
 # define INVITE_MSG(client, username, invited, channel)					std::string(":") + client + "!" + username + "@localhost" + " INVITE " + invited + " " + channel + ENDLINE
 

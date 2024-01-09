@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 14:42:01 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:31:35 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,8 @@ void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
 	if (isFounder)
 		_members[newClient.getNick()] = "~";
 	std::cout << newClient.getNick() << " joined channel " << _name << std::endl;
-	_nbUsers++;
+	if ( newClient.getNick() != "bot" )
+		_nbUsers++;
 
 	refreshChanMembers(s);
 }

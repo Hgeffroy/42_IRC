@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 14:36:00 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/08 22:07:29 by wangthea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 }
 
 Bot::~Bot( void ) {}
-
-/**  Setters and Getters  *********************************************************************************************/
 
 /**  Private member functions  ****************************************************************************************/
 
@@ -161,7 +159,6 @@ std::string	getGPTanswer(const char *str)
 
 void	Bot::privmsg( std::string &msg, std::string &usr )
 {
-	std::cout << usr << std::endl;
 	if (usr[0] != '#') {
 		std::string command = ASSISTANT;
 		std::string answer = getGPTanswer(command.c_str());
@@ -173,21 +170,17 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 		if (answer == "\"KICK\"\n") {
 			std::string channel = usr.substr(0, usr.find(' '));
 			std::string toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
-			sendToServer( "KICK " + channel + toBeKicked + " Bad words in the chat\n" );
+			sendToServer( "KICK " + channel + toBeKicked + " : Bad words in the chat\n" );
 		}
 	}
 }
 
 void	Bot::moderate( std::string &msg, std::string &usr )
 {
-	(void)usr;
+	( void )usr;
 	std::vector< std::string >	channels = splitArguments( msg );
 	if ( channels.empty() )
 		return ;
-
 	for ( std::vector< std::string >::iterator		it = channels.begin() ; it != channels.end(); it++ )
-	{
-		std::cout << BLUE << *it << END << std::endl;
 		sendToServer( "JOIN " + *it + "\n" );
-	}
 }

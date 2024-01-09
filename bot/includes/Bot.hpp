@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:30:24 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 13:58:57 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/09 09:17:39 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ class Bot
 
 	private:
 
-		// std::string	_addr; -> voir avec arthur?
 		std::size_t	_socket;
 		std::string	_password;
 		std::string	_apiKey;
