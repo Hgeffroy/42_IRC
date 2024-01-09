@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 22:13:03 by wangthea         ###   ########.fr       */
+/*   Updated: 2024/01/09 09:12:36 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
+
 static void	handle_signals( int signal );
 
 int	main( int ac, char **av )
