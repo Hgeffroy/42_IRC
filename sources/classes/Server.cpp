@@ -166,7 +166,7 @@ void	Server::removeClientFromChannels(Client& c)
 
 		if (find != members.end()) {
 			if (it->second->removeUserFromChan(*this, find->first))
-				return ;// Mettre le if
+				continue ;// Mettre le if
 			it->second->sendToChannel(*this, PART_MSG(c.getNick(), c.getUser(), it->second->getName(), "Disconnected"));
 		}
 	}
