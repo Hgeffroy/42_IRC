@@ -276,6 +276,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 
 	if (r <= 0)
 	{
+		std::cout << "yolo" << std::endl;
 		s.removeClient(*this);
 		return (1);
 	}
