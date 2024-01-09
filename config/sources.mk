@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/08 09:01:29 by twang            ###   ########.fr        #
+#    Updated: 2024/01/09 12:36:49 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/intostr.cpp									\
 				sources/utils/printMap.cpp									\
 				sources/utils/sendToClient.cpp								\
+				sources/utils/signals.cpp									\
 				sources/utils/splitCmd.cpp									\
 				sources/cmds/topic.cpp										\
 				sources/cmds/kick.cpp										\

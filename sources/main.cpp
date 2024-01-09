@@ -3,26 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:57:17 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/14 09:21:16 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:34:50 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	test(int sig)
-{
-	if (sig == SIGINT)
-		throw	std::exception();
-}
-
 int	main(int ac, char** av)
 {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, &test);
+	signal(SIGINT, &signals_switchman);
 
 	if (ac != 3)
 	{
