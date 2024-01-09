@@ -53,6 +53,6 @@ void	kick(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_NOPRIVS( "bot" ) );
 		return ;
 	}
-	sendToClient(c.getFd(), KICK_MSG((*chan[target]).getName(), user, comment)); // Changer le kick msg (premier arg doit etre le client qui kick)
+	sendToClient(c.getFd(), KICK_MSG(c.getNick(), (*chan[target]).getName(), user, comment));
 	(*chan[target]).removeUserFromChan(s, user);
 }
