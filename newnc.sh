@@ -9,6 +9,5 @@
 	sleep 1
 	echo JOIN \&lol
 	echo JOIN \#lol
-	echo MODERATE \#lol
 	echo QUIT
 } | nc -C localhost 2000
