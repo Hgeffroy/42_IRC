@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:57:17 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 13:54:37 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 16:00:14 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int ac, char** av)
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << "Server closed because: ";
+		std::cerr << "Server closed: ";
 		std::cerr << e.what() << std::endl;
 		return (-1);
 	}

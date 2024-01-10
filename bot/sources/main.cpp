@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/10 13:52:43 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 16:00:05 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main( int ac, char **av )
 	}
 	catch ( std::exception const & error )
 	{
-		std::cerr << "Bot closed because: ";
+		std::cerr << "Bot closed: ";
 		std::cerr << error.what( ) << std::endl;
 		return ( -1 );
 	}
