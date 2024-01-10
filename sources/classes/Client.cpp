@@ -150,14 +150,13 @@ int Client::setInfos(Server &s, std::string &str)
 
 std::vector<std::string> Client::splitBuf()
 {
-	std::string buffer = _bufRead;
 	std::vector<std::string> res;
 
-	size_t sep1 = buffer.find('\n');
-	size_t sep2 = buffer.find("\r\n");
+	size_t sep1 = _buffer.find('\n');
+	size_t sep2 = _buffer.find("\r\n");
 	size_t prev = 0;
 	size_t sep = std::min(sep1, sep2);
-	std::string tempStr = buffer.substr(prev, sep - prev);
+	std::string tempStr = _buffer.substr(prev, sep - prev);
 
 	if (tempStr.length() < 1)
 		return (res);
@@ -165,28 +164,28 @@ std::vector<std::string> Client::splitBuf()
 		tempStr = tempStr.substr(0, tempStr.length() - 1);
 	res.push_back(tempStr);
 
-	std::cout << "res[0] =" << res[0] << "=" << std::endl;
+	//std::cout << "res[0] =" << res[0] << "=" << std::endl;
 
 	int i = 1;
 	while (sep != std::string::npos)
 	{
-		while (buffer[sep] == '\r' || buffer[sep] == '\n')
+		while (_buffer[sep] == '\r' || _buffer[sep] == '\n')
 			sep++;
 
 		prev = sep;
 
-		sep1 = buffer.find('\n', sep);
-		sep2 = buffer.find("\r\n", sep);
+		sep1 = _buffer.find('\n', sep);
+		sep2 = _buffer.find("\r\n", sep);
 		sep = std::min(sep1, sep2);
 
-		tempStr = buffer.substr(prev, sep - prev);
+		tempStr = _buffer.substr(prev, sep - prev);
 		if (tempStr.length() < 1)
 			break;
 		if (tempStr[tempStr.length() - 1] == ' ')
 			tempStr = tempStr.substr(0, tempStr.length() - 1);
 		res.push_back(tempStr);
 
-		std::cout << "res[" << i << "] =" << res[i] << "=" << std::endl;
+		//std::cout << "res[" << i << "] =" << res[i] << "=" << std::endl;
 		i++;
 	}
 
@@ -195,8 +194,6 @@ std::vector<std::string> Client::splitBuf()
 
 int Client::execCmd(Server &s, std::string &str)
 {
-	std::cout << "Executing cmd" << std::endl;
-
 	if (!_connected)
 		setInfos(s, str);
 
@@ -276,19 +273,23 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 
 	if (r <= 0)
 	{
-		std::cout << "yolo" << std::endl;
 		s.removeClient(*this);
 		return (1);
 	}
 
-	std::cout << RED << "From " << _fd << ": " << _bufRead << END << std::endl;
+	std::cout << RED << "From " << _fd << ": -" << _bufRead << "-" << END << std::endl;
+	std::string	test = _bufRead;
 
-	std::vector<std::string> cmds = splitBuf();
+	_buffer += test;
+	if (_buffer.find('\n') != std::string::npos) {
+		std::vector<std::string> cmds = splitBuf();
 
-	for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
-		printStrVec(splitCmd(*it));
-		if (execCmd(s, *it) == 1)
-			return (0);
+		for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
+			printStrVec(splitCmd(*it));
+			if (execCmd(s, *it) == 1)
+				return (0);
+		}
+		_buffer.clear();
 	}
 
 	std::memset(_bufRead, 0, BUFFER_SIZE);

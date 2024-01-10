@@ -32,6 +32,7 @@ class	Client
 		std::string 				_nickname; // Imposer de commencer par un alpha !
 		std::string					_username; // Imposer de commencer par un alpha !
 		char						_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
+		std::string					_buffer;
 		char						_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
 
 		int							getCmd(std::string& buffer);
