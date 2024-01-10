@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 14:40:20 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:50:34 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,13 @@ void	Server::removeClientFromChannels(Client& c)
 	{
 		std::map<std::string, std::string>				members = it->second->getMembers();
 		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
-
+		std::cout << "coucou " << std::endl;
 		if (find != members.end()) {
 			if (it->second->removeUserFromChan(*this, find->first))
-				continue ;// Mettre le if
+				//continue ;// Mettre le if        ->//segfault quand on perd un client par ctrl c 
+				//faire un vector qui contient tout les noms des clients a supprimer et revenir a la fin reboucler et erase tout.
+				// il faut boucler dans le vector pas dans la map
+				break;
 			it->second->sendToChannel(*this, PART_MSG(c.getNick(), c.getUser(), it->second->getName(), "Disconnected"));
 		}
 	}
