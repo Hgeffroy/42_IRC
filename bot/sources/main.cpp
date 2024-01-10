@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/10 10:35:03 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 13:52:43 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main( int ac, char **av )
 		std::cerr << error.what( ) << std::endl;
 		return ( -1 );
 	}
-
+	// checker quand on perd le server il faut arreter le bot	
 	return ( 0 );
 }
 
