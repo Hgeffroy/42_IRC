@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:57:17 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/09 12:34:50 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 10:34:55 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	main(int ac, char** av)
 {
 	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &signals_switchman);
 
 	if (ac != 3)

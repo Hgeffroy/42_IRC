@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:53:44 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 13:03:22 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 10:35:03 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static void	handle_signals( int signal );
 int	main( int ac, char **av )
 {
 	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &handle_signals);
 
 	try
