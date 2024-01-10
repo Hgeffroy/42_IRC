@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 14:34:46 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 09:47:24 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ std::string	getGPTanswer(const char *str)
 
 void	Bot::privmsg( std::string &msg, std::string &usr )
 {
-	std::cout << "-" << msg << "-" << std::endl;
 	for ( std::size_t i = 0; i < msg.size(); i++ )
 	{
 		if ( msg[i] == '\'' || msg[i] == '\"' )
@@ -168,21 +167,20 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 			i--;
 		}
 	}
-	std::cout << "-" << msg << "-" << std::endl;
-
 
 	if (usr[0] != '#') {
-		std::string command = ASSISTANT;
-		std::string answer = getGPTanswer(command.c_str());
+		std::string	command = ASSISTANT;
+		std::string	answer = getGPTanswer(command.c_str());
 		sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
 	}
 	else {
-		std::string command = MODERATOR;
-		std::string answer = getGPTanswer(command.c_str());
+		std::string	command = MODERATOR;
+		std::string	answer = getGPTanswer(command.c_str());
 		if (answer == "\"KICK\"\n") {
-			std::string channel = usr.substr(0, usr.find(' '));
-			std::string toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
-			sendToServer( "KICK " + channel + toBeKicked + " : Bad words in the chat\n" );
+			std::string	channel = usr.substr(0, usr.find(' '));
+			std::string	toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
+			std::string	kickCommand = "KICK " + channel + toBeKicked + REASON;
+			sendToServer( kickCommand );
 		}
 	}
 }
@@ -193,6 +191,6 @@ void	Bot::moderate( std::string &msg, std::string &usr )
 	std::vector< std::string >	channels = splitArguments( msg );
 	if ( channels.empty() )
 		return ;
-	for ( std::vector< std::string >::iterator		it = channels.begin() ; it != channels.end(); it++ )
+	for ( std::vector< std::string >::iterator it = channels.begin() ; it != channels.end(); it++ )
 		sendToServer( "JOIN " + *it + "\n" );
 }
