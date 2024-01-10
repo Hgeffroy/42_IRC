@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/05 14:33:18 by twang            ###   ########.fr        #
+#    Updated: 2024/01/10 12:45:53 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ include config/includes.mk
 NAME			=		ircserv
 DEBUG			=		no
 VALGRIND		=		no
+BONUS			=		no
 HGEFFROY		=		\e]8;;https://profile.intra.42.fr/users/hgeffroy\a\e[34mhgeffroy\e[34m\e]8;;\a
 AASCEDU			=		\e]8;;https://profile.intra.42.fr/users/aascedu\a\e[34maascedu\e[34m\e]8;;\a
 TWANG			=		\e]8;;https://profile.intra.42.fr/users/twang\a\e[34mtwang\e[34m\e]8;;\a
@@ -54,10 +55,19 @@ endif
 
 LEAKS			=		valgrind --leak-check=full --show-leak-kinds=all --quiet
 
+#--bonus flags------------------------------------------------------------------#
+
+BFLAGS			=		-DBONUS
+
+ifeq ($(BONUS), yes)
+CFLAGS			+=		$(BFLAGS)
+endif
+
 #--objects---------------------------------------------------------------------#
 
 OBJECTS			=		$(addprefix $(OBJ_DIR), $(SOURCES:.cpp=.o))
 DEPS			=		$(addprefix $(OBJ_DIR), $(SOURCES:.cpp=.d))
+
 
 #--global rules----------------------------------------------------------------#
 
@@ -94,6 +104,7 @@ leaks:
 		$(LEAKS) ./ircserv 2000 popopo
 
 bonus:
+		$(MAKE) re -j BONUS=yes
 		$(MAKE) -C $(BOT_DIR)
 		./bot/bot 2000 popopo apikey
 
