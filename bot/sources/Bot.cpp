@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/10 09:47:24 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 15:59:55 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	Bot::readFromServer( void )
 	int r = recv( _socket, _bufRead, BUFFER_SIZE, 0);
 
 	if ( r <= 0 )
-		return (-1);
+		throw std::runtime_error( "lost connection to server" );
 
 	std::cout << RED << "From " << _socket << ": " << _bufRead << END;
 
