@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 13:50:34 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 16:03:41 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,10 +166,11 @@ void	Server::removeClientFromChannels(Client& c)
 		std::cout << "coucou " << std::endl;
 		if (find != members.end()) {
 			if (it->second->removeUserFromChan(*this, find->first))
-				//continue ;// Mettre le if        ->//segfault quand on perd un client par ctrl c 
+				//continue ;// Mettre le if        ->//segfault quand on perd un client par ctrl c
+
 				//faire un vector qui contient tout les noms des clients a supprimer et revenir a la fin reboucler et erase tout.
 				// il faut boucler dans le vector pas dans la map
-				break;
+				break; //le break fixe pour l'instant le segfault mais je pense qu'il casse autre chose ...
 			it->second->sendToChannel(*this, PART_MSG(c.getNick(), c.getUser(), it->second->getName(), "Disconnected"));
 		}
 	}

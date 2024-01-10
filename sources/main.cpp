@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:57:17 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 16:00:14 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 16:01:42 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,4 @@ int	main(int ac, char** av)
 		return (-1);
 	}
 	//une fin de ligne doit imperativement etre /n/r		on ne doit pas gerer un nc localhost 2000 sans le -C
-	//message de ctrl c implique que ctrl c est une erreur alors que c'est la facon normale de fermer le server, peut etre changer le message ?
 }
