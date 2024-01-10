@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/10 13:07:16 by twang            ###   ########.fr        #
+#    Updated: 2024/01/10 15:01:27 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ LEAKS			=		valgrind --leak-check=full --show-leak-kinds=all --quiet
 
 OBJECTS			=		$(addprefix $(OBJ_DIR), $(SOURCES:.cpp=.o))
 DEPS			=		$(addprefix $(OBJ_DIR), $(SOURCES:.cpp=.d))
+
 
 #--global rules----------------------------------------------------------------#
 

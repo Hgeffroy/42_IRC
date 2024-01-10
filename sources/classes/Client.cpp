@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 14:55:20 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/10 12:15:56 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,6 @@ std::vector<std::string> Client::splitBuf()
 		tempStr = tempStr.substr(0, tempStr.length() - 1);
 	res.push_back(tempStr);
 
-	//std::cout << "res[0] =" << res[0] << "=" << std::endl;
-
 	int i = 1;
 	while (sep != std::string::npos)
 	{
@@ -184,8 +182,6 @@ std::vector<std::string> Client::splitBuf()
 		if (tempStr[tempStr.length() - 1] == ' ')
 			tempStr = tempStr.substr(0, tempStr.length() - 1);
 		res.push_back(tempStr);
-
-		//std::cout << "res[" << i << "] =" << res[i] << "=" << std::endl;
 		i++;
 	}
 
@@ -291,7 +287,6 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		}
 		_buffer.clear();
 	}
-
 	std::memset(_bufRead, 0, BUFFER_SIZE);
 
 	return (0);

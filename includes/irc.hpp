@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:41:12 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/09 12:36:23 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 15:03:08 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	list(Server& s, Client& c, std::string str);
 void	away(Server& s, Client& c, std::string& str);
 void	bot( Server &s, Client& c, std::string& str );
 void	moderator( Server& s, Client& c, std::string& str );
+
 
 #endif
 

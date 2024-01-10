@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 11:04:17 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 15:01:55 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ void	user(Server& s, Client& c, std::string& str, bool is_bot )
 			return ;
 		}
 	}
-
 	if (usr.empty())
 	{
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
 		return ;
 	}
+
 	if (usr == "bot" && !is_bot)
 	{
 		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "This username is already reserved"));
