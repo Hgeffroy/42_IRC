@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/09 15:39:08 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/10 12:33:09 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ static int	checkChannelName( Client& c, const std::string& channelName )
 		sendToClient( c.getFd(), ERR_NEEDMOREPARAMS( c.getNick(), "JOIN #<channel>" ) );
 		return ( -1 );
 	}
-	else if ( channelName[0] != '#' || channelName.size() < 2 )
+	else if ( ( channelName[0] != '#' && channelName[0] != '&' ) || channelName.size() < 2 )
 	{
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
 		return ( -1 );

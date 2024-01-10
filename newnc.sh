@@ -2,10 +2,12 @@
 
 {
 	echo PASS popopo
+	sleep 1
 	echo NICK h
+	sleep 1
 	echo USER h
+	sleep 1
+	echo JOIN \&lol
 	echo JOIN \#lol
-	while true
-		do echo PRIVMSG jean coucou
-	done
+	echo QUIT
 } | nc -C localhost 2000

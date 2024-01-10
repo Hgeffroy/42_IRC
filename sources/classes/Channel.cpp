@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 11:31:35 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/10 12:14:12 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,9 +243,9 @@ void	Channel::removeUserFromBanList(std::string const& name)
 
 void	Channel::sendToChannel( Server& s, std::string str )
 {
-	std::map< std::string, std::string > 			members = this->getMembers( );
+	std::map< std::string, std::string >			members = this->getMembers( );
 	std::map< std::string, std::string >::iterator	it = members.begin( );
-	std::map< std::string, Client* > 				clients = s.getClients( );
+	std::map< std::string, Client* >				clients = s.getClients( );
 
 	for ( it = members.begin( ); it != members.end( ); ++it ) {
 		Client* client = clients.find( it->first )->second;
