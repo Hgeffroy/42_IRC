@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 15:19:28 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/10 09:47:24 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,6 @@ void	Bot::moderate( std::string &msg, std::string &usr )
 	std::vector< std::string >	channels = splitArguments( msg );
 	if ( channels.empty() )
 		return ;
-	for ( std::vector< std::string >::iterator		it = channels.begin() ; it != channels.end(); it++ )
+	for ( std::vector< std::string >::iterator it = channels.begin() ; it != channels.end(); it++ )
 		sendToServer( "JOIN " + *it + "\n" );
 }
