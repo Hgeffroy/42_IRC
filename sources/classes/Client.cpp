@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 12:15:56 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:23:12 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false),
 
 Client::~Client()
 {
+	/*si on fait un ctrl + c on ne passe que par la, et il faut renvoyer une
+	replie! DONC c'est chaud : 
+	seule idee : integre un vector< std::string > _noms_channels : 
+	qui contient chaques noms de channels dans lesquels le client a ete..
+	mais pour le server ... je bloque tout de suite c;est une fin de journee */
 	close(_fd);
 	std::cout << "Salut, je suis le destructeur de Client" << std::endl;
 }
@@ -266,7 +271,6 @@ int Client::execCmd(Server &s, std::string &str)
 int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 {
 	int r = recv(_fd, _bufRead, BUFFER_SIZE, 0);
-
 	if (r <= 0)
 	{
 		s.removeClient(*this);

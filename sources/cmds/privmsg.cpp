@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 15:36:31 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/11 11:33:29 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	sendMsg(Server& s, Client& c, std::string& str)
 
 	if (std::isalpha(dest[0]))
 		sendDM(s, c, dest, msg);
-	else if (dest[0] == '#')
+	else if (dest[0] == '#' || dest[0] == '&')
 		sendChan(s, c, dest, msg);
 	else if (dest[0] == '$')
 		sendBroadcast(s, c, msg); // Send to all clients on server (broadcast)
