@@ -39,6 +39,7 @@ class Bot
 		Bot( std::string port, std::string password, std::string apikey );
 		~Bot( void );
 
+		bool						checkApiKey( void );
 		void						sendToServer( std::string str );
 		int							readFromServer( void );
 		int							execute( std::string &buffer );

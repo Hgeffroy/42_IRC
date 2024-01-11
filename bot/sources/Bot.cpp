@@ -27,7 +27,8 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 	p = setPort( port );
 	_password = setPassword( password );
 	_apiKey = apikey;
-	//check API key;
+	if (checkApiKey() == false)
+		throw std::runtime_error( "API error" );
 	s = socket( PF_INET, SOCK_STREAM, 0 );
 	if ( s < 0 )
 		throw std::runtime_error( "socket failed" );
@@ -92,6 +93,36 @@ void	Bot::connect( int port, std::string& password )
 }
 
 /**  Public member functions  *****************************************************************************************/
+
+/*
+curl https://api.openai.com/v1/models -H "Authorization: Bearer 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" | jq '.error'
+*/
+
+
+bool	Bot::checkApiKey( void )
+{
+	std::string check = "curl -s https://api.openai.com/v1/models -H \"Authorization: Bearer " + _apiKey + "\" | jq '.error'";
+	FILE*	pipe = popen(check.c_str(), "r");
+	if (!pipe) {
+		std::cerr << RED << "Error popen()" << END << std::endl;
+		return ("Error when using popen function");
+	}
+
+	char	buff[256];
+	std::string res;
+
+	while (fgets(buff, 256, pipe) != NULL) {
+		if (ferror(pipe)) {
+			std::cerr << RED << "Error fgets()" << END << std::endl;
+			return ("Error when using fgets function");
+		}
+		res += buff;
+	}
+	pclose(pipe);
+	if (res == "null")
+		return (true);
+	return (false);
+}
 
 void	Bot::sendToServer( std::string str )
 {
