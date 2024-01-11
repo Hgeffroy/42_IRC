@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 13:03:14 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/11 11:38:19 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	invite( Server& s, Client& c, std::string& params )
 		sendToClient( c.getFd( ), ERR_UNKNOWNERROR( c.getNick( ), "INVITE", "Too many parameters") );
 		return ;
 	}
-	else if( channel[0] != '#' )
+	else if( channel[0] != '#' && channel[0] != '&' )
 	{
 		sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), channel ) );
 		return ;
