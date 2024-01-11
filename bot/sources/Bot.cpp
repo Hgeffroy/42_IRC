@@ -119,7 +119,7 @@ bool	Bot::checkApiKey( void )
 		res += buff;
 	}
 	pclose(pipe);
-	if (res == "null")
+	if (res == "null\n")
 		return (true);
 	return (false);
 }

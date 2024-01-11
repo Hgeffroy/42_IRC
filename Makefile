@@ -96,7 +96,7 @@ leaks:
 
 bonus:
 		$(MAKE) -C $(BOT_DIR)
-		./bot/bot 2000 popopo $KEY
+		./bot/bot 2000 popopo $$KEY
 
 #--print header----------------------------------------------------------------#
 
