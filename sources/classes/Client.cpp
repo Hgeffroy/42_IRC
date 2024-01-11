@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 16:15:59 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/11 11:04:15 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 	std::string	test = _bufRead;
 
 	_buffer += test;
-	if (_buffer.find('\n') != std::string::npos) { // ici il faudra faire un strstr pour trouver \r\n et pas juste \n
+	if (strstr(_buffer.c_str(), "\r\n") != NULL) {
 		std::vector<std::string> cmds = splitBuf();
 
 		for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {

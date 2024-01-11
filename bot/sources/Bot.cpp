@@ -27,6 +27,7 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 	p = setPort( port );
 	_password = setPassword( password );
 	_apiKey = apikey;
+	//check API key;
 	s = socket( PF_INET, SOCK_STREAM, 0 );
 	if ( s < 0 )
 		throw std::runtime_error( "socket failed" );
@@ -85,7 +86,7 @@ void	Bot::connect( int port, std::string& password )
 
 	sendToServer( "PASS " + password + "\n" );
 	sendToServer( "BOT\n" );
-	sendToServer( "JOIN #bot\n" );
+	sendToServer( "JOIN #bot\r\n" );
 	while (true)
 		readFromServer();
 }
@@ -171,7 +172,7 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 	if (usr[0] != '#') {
 		std::string	command = ASSISTANT;
 		std::string	answer = getGPTanswer(command.c_str());
-		sendToServer( "PRIVMSG " + usr + " " + answer + "\n" );
+		sendToServer( "PRIVMSG " + usr + " " + answer + "\r\n" );
 	}
 	else {
 		std::string	command = MODERATOR;
@@ -179,7 +180,7 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 		if (answer == "\"KICK\"\n") {
 			std::string	channel = usr.substr(0, usr.find(' '));
 			std::string	toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
-			std::string	kickCommand = "KICK " + channel + toBeKicked + REASON;
+			std::string	kickCommand = "KICK " + channel + toBeKicked + REASON + "\r\n";
 			sendToServer( kickCommand );
 		}
 	}
@@ -192,5 +193,5 @@ void	Bot::moderate( std::string &msg, std::string &usr )
 	if ( channels.empty() )
 		return ;
 	for ( std::vector< std::string >::iterator it = channels.begin() ; it != channels.end(); it++ )
-		sendToServer( "JOIN " + *it + "\n" );
+		sendToServer( "JOIN " + *it + "\r\n" );
 }
