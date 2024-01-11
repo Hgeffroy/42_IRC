@@ -277,7 +277,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 	std::string	test = _bufRead;
 
 	_buffer += test;
-	if (_buffer.find('\n') != std::string::npos) {
+	if (strstr(_buffer.c_str(), "\r\n") != NULL) {
 		std::vector<std::string> cmds = splitBuf();
 
 		for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
