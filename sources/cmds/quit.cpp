@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:52:42 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 13:28:42 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:23:37 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,8 @@
 void	quit(Server& s, Client& c, std::string& str)
 {
 	(void)str;
+	/*doit renvoyer une RPL comme dans part, mais il faudrait recoder (?)
+	removeUserFromChan(), et ne pas avoir le delete channel a l'interieur
+	soit tu le l'atteins pas, soit tu segfault*/
 	s.removeClient(c);
 }

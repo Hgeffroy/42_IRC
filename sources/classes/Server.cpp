@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 16:03:41 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:30:30 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,13 +164,23 @@ void	Server::removeClientFromChannels(Client& c)
 		std::map<std::string, std::string>				members = it->second->getMembers();
 		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
 		std::cout << "coucou " << std::endl;
-		if (find != members.end()) {
-			if (it->second->removeUserFromChan(*this, find->first))
-				//continue ;// Mettre le if        ->//segfault quand on perd un client par ctrl c
+		if (find != members.end())
+		{
+			if (it->second->removeUserFromChan(*this, find->first)) /* <- pour moi cette fonction pose probleme 
+																		car elle fait plusieurs choses, elle 
+																		devrait renvoyer un code special dans le cas ou on supprime
+																		un channel et on le supprime mais en sortie de ces fonctions,
+																		apres les RPL.*/
+/* quand on fait continue ; il se peut qu'un autre client qui se deconnecte
+passe quand meme au meme moment et accede a la zone memoire un peu trop
+fraichement nettoyee - ctrl + c */
 
-				//faire un vector qui contient tout les noms des clients a supprimer et revenir a la fin reboucler et erase tout.
-				// il faut boucler dans le vector pas dans la map
-				break; //le break fixe pour l'instant le segfault mais je pense qu'il casse autre chose ...
+/* du coup la j'ai mis break pour le moment mais du coup on ne peut plus delog
+plusieurs client en meme temps ...*/
+
+/*solution [par nico]: faire un vector qui contient tout les noms des clients
+a supprimer et boucler sur ce vector a la fin de cette boucle la et erase tout.*/
+				break ;
 			it->second->sendToChannel(*this, PART_MSG(c.getNick(), c.getUser(), it->second->getName(), "Disconnected"));
 		}
 	}
