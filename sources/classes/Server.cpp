@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 14:59:00 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 15:35:59 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ void	Server::initFd()
 	FD_ZERO(&_fdRead);
 
 	FD_SET(_listener, &_fdRead);
-	
+
 	for (it = _newClients.begin(); it != _newClients.end(); ++it)
 		FD_SET((*it)->getFd(), &_fdRead);
 
