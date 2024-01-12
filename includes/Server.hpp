@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 11:25:27 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ class	Server
 		time_t*							getCreationTime();
 
 		int		getClientFd(std::string nickname);
+		void	switchNick(std::string& prevNick, std::string& newNick);
 
 		void	addClient(Client* client);
 		void	removeClient(Client& c);

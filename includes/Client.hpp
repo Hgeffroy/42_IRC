@@ -55,7 +55,7 @@ class	Client
 
 		void			setPassOk();
 		void			setUser(std::string& str);
-		void			setNick(std::string& str);
+		void			setNick(Server& s, std::string& str);
 		void			setAway(bool away);
 
 		int 			read(Server& s);

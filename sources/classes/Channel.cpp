@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 10:30:44 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,12 @@ void	Channel::setTopic( std::string topic )
 
 void	Channel::refreshChanMembers(Server& s)
 {
-	std::map<std::string, Client*>		clientList = s.getClients();
+	std::map<std::string, Client*>					clientList = s.getClients();
 	std::map<std::string, std::string>::iterator	it;
 
 	for (it = _members.begin(); it != _members.end(); ++it) {
+		std::cout << "name of client we lf: " << it->first << std::endl;
+		printClients(clientList);
 		Client* client = clientList[it->first];
 		std::map<std::string, std::string>::iterator	it2;
 
@@ -247,3 +249,29 @@ void	Channel::sendToChannel( Server& s, std::string str )
 		sendToClient( client->getFd( ), str );
 	}
 }
+
+void Channel::switchNick(std::string& prevNick, std::string& newNick)
+{
+	if (_members.find(prevNick) != _members.end()) {
+		_members[newNick] = _members[prevNick];
+		_members.erase(prevNick);
+	}
+
+	std::vector<std::string>::iterator it;
+	for (it = _guestList.begin(); it != _guestList.end(); ++it) {
+		if (*it == prevNick) {
+			_guestList.push_back(newNick);
+			_guestList.erase(it);
+			break ;
+		}
+	}
+
+	for (it = _bannedList.begin(); it != _bannedList.end(); ++it) {
+		if (*it == prevNick) {
+			_bannedList.push_back(newNick);
+			_bannedList.erase(it);
+			break ;
+		}
+	}
+}
+

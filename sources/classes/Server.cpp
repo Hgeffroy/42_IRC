@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 10:12:14 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,18 @@ int Server::getClientFd(std::string nickname)
 {
 	return (_clients[nickname]->getFd());
 }
+
+void	Server::switchNick(std::string& prevNick, std::string& newNick)
+{
+	_clients[newNick] = _clients[prevNick];
+	_clients.erase(prevNick);
+
+	std::map<std::string, Channel*>::iterator it;
+	for (it = _channels.begin(); it != _channels.end(); ++it) {
+		it->second->switchNick(prevNick, newNick);
+	}
+}
+
 
 void	Server::addClient(Client *client)
 {

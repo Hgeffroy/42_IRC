@@ -19,6 +19,7 @@
 # define KICK_MSG(client, channel, usr, comment)						std::string(":") + client + " KICK " + channel + " " + usr + comment + ENDLINE
 # define PART_MSG(client, username, channel, reason)					std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + " :" + reason + ENDLINE
 # define INVITE_MSG(client, username, invited, channel)					std::string(":") + client + "!" + username + "@localhost" + " INVITE " + invited + " " + channel + ENDLINE
+# define MODE_MSG(client, username, str)								std::string(":") + client + "!" + username + "@localhost" + " " + str + ENDLINE
 
 // 001
 # define RPL_WELCOME(client, nickname, username)						std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@localhost" + ENDLINE

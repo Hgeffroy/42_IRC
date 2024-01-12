@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 10:30:45 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ class	Channel
 		void								removeUserFromBanList(std::string const& name);
 		void								sendToChannel( Server& s, std::string str );
 		void								refreshChanMembers(Server& s);
+		void								switchNick( std::string& prevNick, std::string& newNick );
 
 
 };

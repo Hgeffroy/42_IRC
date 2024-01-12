@@ -55,7 +55,7 @@ void	nick(Server& s, Client& c, std::string& str, bool is_bot ) // Verifier la t
 		prev = c.getNick();
 	}
 
-	c.setNick(nick);
+	c.setNick(s, nick);
 
 	if (!prev.empty())
 	{
