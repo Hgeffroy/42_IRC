@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 15:41:12 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 17:02:43 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,13 +165,13 @@ std::vector<std::string> Client::splitBuf()
 		tempStr = tempStr.substr(0, tempStr.length() - 1);
 	res.push_back(tempStr);
 
-	int i = 1;
 	while (sep != std::string::npos)
 	{
-		while (_buffer[sep] == '\r')
+		while (_buffer[sep] == '\r' || _buffer[sep] == '\n')
 			sep++;
 
 		prev = sep;
+		sep = _buffer.find("\r\n", prev);
 		tempStr = _buffer.substr(prev, sep - prev);
 
 		if (tempStr.length() < 1)
@@ -179,7 +179,6 @@ std::vector<std::string> Client::splitBuf()
 		if (tempStr[tempStr.length() - 1] == ' ')
 			tempStr = tempStr.substr(0, tempStr.length() - 1);
 		res.push_back(tempStr);
-		i++;
 	}
 
 	return (res);

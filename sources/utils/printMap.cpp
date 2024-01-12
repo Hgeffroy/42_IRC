@@ -27,7 +27,7 @@ void	printStrVec(std::vector<std::string> v)
 	int i = 0;
 
 	for (it = v.begin(); it != v.end(); ++it) {
-		std::cout << "v[" << i << "] = " << *it << std::endl;
+		std::cout << "v[" << i << "] = -" << *it << "-" << std::endl;
 		i++;
 	}
 }

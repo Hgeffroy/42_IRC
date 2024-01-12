@@ -85,8 +85,8 @@ void	Bot::connect( int port, std::string& password )
 	if ( ::connect( _socket, reinterpret_cast< const struct sockaddr* >( &csin ), sizeof( csin ) ) < 0 )
 		throw std::invalid_argument( "<connect> bot cannot connect to the server" );
 
-	sendToServer( "PASS " + password + "\n" );
-	sendToServer( "BOT\n" );
+	sendToServer( "PASS " + password + "\r\n" );
+	sendToServer( "BOT\r\n" );
 	sendToServer( "JOIN #bot\r\n" );
 	while (true)
 		readFromServer();
