@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 10:30:44 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:11:08 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,12 @@ void	Channel::setTopic( std::string topic )
 
 void	Channel::refreshChanMembers(Server& s)
 {
-	std::map<std::string, Client*>		clientList = s.getClients();
+	std::map<std::string, Client*>					clientList = s.getClients();
 	std::map<std::string, std::string>::iterator	it;
 
 	for (it = _members.begin(); it != _members.end(); ++it) {
+		std::cout << "name of client we lf: " << it->first << std::endl;
+		printClients(clientList);
 		Client* client = clientList[it->first];
 		std::map<std::string, std::string>::iterator	it2;
 

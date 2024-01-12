@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 12:33:09 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 12:08:05 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,13 @@ static void	joinOneChannel(Server& s, Client& c, const std::string& channelName,
 
 		std::map<std::string, std::string> members = channel->getMembers();
 		if (members.find(c.getNick()) == members.end()) {
-			sendChannelRPL(s, c, channel);
 			channel->addUserToChan(s, c, false);
+			sendChannelRPL(s, c, channel);
 		}
-		else
+		else {
 			sendToClient( c.getFd(), ERR_USERONCHANNEL( c.getNick(), c.getNick(), channelName ) );
+//			return ;
+		}
 	}
 	else {
 		Channel* newChannel = new Channel(channelName);
