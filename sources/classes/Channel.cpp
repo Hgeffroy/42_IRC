@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 14:55:14 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 15:09:03 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,6 @@ void	Channel::refreshChanMembers(Server& s)
 	std::map<std::string, std::string>::iterator	it;
 
 	for (it = _members.begin(); it != _members.end(); ++it) {
-		printClients(clientList);
 		Client* client = clientList[it->first];
 		std::map<std::string, std::string>::iterator	it2;
 

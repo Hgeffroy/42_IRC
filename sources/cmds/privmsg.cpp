@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 14:56:19 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 15:01:24 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 		return ; // Err a send
 	}
 
-	std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " :" + msg + ENDLINE;
-	sendToClient(clients[dest]->getFd(), fullMsg);
+	sendToClient(clients[dest]->getFd(), PRIV_MSG(c.getNick(), c.getUser(), dest, msg));
 	if (clients[dest]->getAway())
 		sendToClient(c.getFd(), RPL_AWAY(c.getNick(), clients[dest]->getNick())); // Le RPL away ne permet pour l'instant pas de set le message away
 }
@@ -46,21 +45,15 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 	for (std::map<std::string, std::string>::iterator it2 = members.begin(); it2 != members.end(); ++it2)
 	{
 		if (it2->first != c.getNick())
-		{
-			std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + dest + " " + msg + ENDLINE;
-			sendToClient(s.getClientFd(it2->first), fullMsg);
-		}
+			sendToClient(s.getClientFd(it2->first), PRIV_MSG(c.getNick(), c.getUser(), dest, msg));
 	}
 }
 
 void	sendBroadcast(Server& s, Client& c, std::string& msg)
 {
 	std::map<std::string, Client*>	clients = s.getClients();
-	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
-	{
-		std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + it->first + " :" + msg + ENDLINE;
-		sendToClient(it->second->getFd(), msg);
-	}
+	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+		sendToClient(s.getClientFd(it->first), PRIV_MSG(c.getNick(), c.getUser(), it->first, msg));
 }
 
 void	sendMsg(Server& s, Client& c, std::string& str)
@@ -89,5 +82,5 @@ void	sendMsg(Server& s, Client& c, std::string& str)
 	else if (dest[0] == '#' || dest[0] == '&')
 		sendChan(s, c, dest, msg);
 	else if (dest[0] == '$')
-		sendBroadcast(s, c, msg); // Send to all clients on server (broadcast)
+		sendBroadcast(s, c, msg);
 }
