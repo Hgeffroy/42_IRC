@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/08 11:15:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 10:30:45 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ class	Channel
 		bool								_topicProtect;
 
 		Channel();
-		void	refreshChanMembers(Server& s);
 
 
 	public:
@@ -78,6 +77,7 @@ class	Channel
 		void								removeUserFromGuestList(std::string const& name);
 		void								removeUserFromBanList(std::string const& name);
 		void								sendToChannel( Server& s, std::string str );
+		void								refreshChanMembers(Server& s);
 
 
 };

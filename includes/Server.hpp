@@ -57,7 +57,6 @@ class	Server
 
 		std::map<std::string, Client*>	getClients() const;
 		std::map<std::string, Channel*>	getChannels() const;
-		std::vector<Client*>			getNewClients() const;
 		std::string						getPass() const;
 		std::string						getName() const;
 		std::string						getMotd() const;
