@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 09:49:16 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:57:49 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,13 @@ void Client::setUser(std::string &str)
 	_username = str;
 }
 
-void Client::setNick(Server& s, std::string &str)
+void Client::setNick(Server& s, std::string& str)
 {
+	std::string prev = _nickname;
+
+	if (prev != str && _connected) {
+		s.switchNick(prev, str);
+	}
 	_nickname = str;
 }
 
