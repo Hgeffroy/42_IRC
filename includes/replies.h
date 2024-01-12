@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:39:40 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/07 13:01:43 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 14:23:50 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define PART_MSG(client, username, channel, reason)					std::string(":") + client + "!" + username + "@localhost" + " PART " + channel + " :" + reason + ENDLINE
 # define INVITE_MSG(client, username, invited, channel)					std::string(":") + client + "!" + username + "@localhost" + " INVITE " + invited + " " + channel + ENDLINE
 # define MODE_MSG(client, username, str)								std::string(":") + client + "!" + username + "@localhost" + " " + str + ENDLINE
+# define PRIV_MSG(client, username, dest, msg)							std::string(":") + client + "!" + username + "@localhost" + " PRIVMSG " + dest + " " + msg + ENDLINE
 
 // 001
 # define RPL_WELCOME(client, nickname, username)						std::string(":server ") + "001 " + client + " :Welcome to the " + NETWORKNAME + " Network, " + nickname + "!" + username + "@localhost" + ENDLINE
