@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/11 11:33:29 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 14:56:19 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 {
 	std::map<std::string, Client*>	clients = s.getClients();
-	std::cout << c.getNick() << " tries to send a msg to client " << dest << std::endl;
 
 	if (clients.find(dest) == clients.end())
 	{
@@ -32,7 +31,6 @@ void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 {
 	std::map<std::string, Channel*>	channels = s.getChannels();
-	std::cout << c.getNick() << " tries to send a msg to channel " << dest << std::endl;
 
 	if (channels.find(dest) == channels.end())
 	{
@@ -58,7 +56,6 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 void	sendBroadcast(Server& s, Client& c, std::string& msg)
 {
 	std::map<std::string, Client*>	clients = s.getClients();
-	std::cout << c.getNick() << " tries to send a msg in broadcast" << std::endl;
 	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
 	{
 		std::string	fullMsg = ":" + c.getNick() + " PRIVMSG " + it->first + " :" + msg + ENDLINE;

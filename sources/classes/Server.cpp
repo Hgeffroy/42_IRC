@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 14:59:00 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ Server::~Server()
 		delete *itNewClients;
 
 	close(_listener);
-	std::cout << "Salut, je suis le destructeur de server" << std::endl;
 }
 
 Server::Server(std::string portstr, std::string password) : _creationTime(time(0)), _name("MyIrcServ"), _motd("I like Mr Freeze")
@@ -130,7 +129,6 @@ void	Server::accept()
 	cs = ::accept(_listener, reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
 	if ( cs < 0 )
 		throw std::invalid_argument( "<accept> cannot connect to the server" );
-	std::cout << "New client on socket: " << cs << std::endl;
 	Client* newClient = new Client(cs);
 	_newClients.push_back(newClient);
 }
@@ -158,7 +156,6 @@ void	Server::removeClientFromChannels(Client& c)
 	{
 		std::map<std::string, std::string>				members = it->second->getMembers();
 		std::map<std::string, std::string>::iterator	find = members.find(c.getNick());
-		std::cout << "coucou " << std::endl;
 		if (find != members.end())
 		{
 			if (it->second->removeUserFromChan(*this, find->first)) {
@@ -205,7 +202,6 @@ void	Server::addClient(Client *client)
 void	Server::removeClient(Client& c)
 {
 	close(c.getFd());
-	std::cout << "Client on socket " << c.getFd() << " gone" << std::endl;
 	removeClientFromChannels(c);
 
 	for (std::vector<Client*>::iterator it = _newClients.begin(); it != _newClients.end(); ++it)

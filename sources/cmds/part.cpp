@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 10:05:57 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 09:58:23 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 14:56:50 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,6 @@ void	part( Server& s, Client& c, std::string& str )
 				sendToClient(c.getFd(), ERR_NOTONCHANNEL( c.getNick( ), *it) );
 			else
 			{
-				std::cout << YELLOW << c.getNick( ) << " left channel " << *it;
-				if ( !reason.empty( ) )
-					std::cout << reason;
-				std::cout << END << std::endl;
 				itc->second->sendToChannel( s, PART_MSG( c.getNick( ), c.getUser( ), itc->second->getName( ), reason ) );
 				itc->second->removeUserFromChan( s, c.getNick( ) );
 			}

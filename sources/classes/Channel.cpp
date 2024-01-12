@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 14:55:14 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ Channel::Channel(std::string const& name) : _name(name), _topic(""), \
 																		_inviteOnly(false), _keyProtect(false), \
 																		_topicProtect(false)
 {
-	std::cout << "Channel -" << _name << "- was created" << std::endl;
 }
 
 Channel::~Channel()
@@ -173,7 +172,6 @@ void	Channel::refreshChanMembers(Server& s)
 	std::map<std::string, std::string>::iterator	it;
 
 	for (it = _members.begin(); it != _members.end(); ++it) {
-		std::cout << "name of client we lf: " << it->first << std::endl;
 		printClients(clientList);
 		Client* client = clientList[it->first];
 		std::map<std::string, std::string>::iterator	it2;
@@ -193,7 +191,6 @@ void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
 	_members[newClient.getNick()] = "";
 	if (isFounder)
 		_members[newClient.getNick()] = "~";
-	std::cout << newClient.getNick() << " joined channel " << _name << std::endl;
 	if ( newClient.getNick() != "bot" )
 		_nbUsers++;
 

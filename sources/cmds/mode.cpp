@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 12:17:16 by twang             #+#    #+#             */
-/*   Updated: 2024/01/12 13:43:39 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 14:53:43 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,6 @@ static int	setUserLimit(Client &c, Channel &ch, std::string str)
 		}
 	}
 	i--;
-	std::cout << str[i] << std::endl;
 	int	lim;
 	int	len = str.size() - i;
 	std::string digitStr = str.substr(i, len);
