@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/10 15:01:55 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 14:55:47 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,4 @@ void	user(Server& s, Client& c, std::string& str, bool is_bot )
 	}
 
 	c.setUser(usr);
-	std::cout << "Username set to: " << c.getUser() << std::endl;
 }

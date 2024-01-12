@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 12:44:00 by hgeffroy          #+#    #+#             */
-/*   Updated: 2023/12/19 16:06:31 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 16:12:06 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,6 @@
 
 
 // 723
-# define ERR_NOPRIVS(client)										std::string(":server ") + "723 " + client + " :Insufficient oper privileges." + ENDLINE
+# define ERR_NOPRIVS(client)										std::string(":server ") + "723 " + client + " :Insufficient operator privileges." + ENDLINE
 
 #endif
