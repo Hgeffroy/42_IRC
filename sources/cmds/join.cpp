@@ -60,8 +60,8 @@ static void	joinOneChannel(Server& s, Client& c, const std::string& channelName,
 
 		std::map<std::string, std::string> members = channel->getMembers();
 		if (members.find(c.getNick()) == members.end()) {
-			channel->addUserToChan(s, c, false);
 			sendChannelRPL(s, c, channel);
+			channel->addUserToChan(s, c, false);
 		}
 		else {
 			sendToClient( c.getFd(), ERR_USERONCHANNEL( c.getNick(), c.getNick(), channelName ) );

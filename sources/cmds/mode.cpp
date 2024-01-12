@@ -414,9 +414,9 @@ static int	b_opt( Server& s, Client &c, Channel *channel, std::string str )
 					return (-1);
 				}
 			}
+			channel->sendToChannel( s, PART_MSG( banned, banned, channel->getName( ), "This creep has been banned" ) );
 			channel->setBannedGuest( banned );
 			channel->removeUserFromChan( s, banned );
-			channel->sendToChannel( s, PART_MSG( banned, banned, channel->getName( ), "This creep has been banned" ) );
 			channel->removeUserFromGuestList( banned );
 			std::cout << YELLOW << "MODE " << channel->getName() << " +b";
 			std::cout << " : Setting the \"ban\" mode for : <" << banned << ">" << END << std::endl;
