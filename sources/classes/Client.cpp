@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 13:46:26 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 15:21:47 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,10 +157,8 @@ std::vector<std::string> Client::splitBuf()
 {
 	std::vector<std::string> res;
 
-	size_t sep1 = _buffer.find('\n');
-	size_t sep2 = _buffer.find("\r\n");
+	size_t sep = _buffer.find("\r\n");
 	size_t prev = 0;
-	size_t sep = std::min(sep1, sep2);
 	std::string tempStr = _buffer.substr(prev, sep - prev);
 
 	if (tempStr.length() < 1)
@@ -172,16 +170,12 @@ std::vector<std::string> Client::splitBuf()
 	int i = 1;
 	while (sep != std::string::npos)
 	{
-		while (_buffer[sep] == '\r' || _buffer[sep] == '\n')
+		while (_buffer[sep] == '\r')
 			sep++;
 
 		prev = sep;
-
-		sep1 = _buffer.find('\n', sep);
-		sep2 = _buffer.find("\r\n", sep);
-		sep = std::min(sep1, sep2);
-
 		tempStr = _buffer.substr(prev, sep - prev);
+
 		if (tempStr.length() < 1)
 			break;
 		if (tempStr[tempStr.length() - 1] == ' ')
@@ -278,9 +272,10 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 	}
 
 	std::cout << RED << "From " << _fd << ": -" << _bufRead << "-" << END << std::endl;
-	std::string	test = _bufRead;
 
-	_buffer += test;
+	// TODO fix CMD1\r\nCMD2\r\nCM
+
+	_buffer += std::string(_bufRead, r);
 	if (strstr(_buffer.c_str(), "\r\n") != NULL) {
 		std::vector<std::string> cmds = splitBuf();
 
@@ -290,7 +285,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		}
 		_buffer.clear();
 	}
-	std::memset(_bufRead, 0, BUFFER_SIZE);
+	std::memset(_bufRead, 0, BUFFER_SIZE); // TODO if _bufRead is not used elsewhere, remove this line
 
 	return (0);
 }

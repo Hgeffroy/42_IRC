@@ -14,6 +14,6 @@
 
 void	sendToClient(int fd, std::string str)
 {
-	send(fd, str.c_str(), str.length(), MSG_DONTWAIT + MSG_NOSIGNAL); // Check les flags
+	send(fd, str.c_str(), str.length(), MSG_DONTWAIT | MSG_NOSIGNAL); // Check les flags
 	std::cout << BLUE << "To " << fd << ": " << str << END;
 }
