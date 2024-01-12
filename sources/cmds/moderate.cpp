@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 08:56:27 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 13:15:34 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 10:25:11 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	moderator( Server& s, Client& c, std::string& str )
 					command += ",";
 				}
 			}
-			else
-				sendToClient(c.getFd(), ERR_NOTONCHANNEL( c.getNick( ), *it) );
+			else if ( itm == members.end( ) )
+				sendToClient( c.getFd( ), ERR_NOTONCHANNEL( c.getNick( ), *it) );
 		}
 		else
 			sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), *it ) );
