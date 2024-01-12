@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 14:23:50 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 15:01:24 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 void	sendBroadcast(Server& s, Client& c, std::string& msg)
 {
 	std::map<std::string, Client*>	clients = s.getClients();
-	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) // Send to one client
+	for (std::map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 		sendToClient(s.getClientFd(it->first), PRIV_MSG(c.getNick(), c.getUser(), it->first, msg));
 }
 
@@ -82,5 +82,5 @@ void	sendMsg(Server& s, Client& c, std::string& str)
 	else if (dest[0] == '#' || dest[0] == '&')
 		sendChan(s, c, dest, msg);
 	else if (dest[0] == '$')
-		sendBroadcast(s, c, msg); // Send to all clients on server (broadcast)
+		sendBroadcast(s, c, msg);
 }

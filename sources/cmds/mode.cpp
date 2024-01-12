@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 12:17:16 by twang             #+#    #+#             */
-/*   Updated: 2024/01/12 13:43:39 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 15:06:18 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,6 @@ static int	setUserLimit(Client &c, Channel &ch, std::string str)
 		}
 	}
 	i--;
-	std::cout << str[i] << std::endl;
 	int	lim;
 	int	len = str.size() - i;
 	std::string digitStr = str.substr(i, len);
@@ -340,7 +339,10 @@ static int	k_opt( Client &c, Channel *channel, std::string s )
 	{
 		std::string	password = getParam( c, s );
 		if ( password.empty( ) || password.size( ) < 6 )
+		{
+			sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), channel->getName(), "k", "", "Invalid password format: min size 6"));
 			return (-1);
+		}
 		if ( channel->getKeyStatus( ) )
 		{
 			sendToClient( c.getFd(), RPL_CHANNELMODEIS( c.getNick(), channel->getName(), channel->getModes(), "*parameters" ) );

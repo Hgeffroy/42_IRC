@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 13:46:26 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 14:54:13 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,11 @@ Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false),
 {
 	std::memset(_bufRead, 0, BUFFER_SIZE);
 	std::memset(_bufWrite, 0, BUFFER_SIZE);
-	std::cout << "Salut, je suis le constructeur de Client" << std::endl;
 }
 
 Client::~Client()
 {
 	close(_fd);
-	std::cout << "Salut, je suis le destructeur de Client" << std::endl;
 }
 
 /**  Setters and getters  *********************************************************************************************/
@@ -277,7 +275,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		return (1);
 	}
 
-	std::cout << RED << "From " << _fd << ": -" << _bufRead << "-" << END << std::endl;
+	std::cout << GREEN << "From " << _fd << ": -" << _bufRead << "-" << END << std::endl;
 	std::string	test = _bufRead;
 
 	_buffer += test;

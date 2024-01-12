@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 12:08:05 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 14:58:48 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ static bool	checkOption_K( Client& c, Channel* channel, const std::string& chann
 		}
 	}
 	else if ( !channelPass.empty() && !channel->getKeyStatus() ) {
-		std::cout << "channelPass: " << channelPass << std::endl;
 		sendToClient( c.getFd(), ERR_UNKNOWNERROR( c.getNick(), "JOIN", "Too many parameters" ) );
 		return ( false );
 	}
