@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 14:40:33 by twang             #+#    #+#             */
-/*   Updated: 2024/01/08 12:36:46 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 16:58:09 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ std::vector< std::string >	Bot::splitBuffer( void )
 	std::string					buffer = _bufRead;
 	std::vector<std::string>	res;
 
-	size_t sep1 = buffer.find('\n');
-	size_t sep2 = buffer.find("\r\n");
+	size_t sep = buffer.find("\r\n");
 	size_t prev = 0;
-	size_t sep = std::min(sep1, sep2);
 	std::string tempStr = buffer.substr(prev, sep - prev);
 
 	if (tempStr.length() < 1)
@@ -29,25 +27,21 @@ std::vector< std::string >	Bot::splitBuffer( void )
 		tempStr = tempStr.substr(0, tempStr.length() - 1);
 	res.push_back(tempStr);
 
-	int i = 1;
 	while (sep != std::string::npos)
 	{
+
 		while (buffer[sep] == '\r' || buffer[sep] == '\n')
 			sep++;
 
 		prev = sep;
-
-		sep1 = buffer.find('\n', sep);
-		sep2 = buffer.find("\r\n", sep);
-		sep = std::min(sep1, sep2);
-
+		sep = buffer.find("\r\n", prev);
 		tempStr = buffer.substr(prev, sep - prev);
+
 		if (tempStr.length() < 1)
 			break;
 		if (tempStr[tempStr.length() - 1] == ' ')
 			tempStr = tempStr.substr(0, tempStr.length() - 1);
 		res.push_back(tempStr);
-		i++;
 	}
 
 	return (res);

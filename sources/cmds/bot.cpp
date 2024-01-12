@@ -15,10 +15,8 @@
 void	bot( Server &s, Client& c, std::string& str )
 {
 	( void )str;
-
 	std::string userCmd = "USER bot\r\n";
 	std::string nickCmd = "NICK bot\r\n";
-	std::string joinCmd = "JOIN #bot\r\n";
 
 	user( s, c, userCmd, true );
 	nick( s, c, nickCmd, true );

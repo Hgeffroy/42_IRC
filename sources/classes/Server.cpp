@@ -129,6 +129,7 @@ void	Server::accept()
 	cs = ::accept(_listener, reinterpret_cast< struct sockaddr* >(&csin), &csin_len);
 	if ( cs < 0 )
 		throw std::invalid_argument( "<accept> cannot connect to the server" );
+	std::cout << "New client on socket: " << cs << std::endl;
 	Client* newClient = new Client(cs);
 	_newClients.push_back(newClient);
 }
