@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 14:54:13 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 15:41:12 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		return (1);
 	}
 
-	std::cout << GREEN << "From " << _fd << ": -" << _bufRead << "-" << END << std::endl;
+	std::cout << YELLOW << "From " << _fd << ": " << _bufRead << END;
 	std::string	test = _bufRead;
 
 	_buffer += test;
