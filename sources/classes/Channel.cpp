@@ -266,10 +266,11 @@ void Channel::switchNick(std::string& prevNick, std::string& newNick)
 		}
 	}
 
-	for (it = _bannedList.begin(); it != _bannedList.end(); ++it) {
-		if (*it == prevNick) {
+	std::vector<std::string>::iterator it2;
+	for (it2 = _bannedList.begin(); it2 != _bannedList.end(); ++it2) {
+		if (*it2 == prevNick) {
+			_bannedList.erase(it2);
 			_bannedList.push_back(newNick);
-			_bannedList.erase(it);
 			break ;
 		}
 	}
