@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/11 16:19:53 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 10:30:44 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,17 +135,17 @@ void	Channel::setPrivilege( std::string who, std::string privilege )
 	_members[who] = privilege;
 }
 
-void	Channel::setInviteStatus(bool status)
+void	Channel::setInviteStatus( bool status )
 {
 	_inviteOnly = status;
 }
 
-void	Channel::setKeyStatus(bool status)
+void	Channel::setKeyStatus( bool status )
 {
 	_keyProtect = status;
 }
 
-void	Channel::setPassword(std::string password)
+void	Channel::setPassword( std::string password )
 {
 	_password = password;
 }
@@ -160,14 +160,12 @@ void	Channel::setBannedGuest( std::string banned )
 	_bannedList.push_back( banned );
 }
 
-
 void	Channel::setTopic( std::string topic )
 {
 	_topic = topic;
 }
 
-
-/**  Private member functions  ****************************************************************************************/
+/**  Public member functions  *****************************************************************************************/
 
 void	Channel::refreshChanMembers(Server& s)
 {
@@ -188,8 +186,6 @@ void	Channel::refreshChanMembers(Server& s)
 	}
 }
 
-/**  Public member functions  *****************************************************************************************/
-
 void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
 {
 	_members[newClient.getNick()] = "";
@@ -205,11 +201,6 @@ void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
 int	Channel::removeUserFromChan(Server& s, std::string const& name)
 {
 	std::map<std::string, std::string>::iterator	it2 = _members.find(name);
-	/* si on doit remove channel et bien on arrive pas a erase member, 
-	et on peut pas envoyer la RPL apres qui a besoin que le channel 
-	soit encore la pour se faire.
-	donc erase member d'abord mais peut etre remove channel est appelee
-	a meme les fonctions*/
 	if (it2 != _members.end()) {
 		if (it2->second == "~") {
 			s.removeChannel(this);

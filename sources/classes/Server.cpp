@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/11 16:30:30 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/12 10:12:14 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,6 @@ std::map<std::string, Client*>	Server::getClients() const
 std::map<std::string, Channel*>	Server::getChannels() const
 {
 	return (_channels);
-}
-
-std::vector<Client*>	Server::getNewClients() const
-{
-	return (_newClients);
 }
 
 std::string	Server::getPass() const
@@ -166,21 +161,10 @@ void	Server::removeClientFromChannels(Client& c)
 		std::cout << "coucou " << std::endl;
 		if (find != members.end())
 		{
-			if (it->second->removeUserFromChan(*this, find->first)) /* <- pour moi cette fonction pose probleme 
-																		car elle fait plusieurs choses, elle 
-																		devrait renvoyer un code special dans le cas ou on supprime
-																		un channel et on le supprime mais en sortie de ces fonctions,
-																		apres les RPL.*/
-/* quand on fait continue ; il se peut qu'un autre client qui se deconnecte
-passe quand meme au meme moment et accede a la zone memoire un peu trop
-fraichement nettoyee - ctrl + c */
-
-/* du coup la j'ai mis break pour le moment mais du coup on ne peut plus delog
-plusieurs client en meme temps ...*/
-
-/*solution [par nico]: faire un vector qui contient tout les noms des clients
-a supprimer et boucler sur ce vector a la fin de cette boucle la et erase tout.*/
-				break ;
+			if (it->second->removeUserFromChan(*this, find->first)) {
+				removeClientFromChannels(c);
+				return ;
+			}
 			it->second->sendToChannel(*this, PART_MSG(c.getNick(), c.getUser(), it->second->getName(), "Disconnected"));
 		}
 	}
@@ -240,6 +224,12 @@ void	Server::addChannel(Channel* newChannel)
 
 void	Server::removeChannel(Channel* chan)
 {
+	std::map< std::string, std::string >			_members = chan->getMembers();
+	std::map< std::string, std::string >::iterator	it;
+	for ( it = _members.begin(); it != _members.end(); ++it ) {
+		chan->sendToChannel( *this, PART_MSG( it->first, it->first, chan->getName( ), "Channel deleted" ) );
+	}
+
 	if (_channels.find(chan->getName()) != _channels.end()) {
 		_channels.erase(chan->getName());
 		delete chan;
