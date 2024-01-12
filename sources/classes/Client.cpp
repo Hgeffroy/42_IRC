@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 12:57:49 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 13:46:26 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,6 @@ Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false),
 
 Client::~Client()
 {
-	/*si on fait un ctrl + c on ne passe que par la, et il faut renvoyer une
-	replie! DONC c'est chaud : 
-	seule idee : integre un vector< std::string > _noms_channels : 
-	qui contient chaques noms de channels dans lesquels le client a ete..
-	mais pour le server ... je bloque tout de suite c;est une fin de journee */
 	close(_fd);
 	std::cout << "Salut, je suis le destructeur de Client" << std::endl;
 }
@@ -203,7 +198,7 @@ int Client::execCmd(Server &s, std::string &str)
 	if (!_connected)
 		setInfos(s, str);
 
-	else // Verifier la commande
+	else
 	{
 		int cmd = getCmd(str);
 
@@ -290,7 +285,6 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		std::vector<std::string> cmds = splitBuf();
 
 		for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
-			printStrVec(splitCmd(*it));
 			if (execCmd(s, *it) == 1)
 				return (0);
 		}

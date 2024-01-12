@@ -7,9 +7,5 @@
 	sleep 1
 	echo USER henri
 	sleep 1
-	echo JOIN \&lol
-	sleep 1
-	echo MODERATE \&lol
-	sleep 1
-	echo QUIT
+	echo JOIN \#lol
 } | nc -C localhost 2000

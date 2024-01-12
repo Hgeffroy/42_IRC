@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 12:17:16 by twang             #+#    #+#             */
-/*   Updated: 2024/01/12 11:02:58 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/12 13:43:39 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,24 @@ void	mode(Server& s, Client& c, std::string& str)
 				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case l:
-			setUserLimit(c, *(chan[target]), mode);
+			if (!setUserLimit(c, *(chan[target]), mode))
+				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case t:
-			setTopicProtection(c, *(chan[target]), mode);
+			if (!setTopicProtection(c, *(chan[target]), mode))
+				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case i:
-			i_opt(c, chan[target], mode);
+			if (!i_opt(c, chan[target], mode))
+				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case k:
-			k_opt(c, chan[target], mode);
+			if (!k_opt(c, chan[target], mode))
+				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case b:
-			b_opt(s, c, chan[target], mode);
+			if (!b_opt(s, c, chan[target], mode))
+				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		default:
 			sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), option));
@@ -174,13 +179,9 @@ static int	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				std::cout << PURPLE << "MODE " << ch.getName() << " -o";
-				std::cout << " : Removed Op privilege to " << who << " on " << ch.getName() << END << std::endl;
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				std::cout << YELLOW << "MODE " << ch.getName() << " +o";
-				std::cout << " : Gave Op privilege to " << who << " on " << ch.getName() << END << std::endl;
 			}
 		}
 	}
@@ -188,13 +189,9 @@ static int	opPrivilege(Client &c, Channel &ch, std::string str)
 		if (members[who] != "~" && members[who] != "@") {
 			if (sign == -1) {
 				ch.setPrivilege(who, "");
-				std::cout << PURPLE << "MODE " << ch.getName() << " -o";
-				std::cout << " : Removed Op privilege to " << who << " on " << ch.getName() << END << std::endl;
 			}
 			else {
 				ch.setPrivilege(who, "@");
-				std::cout << YELLOW << "MODE " << ch.getName() << " +o";
-				std::cout << " : Gave Op privilege to " << who << " on " << ch.getName() << END << std::endl;
 			}
 		}
 	}
@@ -213,12 +210,9 @@ static int	setUserLimit(Client &c, Channel &ch, std::string str)
 	for (i = 0; i < str.length(); i++)
 	{
 		if (str[i] == '-') {
-			if (str[i + 2] == '\0') {
+			if (str[i + 2] == '\0')
 				ch.setUserLimit(-1);
-				std::cout << PURPLE << "MODE " << ch.getName() << " -l";
-				std::cout << " : Unset the \"user limit\" mode on " << ch.getName() << END << std::endl;
-			}
-			return (-1);
+			return (0);
 		}
 		else if (str[i] == '+') {
 			break;
@@ -256,11 +250,8 @@ static int	setUserLimit(Client &c, Channel &ch, std::string str)
 		sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "is not a int."));
 		return (-1);
 	}
-	if (ch.getNbUsers() <= lim) {
+	if (ch.getNbUsers() <= lim)
 		ch.setUserLimit(lim);
-		std::cout << YELLOW << "MODE " << ch.getName() << " +l";
-		std::cout << " : Set the \"user limit\" mode on " << ch.getName() << " to " << lim << END << std::endl;
-	}
 	else {
 		sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "l", digitStr, "number of members is higher than the member limit"));
 		return (-1);
@@ -280,26 +271,25 @@ static int	setTopicProtection(Client &c, Channel &ch, std::string str)
 	for (i = 0; i < str.length(); i++)
 	{
 		if (str[i] == '-') {
-			if (str[i + 2] == '\0') {
+			if (str[i + 2] == '\0')
+			{
 				ch.setTopicProtect(false);
-				std::cout << PURPLE << "MODE " << ch.getName() << " -t";
-				std::cout << " : Unset the \"topic protection\" mode on " << ch.getName() << END << std::endl;
+				return (0);
 			}
-			else {
+			else
+			{
 				sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+				return (-1);
 			}
-			return (-1);
 		}
 		else if (str[i] == '+') {
-			if (str[i + 2] == '\0') {
+			if (str[i + 2] == '\0')
 				ch.setTopicProtect(true);
-				std::cout << YELLOW << "MODE " << ch.getName() << " +t";
-				std::cout << " : Set the \"topic protection\" mode on " << ch.getName() << END << std::endl;
-			}
-			else {
+			else
+			{
 				sendToClient(c.getFd(), ERR_INVALIDMODEPARAM(c.getNick(), ch.getName(), "t", "", "MUST NOT input an argument to this parameter"));
+				return (-1);
 			}
-			return (-1);
 		}
 	}
 	return (0);
@@ -323,8 +313,6 @@ static int	i_opt( Client &c, Channel *channel, std::string s )
 			return (-1);
 		}
 		channel->setInviteStatus( true );
-		std::cout << YELLOW << "MODE " << channel->getName() << " +i";
-		std::cout << " : Setting the \"invite only\" mode on " << channel->getName() << END << std::endl;
 	}
 	else if ( s[0] == '-' )
 	{
@@ -334,8 +322,6 @@ static int	i_opt( Client &c, Channel *channel, std::string s )
 			return (-1);
 		}
 		channel->setInviteStatus( false );
-		std::cout << PURPLE << "MODE " << channel->getName() << " -i";
-		std::cout << " : Unset the \"invite only\" mode on " << channel->getName() << END << std::endl;
 	}
 	return (0);
 }
@@ -362,9 +348,6 @@ static int	k_opt( Client &c, Channel *channel, std::string s )
 		}
 		channel->setKeyStatus( true );
 		channel->setPassword( password );
-		std::cout << YELLOW << "MODE " << channel->getName() << " +k";
-		std::cout << " : Setting the \"key protect\" mode on " << channel->getName();
-		std::cout << " with key : <" << channel->getPassword() << ">" << END << std::endl;
 	}
 	else if ( s[0] == '-' )
 	{
@@ -374,8 +357,6 @@ static int	k_opt( Client &c, Channel *channel, std::string s )
 			return (-1);
 		}
 		channel->setKeyStatus( false );
-		std::cout << PURPLE << "MODE " << channel->getName() << " -k";
-		std::cout << " : Unset the \"key protect\" mode on " << channel->getName() << END << std::endl;
 	}
 	return (0);
 }
@@ -418,9 +399,7 @@ static int	b_opt( Server& s, Client &c, Channel *channel, std::string str )
 			channel->setBannedGuest( banned );
 			channel->removeUserFromChan( s, banned );
 			channel->removeUserFromGuestList( banned );
-			std::cout << YELLOW << "MODE " << channel->getName() << " +b";
-			std::cout << " : Setting the \"ban\" mode for : <" << banned << ">" << END << std::endl;
-			return (-1);
+			return (0);
 		}
 		for ( std::vector< std::string >::iterator	itb = bannedList.begin(); itb != bannedList.end(); itb++ )
 		{
@@ -441,9 +420,7 @@ static int	b_opt( Server& s, Client &c, Channel *channel, std::string str )
 		if ( isBanned( channel, unbanned ) )
 		{
 			channel->removeUserFromBanList( unbanned );
-			std::cout << PURPLE << "MODE " << channel->getName() << " -b";
-			std::cout << " : Unsetting the \"ban\" mode for : <" << unbanned << ">" << END << std::endl;
-			return (-1);
+			return (0);
 		}
 		sendToClient( c.getFd(), ERR_INVALIDMODEPARAM( c.getNick(), channel->getName(), "-b", unbanned, " was not banned from this channel."));
 		return (-1);
