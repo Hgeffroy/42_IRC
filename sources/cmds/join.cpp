@@ -97,10 +97,6 @@ static bool	checkOption_K( Client& c, Channel* channel, const std::string& chann
 			return ( false );
 		}
 	}
-	else if ( !channelPass.empty() && !channel->getKeyStatus() ) {
-		sendToClient( c.getFd(), ERR_UNKNOWNERROR( c.getNick(), "JOIN", "Too many parameters" ) );
-		return ( false );
-	}
 	return ( true );
 }
 
