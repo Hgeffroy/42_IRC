@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/15 14:29:00 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/15 14:02:25 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,17 +276,19 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 	_buffer += std::string(_bufRead, r);
 	if (strstr(_buffer.c_str(), "\r\n") != NULL) {
 		std::vector<std::string> cmds = splitBuf();
-		printStrVec(cmds);
+
 		for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
 			if (execCmd(s, *it) == 1) {
 				return (0);
 			}
 		}
-		size_t	pos = _buffer.find("\r\n");
-		if (pos != std::string::npos) {
-			std::string save = _buffer.substr(pos + 2);
+		std::size_t found = _buffer.rfind("\r\n");
+
+		if (found != std::string::npos) {
+			_buffer = _buffer.substr(found + 2);
+		}
+		else {
 			_buffer.clear();
-			_buffer += save;
 		}
 	}
 	std::memset(_bufRead, 0, BUFFER_SIZE);
