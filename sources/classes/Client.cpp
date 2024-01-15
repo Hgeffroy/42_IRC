@@ -278,10 +278,15 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		std::vector<std::string> cmds = splitBuf();
 
 		for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
-			if (execCmd(s, *it) == 1)
+			if (execCmd(s, *it) == 1) {
 				return (0);
+			}
 		}
+		std::string save = _buffer.substr(_buffer.find("\r\n"));
 		_buffer.clear();
+		_buffer += save;
+		save.clear();
+		std::cout << "--------------------------------------------------" << save << "|||||||||||||||||" << std::endl;
 	}
 	std::memset(_bufRead, 0, BUFFER_SIZE); // TODO if _bufRead is not used elsewhere, remove this line
 
