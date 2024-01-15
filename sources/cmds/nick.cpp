@@ -14,14 +14,10 @@
 
 void	nick(Server& s, Client& c, std::string& str, bool is_bot ) // Verifier la taille
 {
-	if (str.find(' ', 5) != std::string::npos)
-	{
-		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "Too many parameters"));
-		return ;
-	}
-
-	size_t		nextSpace = str.find_first_of("\n\r", 5);
 	std::string	nick;
+	size_t		nextSpace = str.find_first_of("\n\r", 5);
+	if (nextSpace == std::string::npos)
+		nextSpace = str.find_first_of(" ", 5);
 	if (nextSpace == std::string::npos && str.size() > 5)
 		nick = str.substr(5);
 	else if (nextSpace != std::string::npos)
