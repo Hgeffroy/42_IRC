@@ -172,6 +172,8 @@ std::vector<std::string> Client::splitBuf()
 
 		prev = sep;
 		sep = _buffer.find("\r\n", prev);
+		if (sep == std::string::npos)
+			break ;
 		tempStr = _buffer.substr(prev, sep - prev);
 
 		if (tempStr.length() < 1)
@@ -281,7 +283,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 			}
 		}
 		std::size_t found = _buffer.rfind("\r\n");
-		
+
 		if (found != std::string::npos) {
 			_buffer = _buffer.substr(found + 2);
 		}

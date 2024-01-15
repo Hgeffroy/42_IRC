@@ -29,6 +29,8 @@ std::string					getTime(Server& s);
 std::string					intostr(int a);
 void						sendToClient(int fd, std::string str);
 void						signals_switchman( int signal );
+void						printStrVec(std::vector<std::string> v);
+
 
 
 // Cmds
