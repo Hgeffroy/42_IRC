@@ -280,12 +280,13 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 				return (0);
 			}
 		}
-		size_t	pos = _buffer.find("\r\n");
-		if (pos != std::string::npos) {
-			std::string save = _buffer.substr(pos + 2);
+		std::size_t found = _buffer.rfind("\r\n");
+		
+		if (found != std::string::npos) {
+			_buffer = _buffer.substr(found + 2);
+		}
+		else {
 			_buffer.clear();
-			_buffer += save;
-			//std::cout << "-----" << _buffer << "------" << std::endl;
 		}
 	}
 	std::memset(_bufRead, 0, BUFFER_SIZE);
