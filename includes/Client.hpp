@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:44:37 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/03 15:12:59 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/15 08:12:42 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ class	Client
 		std::string 				_nickname; // Imposer de commencer par un alpha !
 		std::string					_username; // Imposer de commencer par un alpha !
 		char						_bufRead[BUFFER_SIZE]; // Ce que lit le serveur chez le client
-		std::string					_buffer;
 		char						_bufWrite[BUFFER_SIZE]; // Ce que write le serveur au client
+		std::string					_buffer;
 
 		int							getCmd(std::string& buffer);
 		int							execCmd(Server &s, std::string& str);
@@ -47,13 +47,13 @@ class	Client
 		~Client();
 
 		int				getFd() const;
-		const char*		getBufWrite() const;
 		std::string		getNick() const;
 		std::string		getUser() const;
 		bool			getConnected() const;
 		bool			getAway() const;
 
 		void			setPassOk();
+		void			setPassNotOk();
 		void			setUser(std::string& str);
 		void			setNick(Server& s, std::string& str);
 		void			setAway(bool away);

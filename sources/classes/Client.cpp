@@ -6,7 +6,7 @@
 /*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 17:02:43 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/15 08:10:49 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ Client::~Client()
 }
 
 /**  Setters and getters  *********************************************************************************************/
-
-const char *Client::getBufWrite() const
-{
-	return (_bufWrite);
-}
 
 int Client::getFd() const
 {
@@ -61,6 +56,11 @@ bool Client::getAway() const
 void Client::setPassOk()
 {
 	_passwordOk = true;
+}
+
+void Client::setPassNotOk()
+{
+	_passwordOk = false;
 }
 
 void Client::setUser(std::string &str)
