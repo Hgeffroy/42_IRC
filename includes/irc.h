@@ -35,7 +35,7 @@
 # include <netdb.h>
 # include <sstream>
 # include <stdlib.h>
-# include <cctype> // Pas inclus dans cstdlib ?
+# include <cctype>
 # include <cstdio>
 # include <ios>
 

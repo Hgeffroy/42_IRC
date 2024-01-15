@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 12:17:16 by twang             #+#    #+#             */
-/*   Updated: 2024/01/12 16:14:07 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 13:45:08 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,33 +53,32 @@ void	mode(Server& s, Client& c, std::string& str)
 	{
 		case o:
 			if (!opPrivilege(c, *(chan[target]), mode))
-				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
+				chan[target]->sendToChannel(s, MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case l:
 			if (!setUserLimit(c, *(chan[target]), mode))
-				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
+				chan[target]->sendToChannel(s, MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case t:
 			if (!setTopicProtection(c, *(chan[target]), mode))
-				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
+				chan[target]->sendToChannel(s, MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case i:
 			if (!i_opt(c, chan[target], mode))
-				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
+				chan[target]->sendToChannel(s, MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case k:
 			if (!k_opt(c, chan[target], mode))
-				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
+				chan[target]->sendToChannel(s, MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		case b:
 			if (!b_opt(s, c, chan[target], mode))
-				sendToClient(c.getFd(), MODE_MSG(c.getNick(), c.getUser(), str));
+				chan[target]->sendToChannel(s, MODE_MSG(c.getNick(), c.getUser(), str));
 			break;
 		default:
 			sendToClient(c.getFd(), ERR_UNKNOWNMODE(c.getNick(), option));
 			break;
 	}
-
 }
 
 /*---- utils ------------------------------------------------------------------*/

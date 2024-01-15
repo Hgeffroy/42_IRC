@@ -6,18 +6,15 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:48:29 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 15:35:59 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:03:19 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-/**  Constructors and destructors  ************************************************************************************/
+/**  Constructors and destructors  *********************************************/
 
-Server::Server()
-{
-
-}
+Server::Server() {}
 
 Server::~Server()
 {
@@ -62,7 +59,7 @@ Server::Server(std::string portstr, std::string password) : _creationTime(time(0
 	_listener = s;
 }
 
-/**  Setters and Getters  *********************************************************************************************/
+/**  Setters and Getters  ******************************************************/
 
 std::map<std::string, Client*>	Server::getClients() const
 {
@@ -94,7 +91,7 @@ time_t* 	Server::getCreationTime()
 	return (&_creationTime);
 }
 
-/**  Private member functions  ****************************************************************************************/
+/**  Private member functions  *************************************************/
 
 int	Server::setPort(std::string& portstr)
 {
@@ -120,7 +117,7 @@ std::string	Server::setPassword(std::string& pass)
 	return (pass);
 }
 
-void	Server::accept()
+void	Server::acceptClient()
 {
 	int					cs;
 	struct sockaddr_in	csin;
@@ -168,10 +165,12 @@ void	Server::removeClientFromChannels(Client& c)
 	}
 }
 
-/**  Public member functions  *****************************************************************************************/
+/**  Public member functions  **************************************************/
 
 int Server::getClientFd(std::string nickname)
 {
+	if (_clients.find(nickname) == _clients.end())
+		return (-1);
 	return (_clients[nickname]->getFd());
 }
 
@@ -203,6 +202,7 @@ void	Server::addClient(Client *client)
 void	Server::removeClient(Client& c)
 {
 	close(c.getFd());
+	std::cout << "Client on socket " << c.getFd() << " gone." << std::endl;
 	removeClientFromChannels(c);
 
 	for (std::vector<Client*>::iterator it = _newClients.begin(); it != _newClients.end(); ++it)
@@ -266,28 +266,26 @@ void	Server::checkFd()
 	std::vector<Client*>::iterator				it;
 	std::map<std::string, Client*>::iterator	it2;
 	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, NULL, NULL, NULL);
+	if (i < 0) {
+		throw std::runtime_error("Select failed");
+	}
 
-	if (FD_ISSET(_listener, &_fdRead))
-	{
-		accept();
+	if (FD_ISSET(_listener, &_fdRead)) {
+		acceptClient();
 		i--;
 	}
 
-	for (it = _newClients.begin(); it != _newClients.end() && i > 0; ++it)
-	{
-		if (FD_ISSET((*it)->getFd(), &_fdRead))
-		{
-			if ((*it)->read(*this) == 1)
+	for (it2 = _clients.begin(); it2 != _clients.end() && i > 0; ++it2) {
+		if (FD_ISSET(it2->second->getFd(), &_fdRead)) {
+			if (it2->second->read(*this) == 1)
 				break;
 			i--;
 		}
 	}
 
-	for (it2 = _clients.begin(); it2 != _clients.end() && i > 0; ++it2)
-	{
-		if (FD_ISSET(it2->second->getFd(), &_fdRead))
-		{
-			if (it2->second->read(*this) == 1)
+	for (it = _newClients.begin(); it != _newClients.end() && i > 0; ++it) {
+		if (FD_ISSET((*it)->getFd(), &_fdRead)) {
+			if ((*it)->read(*this) == 1)
 				break;
 			i--;
 		}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   kick.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/15 09:47:35 by twang             #+#    #+#             */
+/*   Updated: 2024/01/15 13:56:01 by twang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "irc.hpp"
 
 void	kick(Server& s, Client& c, std::string& str)
@@ -47,7 +59,7 @@ void	kick(Server& s, Client& c, std::string& str)
 	}
 	if (members[user] == "~")
 	{
-		sendToClient(c.getFd(), ERR_NOPRIVS( "bot" ) );
+		sendToClient(c.getFd(), ERR_CHANOPRIVSNEEDED(c.getNick(), (*chan[target]).getName()));
 		return ;
 	}
 

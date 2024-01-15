@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:39:59 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:06:35 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ class	Channel
 		bool								_inviteOnly;
 		bool								_keyProtect;
 		bool								_topicProtect;
-
-		Channel();
 
 
 	public:

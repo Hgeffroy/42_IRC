@@ -6,20 +6,17 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/10 12:47:44 by twang            ###   ########.fr        #
+#    Updated: 2024/01/15 09:46:40 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SOURCES		=	sources/classes/Channel.cpp									\
 				sources/classes/Client.cpp									\
 				sources/classes/Server.cpp									\
-				sources/utils/getIP.cpp										\
 				sources/utils/getTime.cpp									\
 				sources/utils/intostr.cpp									\
-				sources/utils/printMap.cpp									\
 				sources/utils/sendToClient.cpp								\
 				sources/utils/signals.cpp									\
-				sources/utils/splitCmd.cpp									\
 				sources/cmds/topic.cpp										\
 				sources/cmds/kick.cpp										\
 				sources/cmds/mode.cpp										\

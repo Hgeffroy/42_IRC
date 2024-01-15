@@ -6,15 +6,13 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/12 14:59:20 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 10:28:55 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 
-/**  Constructors and destructors  ************************************************************************************/
-
-Bot::Bot( void ) {}
+/**  Constructors and destructors  *********************************************/
 
 Bot::Bot( std::string port, std::string password, std::string apikey )
 {
@@ -44,7 +42,7 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 
 Bot::~Bot( void ) {}
 
-/**  Private member functions  ****************************************************************************************/
+/**  Private member functions  *************************************************/
 
 std::string	Bot::setPassword( std::string& password )
 {
@@ -92,12 +90,7 @@ void	Bot::connect( int port, std::string& password )
 		readFromServer();
 }
 
-/**  Public member functions  *****************************************************************************************/
-
-/*
-curl https://api.openai.com/v1/models -H "Authorization: Bearer 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" | jq '.error'
-*/
-
+/**  Public member functions  **************************************************/
 
 bool	Bot::checkApiKey( void )
 {

@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:54:50 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 15:01:24 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 10:03:46 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ void	sendDM(Server& s, Client& c, std::string& dest, std::string& msg)
 	if (clients.find(dest) == clients.end())
 	{
 		sendToClient(c.getFd(), ERR_NOSUCHNICK(c.getNick(), dest));
-		return ; // Err a send
+		return ;
 	}
 
 	sendToClient(clients[dest]->getFd(), PRIV_MSG(c.getNick(), c.getUser(), dest, msg));
 	if (clients[dest]->getAway())
-		sendToClient(c.getFd(), RPL_AWAY(c.getNick(), clients[dest]->getNick())); // Le RPL away ne permet pour l'instant pas de set le message away
+		sendToClient(c.getFd(), RPL_AWAY(c.getNick(), clients[dest]->getNick()));
 }
 
 void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
@@ -34,7 +34,7 @@ void	sendChan(Server& s, Client& c, std::string& dest, std::string& msg)
 	if (channels.find(dest) == channels.end())
 	{
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), dest));
-		return ; // Err a send
+		return ;
 	}
 
 	std::map<std::string, std::string>	members = channels[dest]->getMembers();
@@ -65,8 +65,6 @@ void	sendMsg(Server& s, Client& c, std::string& str)
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "PRIVMSG"));
 		return ;
 	}
-
-	// Mettre des protections ici !
 
 	std::string	dest = str.substr(sep1 + 1, sep2 - sep1 - 1);
 	std::string msg = str.substr(sep2 + 1);

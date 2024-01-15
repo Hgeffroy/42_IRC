@@ -6,7 +6,7 @@
 #    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/12 12:52:33 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/05 11:27:20 by twang            ###   ########.fr        #
+#    Updated: 2024/01/15 09:42:41 by twang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ OBJ_DIR			=		.objs/
 
 #--flags-----------------------------------------------------------------------#
 
-CFLAGS			=		-Wall -Wextra -g3 -std=c++98 -I $(INC_DIR) -MMD -MP #-Werror
+CFLAGS			=		-Wall -Wextra -Werror -g3 -std=c++98 -I $(INC_DIR) -MMD -MP
 CPP				=		c++
 
 #--debug flags-----------------------------------------------------------------#
@@ -105,7 +105,7 @@ header:
 #--re, clean & fclean----------------------------------------------------------#
 
 re:
-#clear
+		clear
 		$(MAKE) fclean
 		$(MAKE) -j all
 
@@ -114,7 +114,7 @@ clean:
 		$(PRINT_CLEAN)
 
 fclean:
-#clear
+		clear
 		$(MAKE) clean
 		$(RM) $(NAME)
 		$(PRINT_FCLEAN)

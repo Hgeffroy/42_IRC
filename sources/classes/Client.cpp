@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/15 08:10:49 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/15 14:02:25 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-/**  Constructors and destructors  ************************************************************************************/
+/**  Constructors and destructors  *********************************************/
 
-Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), _away(false), _nickname(""),
-							 _username("")
+Client::Client(int socket) : _fd(socket), _connected(false), _passwordOk(false), \
+							_away(false), _nickname(""), _username("")
 {
 	std::memset(_bufRead, 0, BUFFER_SIZE);
 	std::memset(_bufWrite, 0, BUFFER_SIZE);
@@ -26,7 +26,7 @@ Client::~Client()
 	close(_fd);
 }
 
-/**  Setters and getters  *********************************************************************************************/
+/**  Setters and getters  ******************************************************/
 
 int Client::getFd() const
 {
@@ -84,7 +84,7 @@ void Client::setAway(bool away)
 }
 
 
-/**  Private member functions  ****************************************************************************************/
+/**  Private member functions  *************************************************/
 
 int Client::getCmd(std::string &buffer)
 {
@@ -257,7 +257,7 @@ int Client::execCmd(Server &s, std::string &str)
 	return (0);
 }
 
-/**  Public member functions  *****************************************************************************************/
+/**  Public member functions  **************************************************/
 
 int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 {
@@ -271,8 +271,6 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 	std::cout << YELLOW << "From " << _fd << ": -" << _bufRead << "-" << END << std::endl;
 	std::string	test = _bufRead;
 
-	// TODO fix CMD1\r\nCMD2\r\nCM
-
 	_buffer += std::string(_bufRead, r);
 	if (strstr(_buffer.c_str(), "\r\n") != NULL) {
 		std::vector<std::string> cmds = splitBuf();
@@ -283,7 +281,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 		}
 		_buffer.clear();
 	}
-	std::memset(_bufRead, 0, BUFFER_SIZE); // TODO if _bufRead is not used elsewhere, remove this line
+	std::memset(_bufRead, 0, BUFFER_SIZE);
 
 	return (0);
 }

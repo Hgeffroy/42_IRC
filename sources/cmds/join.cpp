@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 14:58:48 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 09:55:21 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,11 @@ static int	checkChannelName( Client& c, const std::string& channelName )
 	if ( channelName == "#bot" && ( c.getUser() != "bot" || c.getNick() != "bot" ) )
 	{
 		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "This channel name is already reserved"));
+		return ( -1 );
+	}
+	if ( channelName.size() > 50 )
+	{
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "Nickname too long(max size 50)"));
 		return ( -1 );
 	}
 	return ( 0 );
