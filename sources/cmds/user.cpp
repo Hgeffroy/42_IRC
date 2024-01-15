@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 09:00:21 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 14:55:47 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 13:07:46 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,26 @@
 
 void	user(Server& s, Client& c, std::string& str, bool is_bot )
 {
-	std::size_t	nextSpace;
-	if (str.find(' ', 5) != std::string::npos)
-		nextSpace = str.find(' ', 5);
-	else
-		nextSpace = str.find_first_of("\n\r", 5);
-
 	std::string	usr;
 
-	if (nextSpace == std::string::npos && str.size() > 5)
-		usr = str.substr(5);
-	else if (nextSpace != std::string::npos)
+	std::size_t	nextSpace = str.find(' ', 5);
+	if (nextSpace != std::string::npos)
 		usr = str.substr(5, nextSpace - 5);
+	else {
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
+		return ;
+	}
+
+	int	i = 1;
+	while (nextSpace != std::string::npos) {
+		nextSpace = str.find_first_of("\r ", nextSpace + 1);
+		i++;
+	}
+
+	if (i < 4) {
+		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
+		return ;
+	}
 
 	std::map<std::string, Client*>	clients = s.getClients();
 
@@ -37,6 +45,12 @@ void	user(Server& s, Client& c, std::string& str, bool is_bot )
 			return ;
 		}
 	}
+	// TODO pas de secu de ca. le seul identifiant unique est le nickName
+			// if (it->second->getUser() == usr)
+			// {
+			//		sendToClient(c.getFd(), ERR_ALREADYREGISTERED(c.getNick()));
+			//		return ;
+			// }
 	if (usr.empty())
 	{
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));

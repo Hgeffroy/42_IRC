@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:26:42 by twang             #+#    #+#             */
-/*   Updated: 2024/01/11 11:38:19 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 13:32:03 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ void	invite( Server& s, Client& c, std::string& params )
 	if ( channels[channel] )
 	{
 		std::map<std::string, std::string>		members = channels[channel]->getMembers();
-		if ( !channels[channel]->getInviteStatus() )
-		{
-			std::cerr << PURPLE << "le channel n'est pas en mode +i" << END << std::endl;
-			return ;
-		}
 		std::map<std::string, std::string>::iterator it = members.find(nickname);
 		if ( it != members.end( ) )
 		{
@@ -79,7 +74,11 @@ void	invite( Server& s, Client& c, std::string& params )
 		}
 		channels[channel]->setGuest( nickname );
 		sendToClient( c.getFd( ), RPL_INVITING( c.getNick( ), nickname, channel ) );
-		sendToClient( c.getFd( ), INVITE_MSG( c.getNick( ), c.getUser( ), nickname, channel ) );
+
+
+		int tar = s.getClientFd( nickname );
+		if (tar > 0)
+			sendToClient( tar, INVITE_MSG( c.getNick( ), c.getUser( ), nickname, channel ) );
 	}
 	else
 	{
@@ -127,7 +126,6 @@ static std::string	getChannelName( std::string params )
 	std::string	channelname;
 	std::size_t	first_space = params.find( ' ' );
 	std::size_t second_space = params.find( ' ', first_space + 1 );
-	std::size_t third_space = params.find( ' ', second_space + 1 );
 
 	if ( second_space != std::string::npos )
 	{

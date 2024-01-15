@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:45:47 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 12:45:02 by hgeffroy         ###   ########.fr       */
+/*   Updated: 2024/01/15 14:01:04 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ class	Server
 
 		Server();
 
-		static int			setPort(std::string& portstr);
-		static std::string	setPassword(std::string& pass);
+		static int						setPort(std::string& portstr);
+		static std::string				setPassword(std::string& pass);
 
-		void				accept();
-		int					higherFd() const;
-		void				removeClientFromChannels(Client& c);
+		void							acceptClient();
+		int								higherFd() const;
+		void							removeClientFromChannels(Client& c);
 
 	public:
 
@@ -62,16 +62,16 @@ class	Server
 		std::string						getMotd() const;
 		time_t*							getCreationTime();
 
-		int		getClientFd(std::string nickname);
-		void	switchNick(std::string& prevNick, std::string& newNick);
+		int								getClientFd(std::string nickname);
+		void							switchNick(std::string& prevNick, std::string& newNick);
 
-		void	addClient(Client* client);
-		void	removeClient(Client& c);
-		void	addChannel(Channel* newChannel);
-		void	removeChannel(Channel* chan);
+		void							addClient(Client* client);
+		void							removeClient(Client& c);
+		void							addChannel(Channel* newChannel);
+		void							removeChannel(Channel* chan);
 
-		void	initFd();
-		void	checkFd();
+		void							initFd();
+		void							checkFd();
 
 };
 

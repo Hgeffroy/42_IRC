@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:30:24 by twang             #+#    #+#             */
-/*   Updated: 2024/01/09 09:17:39 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 10:27:51 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ class Bot
 		std::string	_password;
 		std::string	_apiKey;
 		char		_bufRead[BUFFER_SIZE];
-		Bot( void );
 
 		static std::string	setPassword( std::string& password );
 		static std::size_t	setPort( std::string& port );

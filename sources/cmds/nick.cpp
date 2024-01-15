@@ -6,18 +6,18 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:44:16 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/05 17:00:34 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 10:43:58 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-void	nick(Server& s, Client& c, std::string& str, bool is_bot ) // Verifier la taille
+void	nick(Server& s, Client& c, std::string& str, bool is_bot )
 {
 	std::string	nick;
-	size_t		nextSpace = str.find_first_of("\n\r", 5);
+	size_t		nextSpace = str.find_first_of("\r ", 5);
 	if (nextSpace == std::string::npos)
-		nextSpace = str.find_first_of(" ", 5);
+		nextSpace = str.find(' ', 5);
 	if (nextSpace == std::string::npos && str.size() > 5)
 		nick = str.substr(5);
 	else if (nextSpace != std::string::npos)
@@ -37,6 +37,11 @@ void	nick(Server& s, Client& c, std::string& str, bool is_bot ) // Verifier la t
 	if (nick.empty())
 	{
 		sendToClient(c.getFd(), ERR_NONICKNAMEGIVEN(c.getNick()));
+		return ;
+	}
+	if (nick.size() > 10)
+	{
+		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "NICK", "Nickname too long(max size 10)"));
 		return ;
 	}
 	if (nick == "bot" && !is_bot)

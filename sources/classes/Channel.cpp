@@ -6,32 +6,23 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/12 15:09:03 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 10:06:23 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-/**  Constructors and destructors  ************************************************************************************/
-
-Channel::Channel()
-{
-
-}
+/**  Constructors and destructors  *********************************************/
 
 Channel::Channel(std::string const& name) : _name(name), _topic(""), \
-																		_userLimit(-1), _nbUsers(0), \
-																		_inviteOnly(false), _keyProtect(false), \
-																		_topicProtect(false)
-{
-}
+											_userLimit(-1), _nbUsers(0), \
+											_inviteOnly(false), _keyProtect(false), \
+											_topicProtect(false)
+{}
 
-Channel::~Channel()
-{
+Channel::~Channel() {}
 
-}
-
-/**  Setters and Getters  *********************************************************************************************/
+/**  Setters and Getters  ******************************************************/
 
 std::string Channel::getName() const
 {
@@ -164,7 +155,7 @@ void	Channel::setTopic( std::string topic )
 	_topic = topic;
 }
 
-/**  Public member functions  *****************************************************************************************/
+/**  Public member functions  **************************************************/
 
 void	Channel::refreshChanMembers(Server& s)
 {
@@ -271,4 +262,3 @@ void Channel::switchNick(std::string& prevNick, std::string& newNick)
 		}
 	}
 }
-

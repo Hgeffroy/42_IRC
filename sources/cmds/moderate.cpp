@@ -6,18 +6,18 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 08:56:27 by twang             #+#    #+#             */
-/*   Updated: 2024/01/12 14:58:34 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 09:49:07 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
-
-/*nouvelle commande moderate qui prend en argument le channel que le client
-veut que le bot modere - check channel - si il existe - faire un list dans bot */
+/*---- static defines --------------------------------------------------------*/
 
 static std::vector< std::string >	getNames( std::string& s );
 static bool							isFounder( Client &c, Channel *channel );
+
+/*----------------------------------------------------------------------------*/
 
 void	moderator( Server& s, Client& c, std::string& str )
 {
