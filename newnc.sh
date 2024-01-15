@@ -1,14 +1,14 @@
 #!/bin/bash
 
 {
-	echo PASS popopo
+	echo PASS popopo \r\n
 	sleep 1
-	echo NICK henri
+	echo NICK henri \r\n
 	sleep 1
-	echo USER henri
+	echo USER henri j j j \r\n
 	sleep 1
-	echo JOIN \#lol
-	echo MODE \#lol +k po
-	echo MODE \#lol +k password
-	echo QUIT
+	echo JOIN \#lol \r\n
+  while true
+    do echo PRIVMSG \#lol Yo \r\n
+  done
 } | nc -C localhost 2000

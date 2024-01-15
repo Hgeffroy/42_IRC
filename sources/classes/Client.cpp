@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:51:07 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/15 14:02:25 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:29:00 by hgeffroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,8 @@ std::vector<std::string> Client::splitBuf()
 
 		prev = sep;
 		sep = _buffer.find("\r\n", prev);
+		if (sep == std::string::npos)
+			break ;
 		tempStr = _buffer.substr(prev, sep - prev);
 
 		if (tempStr.length() < 1)
@@ -274,7 +276,7 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 	_buffer += std::string(_bufRead, r);
 	if (strstr(_buffer.c_str(), "\r\n") != NULL) {
 		std::vector<std::string> cmds = splitBuf();
-
+		printStrVec(cmds);
 		for (std::vector<std::string>::iterator it = cmds.begin(); it != cmds.end(); ++it) {
 			if (execCmd(s, *it) == 1) {
 				return (0);
@@ -285,7 +287,6 @@ int	Client::read(Server &s) // Le serveur lit ce que lui envoit le client
 			std::string save = _buffer.substr(pos + 2);
 			_buffer.clear();
 			_buffer += save;
-			//std::cout << "-----" << _buffer << "------" << std::endl;
 		}
 	}
 	std::memset(_bufRead, 0, BUFFER_SIZE);

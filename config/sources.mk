@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    sources.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: twang <twang@student.42.fr>                +#+  +:+       +#+         #
+#    By: hgeffroy <hgeffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 08:29:58 by hgeffroy          #+#    #+#              #
-#    Updated: 2024/01/15 09:46:40 by twang            ###   ########.fr        #
+#    Updated: 2024/01/15 14:27:53 by hgeffroy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SOURCES		=	sources/classes/Channel.cpp									\
 				sources/utils/intostr.cpp									\
 				sources/utils/sendToClient.cpp								\
 				sources/utils/signals.cpp									\
+				sources/utils/displayVector.cpp								\
 				sources/cmds/topic.cpp										\
 				sources/cmds/kick.cpp										\
 				sources/cmds/mode.cpp										\
