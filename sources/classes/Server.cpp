@@ -263,8 +263,6 @@ void	Server::initFd()
 
 void	Server::checkFd()
 {
-	std::vector<Client*>::iterator				it;
-	std::map<std::string, Client*>::iterator	it2;
 	int	i = select(static_cast<int>(higherFd()) + 1, &_fdRead, NULL, NULL, NULL);
 	if (i < 0) {
 		throw std::runtime_error("Select failed");
@@ -275,6 +273,10 @@ void	Server::checkFd()
 		i--;
 	}
 
+
+	std::vector<Client*>::iterator				it;
+	std::map<std::string, Client*>::iterator	it2;
+	
 	for (it2 = _clients.begin(); it2 != _clients.end() && i > 0; ++it2) {
 		if (FD_ISSET(it2->second->getFd(), &_fdRead)) {
 			if (it2->second->read(*this) == 1)
