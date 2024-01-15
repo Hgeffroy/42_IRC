@@ -37,11 +37,6 @@ void	invite( Server& s, Client& c, std::string& params )
 		sendToClient( c.getFd( ), ERR_NEEDMOREPARAMS( c.getNick( ), "INVITE") );
 		return ;
 	}
-	else if ( channel == "invalid" )
-	{
-		sendToClient( c.getFd( ), ERR_UNKNOWNERROR( c.getNick( ), "INVITE", "Too many parameters") );
-		return ;
-	}
 	else if( channel[0] != '#' && channel[0] != '&' )
 	{
 		sendToClient( c.getFd( ), ERR_NOSUCHCHANNEL( c.getNick( ), channel ) );
@@ -134,8 +129,6 @@ static std::string	getChannelName( std::string params )
 	std::size_t second_space = params.find( ' ', first_space + 1 );
 	std::size_t third_space = params.find( ' ', second_space + 1 );
 
-	if ( third_space != std::string::npos )
-		return ( "invalid" );
 	if ( second_space != std::string::npos )
 	{
 		channelname = params.substr( second_space + 1 );
