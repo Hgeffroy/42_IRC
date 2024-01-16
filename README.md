@@ -17,7 +17,7 @@
 
 ## About
 
-The ft_irc project at 42 involves implementing an IRC (Internet Relay Chat) server and client using the C language. The goal is to create a real-time communication system, allowing multiple users to connect to discussion channels.
+The ft_irc project at 42 involves implementing an IRC (Internet Relay Chat) server and client using the C++ language. The goal is to create a real-time communication system, allowing multiple users to connect to discussion channels.
 
 ## Features
 - [ ] Connect to the IRC server
@@ -28,27 +28,35 @@ The ft_irc project at 42 involves implementing an IRC (Internet Relay Chat) serv
 
 ## Prerequisites
 - GCC (GNU Compiler Collection)
-- ...
+- An IRC client (Hexchat, Wechat, etc.)
+- jq dependency to run the bot
 
 ## Installation
 1. Clone the repository: `git clone https://github.com/hgeffroy/irc.git`
 2. Compile the project: `make`
+3. Compile the bot: `make bonus`
 
 ## Usage
-1. Start the server: `./server [port]`
-2. Launch the client: `./client [IP address] [port]`
+1. Start the server: `./ircserv [port] [password]`
+2. Launch the client with its corresponding parameters (encryption not supported)
+3. Launch the bot: `./bot [port] [password] [api key]`
 
 ## Examples
 Example of using the server and client.
 
 ```bash
 # Terminal 1 - Start the server
-$ ./server 6667
+$ ./ircserv 6667 popopo
 IRC server started on port 6667
 
-# Terminal 2 - Connect a client
-$ ./client 127.0.0.1 6667
+# Terminal 2 - Connect a client (with netcat)
+$ nc -C localhost 6667
 Connected to the IRC server
+
+# Terminal 2 - Register
+PASS popopo
+NICK nickname
+USER username 0 * realname
 
 # Terminal 2 - Join a channel
 JOIN #general
@@ -58,6 +66,10 @@ PRIVMSG #general :Hello, everyone!
 
 # Terminal 2 - Leave the channel
 PART #general
+
+# Terminal 2 - Leave the server
+QUIT #general
+
 ```
 
 ## Resources
