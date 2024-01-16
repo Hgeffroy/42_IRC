@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/15 10:28:55 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/16 10:14:28 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,10 @@ int	Bot::execute( std::string &buffer )
 	const t_commands	list[] = { {"PRIVMSG", &Bot::privmsg }, {"MODERATE", &Bot::moderate} };
 	std::string			command = splitCommand( buffer );
 	std::string			user;
-	if (buffer.find('#', 0) == std::string::npos)
+	if (buffer.find('!', 0) == std::string::npos)
 		user = buffer.substr(1, buffer.find(' '));
 	else
-		user = buffer.substr(buffer.find('#', 0), buffer.find(' ', buffer.find('#', 0)) - buffer.find('#', 0)) + " " + buffer.substr(1, buffer.find(' '));
+		user = buffer.substr(buffer.find('!', 0), buffer.find(' ', buffer.find('!', 0)) - buffer.find('!', 0)) + " " + buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
 
 	for ( int i = 0; i < 2; i++ )
@@ -205,6 +205,7 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 			std::string	channel = usr.substr(0, usr.find(' '));
 			std::string	toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
 			std::string	kickCommand = "KICK " + channel + toBeKicked + REASON + "\r\n";
+			std::cout << RED << toBeKicked << END << std::endl;
 			sendToServer( kickCommand );
 		}
 	}

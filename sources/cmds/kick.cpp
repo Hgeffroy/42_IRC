@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 09:47:35 by twang             #+#    #+#             */
-/*   Updated: 2024/01/15 13:56:01 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/16 10:07:19 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	kick(Server& s, Client& c, std::string& str)
 	if (end == -1)
 		end = str.size();
 	user = str.substr(startTwo + 1, end - startTwo - 1);
+	std::cout << YELLOW << "-" << user << "-" << END << std::endl;
 	if (members.find(user) == members.end()) {
 		sendToClient(c.getFd(), ERR_USERNOTINCHANNEL(c.getNick(), user, (*chan[target]).getName()));
 		return ;
