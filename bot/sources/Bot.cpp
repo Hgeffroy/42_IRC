@@ -148,7 +148,7 @@ int	Bot::execute( std::string &buffer )
 	std::string			command = splitCommand( buffer );
 	std::string			user;
 	if (buffer.find('#', 0) == std::string::npos)
-		user = buffer.substr(1, buffer.find('!'));
+		user = buffer.substr(1, buffer.find(' '));
 	else
 		user = buffer.substr(buffer.find('#', 0), buffer.find(' ', buffer.find('#', 0)) - buffer.find('#', 0)) + " " + buffer.substr(1, buffer.find(' '));
 	std::string			msg = splitMessage( buffer );
@@ -192,22 +192,20 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 			i--;
 		}
 	}
-	std::cout << "-" << usr[0] << "- _" << usr << "_" << std::endl;
+
 	if (usr[0] != '#') {
-		std::cout << "HAAAAAAAAAAAAAAAAAAA\n\n\n\n";
 		std::string	command = ASSISTANT;
 		std::string	answer = getGPTanswer(command.c_str());
+		usr = usr.substr(0, usr.find('!'));
 		sendToServer( "PRIVMSG " + usr + " " + answer + "\r\n" );
 	}
 	else {
-		std::cout << "HEYYYYYYYYY\n\n\n\n";
 		std::string	command = MODERATOR;
 		std::string	answer = getGPTanswer(command.c_str());
 		if (answer == "\"KICK\"\n") {
 			std::string	channel = usr.substr(0, usr.find(' '));
-			std::string	toBeKicked = usr.substr(usr.find(' '), usr.length() - usr.find(' '));
-			std::string	kickCommand = "KICK " + channel + toBeKicked + REASON + "\r\n";
-			std::cout << RED << toBeKicked << END << std::endl;
+			std::string	toBeKicked = usr.substr(usr.find(' ') + 1, usr.find('!') - usr.find(' ') - 1);
+			std::string	kickCommand = "KICK " + channel + " " + toBeKicked + " " + REASON + "\r\n";
 			sendToServer( kickCommand );
 		}
 	}
