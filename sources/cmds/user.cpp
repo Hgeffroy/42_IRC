@@ -45,12 +45,6 @@ void	user(Server& s, Client& c, std::string& str, bool is_bot )
 			return ;
 		}
 	}
-	// TODO pas de secu de ca. le seul identifiant unique est le nickName
-			// if (it->second->getUser() == usr)
-			// {
-			//		sendToClient(c.getFd(), ERR_ALREADYREGISTERED(c.getNick()));
-			//		return ;
-			// }
 	if (usr.empty())
 	{
 		sendToClient(c.getFd(), ERR_NEEDMOREPARAMS(c.getNick(), "USER"));
