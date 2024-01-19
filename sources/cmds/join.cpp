@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 08:31:06 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/15 09:55:21 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:13:15 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,14 @@ static void	joinOneChannel(Server& s, Client& c, const std::string& channelName,
 		}
 		else {
 			sendToClient( c.getFd(), ERR_USERONCHANNEL( c.getNick(), c.getNick(), channelName ) );
-//			return ;
 		}
 	}
 	else {
+		if ( channelName == "#bot" && ( c.getUser() != "bot" || c.getNick() != "bot" ) )
+		{
+			sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "This channel name is already reserved"));
+			return ;
+		}
 		Channel* newChannel = new Channel(channelName);
 		sendChannelRPL(s, c, newChannel);
 		newChannel->addUserToChan(s, c, true);
@@ -157,11 +161,6 @@ static int	checkChannelName( Client& c, const std::string& channelName )
 	if ( comma != std::string::npos )
 	{
 		sendToClient(c.getFd(), ERR_NOSUCHCHANNEL(c.getNick(), channelName));
-		return ( -1 );
-	}
-	if ( channelName == "#bot" && ( c.getUser() != "bot" || c.getNick() != "bot" ) )
-	{
-		sendToClient(c.getFd(), ERR_UNKNOWNERROR(c.getNick(), "JOIN", "This channel name is already reserved"));
 		return ( -1 );
 	}
 	if ( channelName.size() > 50 )
