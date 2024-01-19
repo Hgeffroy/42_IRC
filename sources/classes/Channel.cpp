@@ -179,7 +179,8 @@ void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
 		_members[newClient.getNick()] = "~";
 	if ( newClient.getNick() != "bot" )
 		_nbUsers++;
-
+	if ( newClient.getNick() == "bot")
+		_members[newClient.getNick()] = "@";
 	refreshChanMembers(s);
 }
 
