@@ -410,7 +410,7 @@ static int	b_opt( Server& s, Client &c, Channel *channel, std::string str )
 				return (-1);
 			}
 		}
-		sendToClient( c.getFd(), ERR_NOTONCHANNEL( banned, channel->getName() ) );
+		sendToClient( c.getFd(), ERR_USERNOTINCHANNEL( c.getNick(), banned, channel->getName() ) );
 		return (-1);
 	}
 	else if ( str[0] == '-' )

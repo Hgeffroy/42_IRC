@@ -6,7 +6,7 @@
 /*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 08:53:33 by hgeffroy          #+#    #+#             */
-/*   Updated: 2024/01/15 10:06:23 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/19 10:34:42 by twang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,6 @@ std::string	Channel::getModes() const
 		modes += "+l ";
 	else
 		modes += "-l ";
-	if ( _bannedList.empty() )
-		modes += "-b";
-	else
-		modes += "+b";
 
 	return ( modes );
 }
@@ -183,7 +179,8 @@ void	Channel::addUserToChan(Server& s, Client& newClient, bool isFounder)
 		_members[newClient.getNick()] = "~";
 	if ( newClient.getNick() != "bot" )
 		_nbUsers++;
-
+	if ( newClient.getNick() == "bot")
+		_members[newClient.getNick()] = "@";
 	refreshChanMembers(s);
 }
 
