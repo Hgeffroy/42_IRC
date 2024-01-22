@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twang <twang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangthea <wangthea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 09:33:13 by twang             #+#    #+#             */
-/*   Updated: 2024/01/16 10:56:22 by twang            ###   ########.fr       */
+/*   Updated: 2024/01/22 22:39:37 by wangthea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ Bot::Bot( std::string port, std::string password, std::string apikey )
 	p = setPort( port );
 	_password = setPassword( password );
 	_apiKey = apikey;
-	if (checkApiKey() == false)
-		throw std::runtime_error( "API error" );
+	// if (checkApiKey() == false)
+	// 	throw std::runtime_error( "API error" );
 	s = socket( PF_INET, SOCK_STREAM, 0 );
 	if ( s < 0 )
 		throw std::runtime_error( "socket failed" );
@@ -192,7 +192,6 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 			i--;
 		}
 	}
-
 	if (usr[0] != '#') {
 		std::string	command = ASSISTANT;
 		std::string	answer = getGPTanswer(command.c_str());
@@ -200,10 +199,15 @@ void	Bot::privmsg( std::string &msg, std::string &usr )
 		sendToServer( "PRIVMSG " + usr + " " + answer + "\r\n" );
 	}
 	else {
-		std::string	command = MODERATOR;
+		std::string	channel = usr.substr(0, usr.find(' '));
+		std::string	command;
+		if ( channel == "#bot")
+			command = ASSISTANT_MODERATOR;
+		else
+			command = MODERATOR;
 		std::string	answer = getGPTanswer(command.c_str());
+		std::cout << YELLOW << "-" << channel << "-" << END << std::endl;
 		if (answer == "\"KICK\"\n") {
-			std::string	channel = usr.substr(0, usr.find(' '));
 			std::string	toBeKicked = usr.substr(usr.find(' ') + 1, usr.find('!') - usr.find(' ') - 1);
 			std::string	kickCommand = "KICK " + channel + " " + toBeKicked + " " + REASON + "\r\n";
 			sendToServer( kickCommand );
